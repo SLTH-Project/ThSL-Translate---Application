@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 Hello world
+Hello from master
+=======
+Here will be my flutter code
+>>>>>>> Piyada
