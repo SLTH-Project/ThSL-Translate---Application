@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatefulWidget {
-  const GetStarted({Key? key}) : super(key: key);
-
   @override
   _GetStartedState createState() => _GetStartedState();
 }
@@ -12,12 +10,36 @@ class GetStarted extends StatefulWidget {
 class _GetStartedState extends State<GetStarted> {
   @override
   Widget build(BuildContext context) {
+    final buttonStarted = new InkWell(
+      onTap: () {
+        print('go to home page');
+      },
+      child: new Container(
+        margin: EdgeInsets.only(top: 30.0),
+        width: 300,
+        height: 50,
+        decoration: BoxDecoration(
+            color: Colors.yellow,
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Text(
+          'Get Started',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Opun',
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Colors.white),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          SizedBox(height: 50),
+        children: [
+          //SizedBox(height: 50),
           Text(
             'THSL Translation',
             textAlign: TextAlign.center,
@@ -28,11 +50,12 @@ class _GetStartedState extends State<GetStarted> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 50),
+          //SizedBox(height: 50),
           Image(
             image: AssetImage('assets/images/img.png'),
             height: 200,
-          )
+          ),
+          buttonStarted
         ],
       ),
     );

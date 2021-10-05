@@ -17,6 +17,6 @@ class MyApp extends StatelessWidget {
             primaryColor: const Color(0xFF3EBACE),
             scaffoldBackgroundColor: const Color(0xFFF3F5F7)),
         //home: const MyHomePage(title: 'THSL Translation'),
-        home: const GetStarted());
+        home: GetStarted());
   }
 }
