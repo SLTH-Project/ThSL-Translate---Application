@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatefulWidget {
@@ -10,8 +12,29 @@ class GetStarted extends StatefulWidget {
 class _GetStartedState extends State<GetStarted> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Image.network(
-            'https://www.google.co.th/url?sa=i&url=https%3A%2F%2Fwww.pikpng.com%2Ftranspng%2FhoJhiww%2F&psig=AOvVaw0vp5qTrGNWWpoeDDF1INjP&ust=1633482760744000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjuz9mLsvMCFQAAAAAdAAAAABAD'));
+    return Container(
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          SizedBox(height: 50),
+          Text(
+            'THSL Translation',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              //fontFamily: 'Opun',
+              color: Colors.indigo,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 50),
+          Image(
+            image: AssetImage('assets/images/img.png'),
+            height: 200,
+          )
+        ],
+      ),
+    );
   }
 }
