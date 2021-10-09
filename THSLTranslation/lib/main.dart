@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:thsltranslation/screens/getStarted_screen.dart';
-//import 'package:thsltranslation/screens/home_screen.dart';
+import 'dart:async';
 
-void main() {
-  runApp(const MyApp());
+import 'package:camera/camera.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final cameras = await availableCameras();
+
+  final firstCamera = cameras.first;
+
+  runApp(MaterialApp(
+      title: 'THSL APP',
+      theme: ThemeData(fontFamily: 'Anakotmai'),
+      home: GetStarted(camera: firstCamera)));
 }
 
-class MyApp extends StatelessWidget {
+/*class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -19,4 +30,4 @@ class MyApp extends StatelessWidget {
         //home: const MyHomePage(title: 'THSL Translation'),
         home: GetStarted());
   }
-}
+}*/
