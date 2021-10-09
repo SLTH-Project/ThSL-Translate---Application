@@ -40,6 +40,9 @@ dependencies:
   camera: any
   path: any
   gallery_saver: any
+  flutter_native_image: ^0.0.6+1
+  image: ^3.0.8
+
 
 dev_dependencies:
   flutter_test:

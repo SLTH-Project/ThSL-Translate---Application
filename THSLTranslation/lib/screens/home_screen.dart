@@ -2,8 +2,30 @@
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'dart:async';
+import 'package:thsltranslation/screens/result_screen.dart';
+
+class Item {
+  Item({
+    required this.expandedValue,
+    required this.headerValue,
+    this.isExpanded = false,
+  });
+
+  String expandedValue;
+  String headerValue;
+  bool isExpanded;
+}
+
+List<Item> generateItems(int numberOfItems) {
+  return List<Item>.generate(numberOfItems, (int index) {
+    return Item(
+      headerValue: 'วิธีใช้งาน',
+      expandedValue:
+          'ตั้งกล้องให้ขนาดของลำตัวตั้งแต่เหนือศีรษะจนถึงเอวอยู่พอดีกรอบ',
+    );
+  });
+}
 
 // ignore: use_key_in_widget_constructors
 class HomePage extends StatefulWidget {
@@ -19,37 +41,69 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  late CameraController _controller;
+  late CameraController controller;
   late Future<void> _initializeControllerFuture;
+
+  final List<Item> _data = generateItems(1);
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(
+    controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
     );
 
-    _initializeControllerFuture = _controller.initialize();
+    _initializeControllerFuture = controller.initialize();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
-  /*File _image;
-    final imagePicker = ImagePicker();
-    Future getImage() async {
-      final image = await imagePicker.pickImage(source: ImageSource.camera);
-      setState(() {
-        _image = File(image.path);
-      });
-    }*/
+  Widget _buildPanel() {
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          _data[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _data.map<ExpansionPanel>((Item item) {
+        return ExpansionPanel(
+          canTapOnHeader: true,
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              title: Text(item.headerValue,
+                  style: TextStyle(
+                    fontFamily: 'Anakotmai',
+                    color: Colors.black87,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  )),
+            );
+          },
+          body: ListTile(
+            title: Text(item.expandedValue,
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Colors.black87,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                )),
+            //trailing: const Icon(Icons.delete),
+          ),
+          isExpanded: item.isExpanded,
+        );
+      }).toList(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Color(0xF7F7F7FF),
       appBar: AppBar(
@@ -62,24 +116,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             )),
         backgroundColor: Colors.white,
       ),
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(_controller);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: SingleChildScrollView(
+        child: Container(
+            child: Column(children: [
+          Container(
+            width: screenSize.width,
+            height: screenSize.width,
+            child: ClipRRect(
+              child: OverflowBox(
+                alignment: Alignment.center,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Container(
+                      width: screenSize.width,
+                      height: screenSize.width,
+                      child: CameraPreview(controller)),
+                ),
+              ),
+            ),
+          ),
+          _buildPanel(),
+          SizedBox(
+            height: 20,
+          )
+        ])),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           try {
             await _initializeControllerFuture;
-            final image = await _controller.takePicture();
+            final image = await controller.takePicture();
             await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
+                builder: (context) => ResultPage(
                   imagePath: image.path,
                 ),
               ),
@@ -94,39 +163,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 }
 
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
-
-  const DisplayPictureScreen({Key? key, required this.imagePath})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
-    return Scaffold(
-        backgroundColor: Color(0xF7F7F7FF),
-        appBar: AppBar(
-          title: Text('THSL Translate',
-              style: TextStyle(
-                fontFamily: 'Anakotmai',
-                color: Color(0xFF2B2B2B),
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              )),
-          backgroundColor: Colors.white,
-        ),
-        body: Image.file(
-          File(imagePath),
-          width: 300,
-        )
-        /*Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.file(File(imagePath)),
-            ])*/
-        );
-  }
-}
+//Camera
+/*FutureBuilder<void>(
+                      future: _initializeControllerFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return CameraPreview(controller);
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      },
+                    ),*/
