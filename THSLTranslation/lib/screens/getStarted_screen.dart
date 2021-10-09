@@ -13,7 +13,7 @@ class _GetStartedState extends State<GetStarted> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    Route _createRoute() {
+    /*Route _createRoute() {
       return PageRouteBuilder(
         pageBuilder: (context, animation, firstAnimation) => HomePage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -30,11 +30,14 @@ class _GetStartedState extends State<GetStarted> {
           );
         },
       );
-    }
+    }*/
 
-    final buttonStarted = InkWell(
+    /*final buttonStarted = InkWell(
       onTap: () {
-        Navigator.of(context).push(_createRoute());
+        Navigator.of(context).push(
+          context,
+          MaterialPageRoute(builder: builder)
+        );
       },
       child: Container(
         padding: const EdgeInsets.only(top: 12),
@@ -54,7 +57,7 @@ class _GetStartedState extends State<GetStarted> {
           ),
         ),
       ),
-    );
+    );*/
 
     return Scaffold(
         body: Container(
@@ -78,10 +81,33 @@ class _GetStartedState extends State<GetStarted> {
           ),
           //SizedBox(height: 50),
           Image(
-            image: AssetImage('assets/images/img.png'),
+            image: AssetImage('assets/images/Logo.png'),
             height: 200,
           ),
-          buttonStarted
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
+            },
+            child: Container(
+              padding: const EdgeInsets.only(top: 12),
+              width: 300,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Text(
+                'Get Started',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  //fontFamily: 'Opun',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     ));
