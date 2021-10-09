@@ -1,9 +1,16 @@
 // ignore_for_file: file_names, use_key_in_widget_constructors, unused_local_variable, avoid_print, prefer_const_constructors
-
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:thsltranslation/screens/home_screen.dart';
 
 class GetStarted extends StatefulWidget {
+  const GetStarted({
+    Key? key,
+    required this.camera,
+  }) : super(key: key);
+
+  final CameraDescription camera;
+
   @override
   _GetStartedState createState() => _GetStartedState();
 }
@@ -41,7 +48,9 @@ class _GetStartedState extends State<GetStarted> {
           InkWell(
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(camera: widget.camera)));
             },
             child: Container(
               padding: const EdgeInsets.only(top: 12),
