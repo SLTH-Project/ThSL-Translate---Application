@@ -64,16 +64,16 @@ class _GetStartedState extends State<GetStarted> {
       decoration: BoxDecoration(color: Colors.white),
       width: screenSize.width,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           //SizedBox(height: 50),
           Text(
-            'THSL Translation',
+            'THSL Translate',
             textAlign: TextAlign.center,
             style: TextStyle(
-              //fontFamily: 'Opun',
+              fontFamily: 'Anakotmai',
               color: Colors.indigo,
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class _GetStartedState extends State<GetStarted> {
           ),
           //SizedBox(height: 50),
           Image(
-            image: AssetImage('assets/images/Logo.png'),
+            image: AssetImage('assets/images/logo.png'),
             height: 200,
           ),
           InkWell(
@@ -100,7 +100,7 @@ class _GetStartedState extends State<GetStarted> {
                 'Get Started',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  //fontFamily: 'Opun',
+                  fontFamily: 'Anakotmai',
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
