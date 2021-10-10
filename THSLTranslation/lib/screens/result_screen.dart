@@ -16,14 +16,6 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
-    /*imgg.Image img = imgg.decodeJpg(File(widget.imagePath).readAsBytesSync());
-
-    imgg.Image temp = imgg.copyResize(img, width: 500, height: 500);
-
-    File('assets/images/temp.png').writeAsBytesSync(imgg.encodePng(temp));*/
-
     return Scaffold(
         backgroundColor: Color(0xF7F7F7FF),
         appBar: AppBar(
@@ -37,6 +29,17 @@ class _ResultPageState extends State<ResultPage> {
           backgroundColor: Colors.white,
         ),
         body: AspectRatio(
+          aspectRatio: 1,
+          child: Image.file(
+            File(widget.imagePath),
+            fit: BoxFit.cover,
+          ),
+        )
+        /*Image.file(
+          File(widget.imagePath),
+          scale: 0.61,
+        )*/
+        /*AspectRatio(
           aspectRatio: 487 / 451,
           child: Container(
             decoration: BoxDecoration(
@@ -45,6 +48,7 @@ class _ResultPageState extends State<ResultPage> {
                     alignment: FractionalOffset.topCenter,
                     image: AssetImage(widget.imagePath))),
           ),
-        ));
+        )*/
+        );
   }
 }

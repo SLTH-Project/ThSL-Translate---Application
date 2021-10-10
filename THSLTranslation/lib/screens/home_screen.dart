@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, avoid_print
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +107,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return Scaffold(
       backgroundColor: Color(0xF7F7F7FF),
       appBar: AppBar(
+        leading: Container(),
+        centerTitle: true,
         title: Text('THSL Translate',
             style: TextStyle(
               fontFamily: 'Anakotmai',
@@ -116,48 +118,104 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             )),
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            child: Column(children: [
-          Container(
-            width: screenSize.width,
-            height: screenSize.width,
-            child: ClipRRect(
-              child: OverflowBox(
-                alignment: Alignment.center,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Container(
-                      width: screenSize.width,
-                      height: screenSize.width,
-                      child: CameraPreview(controller)),
+      body: SizedBox.expand(
+        child: Stack(children: <Widget>[
+          Column(
+            children: [
+              Container(
+                width: screenSize.width,
+                height: screenSize.width,
+                child: ClipRRect(
+                  child: OverflowBox(
+                    alignment: Alignment.center,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Container(
+                          width: screenSize.width,
+                          height: screenSize.width,
+                          child: CameraPreview(controller)),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              IconButton(
+                  onPressed: () async {
+                    try {
+                      await _initializeControllerFuture;
+                      final image = await controller.takePicture();
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                            imagePath: image.path,
+                          ),
+                        ),
+                      );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  icon: Icon(Icons.camera_alt)),
+              _buildPanel(),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox.expand(
+                child: DraggableScrollableSheet(
+                    initialChildSize: 0.25,
+                    minChildSize: 0.12,
+                    maxChildSize: 0.4,
+                    builder: (BuildContext context, scrollController) {
+                      return Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)),
+                            boxShadow: [
+                              BoxShadow(color: Colors.grey, blurRadius: 10)
+                            ]),
+                        child: ListView(
+                          controller: scrollController,
+                          children: <Widget>[
+                            Center(
+                              child: Container(
+                                height: 8,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text('test')
+                          ],
+                        ),
+                      );
+                    }),
+              )
+            ],
           ),
-          _buildPanel(),
-          SizedBox(
-            height: 20,
-          )
-        ])),
+        ]),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            await _initializeControllerFuture;
-            final image = await controller.takePicture();
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ResultPage(
-                  imagePath: image.path,
-                ),
+      floatingActionButton: Container(
+        height: 50,
+        child: FittedBox(
+          child: FloatingActionButton.extended(
+            onPressed: () async {},
+            icon: Image(
+              image: AssetImage(
+                'assets/images/logoyellow.png',
               ),
-            );
-          } catch (e) {
-            print(e);
-          }
-        },
-        child: const Icon(Icons.camera_alt),
+              height: 40,
+            ),
+            label: Text('คลังภาษามือไทย'),
+            backgroundColor: Colors.indigo,
+          ),
+        ),
       ),
     );
   }
