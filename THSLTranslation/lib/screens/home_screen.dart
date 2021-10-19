@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             );
           },
           body: Container(
-            height: 115,
+            height: 134,
             color: Colors.blue,
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -99,32 +99,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       margin: EdgeInsets.only(right: 24),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.red),
-                      width: 98,
-                      height: 115,
+                          color: Colors.white),
+                      width: 259,
+                      height: 134,
                       child: Stack(
                           alignment: Alignment.topCenter,
                           children: <Widget>[
                             Positioned(
-                              bottom: 0,
-                              child: Container(
-                                  height: 60,
-                                  width: 98,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                      padding: EdgeInsets.all(1),
-                                      child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('ชื่อหมวด'),
-                                            Text('ชื่อหมวด2')
-                                          ]))),
+                              top: 15,
+                              child: Image(
+                                image: AssetImage('assets/images/step1.png'),
+                                height: 63,
+                                width: 63,
+                              ),
+                            ),
+                            Positioned(
+                              top: 20,
+                              left: 20,
+                              child: Text(''' ตั้งกล้องให้ขนาดของลำตัวตั้งแต่
+เหนือศีรษะจนถึงเอวอยู่พอดีกรอบ'''),
                             )
                           ])),
                 );
