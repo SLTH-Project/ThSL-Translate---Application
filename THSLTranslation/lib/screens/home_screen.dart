@@ -21,8 +21,7 @@ List<Item> generateItems(int numberOfItems) {
   return List<Item>.generate(numberOfItems, (int index) {
     return Item(
       headerValue: 'วิธีใช้งาน',
-      expandedValue:
-          'ตั้งกล้องให้ขนาดของลำตัวตั้งแต่เหนือศีรษะจนถึงเอวอยู่พอดีกรอบ',
+      expandedValue: 'สวัสดีจ้าาาาาาาาา',
     );
   });
 }
@@ -84,7 +83,55 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   )),
             );
           },
-          body: ListTile(
+          body: Container(
+            height: 115,
+            color: Colors.blue,
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: 3, //จำนวนหมวด
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () {
+                    return;
+                  },
+                  child: Container(
+                      margin: EdgeInsets.only(right: 24),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red),
+                      width: 98,
+                      height: 115,
+                      child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: <Widget>[
+                            Positioned(
+                              bottom: 0,
+                              child: Container(
+                                  height: 60,
+                                  width: 98,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                      padding: EdgeInsets.all(1),
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text('ชื่อหมวด'),
+                                            Text('ชื่อหมวด2')
+                                          ]))),
+                            )
+                          ])),
+                );
+              },
+            ),
+          )
+          /*ListTile(
             title: Text(item.expandedValue,
                 style: TextStyle(
                   fontFamily: 'Anakotmai',
@@ -92,8 +139,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 )),
-            //trailing: const Icon(Icons.delete),
-          ),
+            //trailing: const Icon(Icons.delete), //icon ท้าย
+          )*/
+          ,
           isExpanded: item.isExpanded,
         );
       }).toList(),
@@ -167,6 +215,93 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
+    final camera = Container(
+      width: screenSize.width,
+      height: screenSize.width,
+      child: ClipRRect(
+        child: OverflowBox(
+          alignment: Alignment.center,
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Container(
+                width: screenSize.width,
+                height: screenSize.width,
+                child: CameraPreview(controller)),
+          ),
+        ),
+      ),
+    );
+
+    final capture = IconButton(
+        onPressed: () async {
+          try {
+            await _initializeControllerFuture;
+            final image = await controller.takePicture();
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ResultPage(
+                  imagePath: image.path,
+                ),
+              ),
+            );
+          } catch (e) {
+            print(e);
+          }
+        },
+        icon: Icon(Icons.camera_alt));
+
+    final bottomSwipeUp = SizedBox.expand(
+      child: DraggableScrollableSheet(
+          initialChildSize: 0.1,
+          minChildSize: 0.1,
+          maxChildSize: 0.5,
+          builder: (BuildContext context, scrollController) {
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)]),
+              child: ListView(
+                controller: scrollController,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      height: 8,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'คลังภาษามือไทย 100 คำ',
+                    style: TextStyle(
+                      fontFamily: 'Anakotmai',
+                      color: Colors.black87,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  rowCatagory,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  rowCatagory
+                ],
+              ),
+            );
+          }),
+    );
+
     return Scaffold(
       backgroundColor: Color(0xF7F7F7FF),
       appBar: AppBar(
@@ -183,100 +318,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
       body: SizedBox.expand(
         child: Stack(children: <Widget>[
-          Column(
-            children: [
-              Container(
-                width: screenSize.width,
-                height: screenSize.width,
-                child: ClipRRect(
-                  child: OverflowBox(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Container(
-                          width: screenSize.width,
-                          height: screenSize.width,
-                          child: CameraPreview(controller)),
-                    ),
-                  ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                camera,
+                capture,
+                _buildPanel(),
+                SizedBox(
+                  height: 100,
                 ),
-              ),
-              IconButton(
-                  onPressed: () async {
-                    try {
-                      await _initializeControllerFuture;
-                      final image = await controller.takePicture();
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ResultPage(
-                            imagePath: image.path,
-                          ),
-                        ),
-                      );
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  icon: Icon(Icons.camera_alt)),
-              _buildPanel(),
-              SizedBox(
-                height: 20,
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox.expand(
-            child: DraggableScrollableSheet(
-                initialChildSize: 0.1,
-                minChildSize: 0.1,
-                maxChildSize: 0.5,
-                builder: (BuildContext context, scrollController) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey, blurRadius: 10)
-                        ]),
-                    child: ListView(
-                      controller: scrollController,
-                      children: <Widget>[
-                        Center(
-                          child: Container(
-                            height: 8,
-                            width: 50,
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(5)),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'คลังภาษามือไทย 100 คำ',
-                          style: TextStyle(
-                            fontFamily: 'Anakotmai',
-                            color: Colors.black87,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        rowCatagory,
-                        SizedBox(
-                          height: 10,
-                        ),
-                        rowCatagory
-                      ],
-                    ),
-                  );
-                }),
-          )
+          bottomSwipeUp
         ]),
       ),
       /*floatingActionButton: Container(
