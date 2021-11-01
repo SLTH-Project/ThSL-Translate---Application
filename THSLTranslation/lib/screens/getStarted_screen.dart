@@ -29,22 +29,22 @@ class _GetStartedState extends State<GetStarted> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          //SizedBox(height: 50),
+          Image(
+            image: AssetImage('assets/images/logo.png'),
+            height: 150,
+          ),
+          SizedBox(height: 10),
           Text(
             'THSL Translate',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Anakotmai',
-              color: Colors.indigo,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+              color: Color(0xff2b2b2b),
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          //SizedBox(height: 50),
-          Image(
-            image: AssetImage('assets/images/logo.png'),
-            height: 200,
-          ),
+          SizedBox(height: 50),
           InkWell(
             onTap: () {
               Navigator.push(
@@ -53,20 +53,20 @@ class _GetStartedState extends State<GetStarted> {
                       builder: (context) => HomePage(camera: widget.camera)));
             },
             child: Container(
-              padding: const EdgeInsets.only(top: 12),
-              width: 300,
+              padding: const EdgeInsets.only(top: 11),
+              width: 230,
               height: 50,
               decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  color: Color(0xff1821ae),
+                  borderRadius: BorderRadius.all(Radius.circular(100))),
               child: Text(
-                'Get Started',
+                'เริ่มต้นใช้งาน',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Anakotmai',
                   color: Colors.white,
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

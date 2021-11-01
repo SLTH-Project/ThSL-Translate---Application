@@ -225,23 +225,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
-    final capture = IconButton(
-        onPressed: () async {
-          try {
-            await _initializeControllerFuture;
-            final image = await controller.takePicture();
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ResultPage(
-                  imagePath: image.path,
-                ),
-              ),
-            );
-          } catch (e) {
-            print(e);
-          }
-        },
-        icon: Icon(Icons.camera_alt));
+    final capture = Positioned(
+        top: screenSize.width - 60,
+        child: Container(
+            width: screenSize.width,
+            alignment: Alignment.center,
+            //color: Colors.white,
+            child: IconButton(
+                onPressed: () async {
+                  try {
+                    await _initializeControllerFuture;
+                    final image = await controller.takePicture();
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ResultPage(
+                          imagePath: image.path,
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+                icon: Icon(
+                  Icons.camera_alt,
+                  color: Colors.red,
+                  size: 50,
+                ))));
 
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
@@ -296,7 +306,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
 
     return Scaffold(
-      backgroundColor: Color(0xF7F7F7FF),
+      backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
         leading: Container(),
         centerTitle: true,
@@ -315,7 +325,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             child: Column(
               children: [
                 camera,
-                capture,
+                //capture,
                 _buildPanel(),
                 SizedBox(
                   height: 100,
@@ -323,6 +333,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               ],
             ),
           ),
+          capture,
           bottomSwipeUp
         ]),
       ),
