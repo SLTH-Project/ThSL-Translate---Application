@@ -1,6 +1,5 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, avoid_print
-
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:thsltranslation/screens/result_screen.dart';
@@ -26,7 +25,6 @@ List<Item> generateItems(int numberOfItems) {
   });
 }
 
-// ignore: use_key_in_widget_constructors
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
@@ -140,6 +138,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       }).toList(),
     );
   }
+
+  final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +305,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
-    return Scaffold(
+    return FutureBuilder(builder: builder);
+    Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
         leading: Container(),
