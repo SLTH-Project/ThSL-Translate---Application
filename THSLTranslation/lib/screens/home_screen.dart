@@ -1,4 +1,6 @@
+//import 'dart:html';
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -145,10 +147,117 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
+    /*final category = StreamBuilder(
+        stream:
+            FirebaseFirestore.instance.collection("CategoryPic").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return 
+        });*/
+
     final rowCatagory = Container(
-      height: 115,
-      color: Colors.blue,
-      child: ListView.builder(
+        height: 115,
+        color: Colors.blue,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection("CategoryPic")
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView(
+                  children: snapshot.data!.docs.map((document) {
+                    return InkWell(
+                      onTap: () {
+                        return;
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 24),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.amber),
+                        width: 40,
+                        height: 115,
+                        child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                    height: 60,
+                                    width: 98,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(1),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text('ชื่อหมวด'),
+                                            ]))),
+                              )
+                            ]),
+                      ),
+                    );
+                  }).toList(),
+                );
+              }
+              /*ListView(
+                children: snapshot.data!.docs.map((document) {
+                  return InkWell(
+                    onTap: () {
+                      return;
+                    },
+                    child: Container(
+                        margin: EdgeInsets.only(right: 24),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.amber),
+                        width: 98,
+                        height: 115,
+                        child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                    height: 60,
+                                    width: 98,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(1),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text('ชื่อหมวด'),
+                                              Text('ชื่อหมวด2')
+                                            ]))),
+                              )
+                            ])),
+                  );
+                }).toList(),
+              );*/
+            })
+
+        /* ListView.builder(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: 5, //จำนวนหมวด
@@ -186,8 +295,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 ])),
           );
         },
-      ),
-    );
+      ),*/
+        );
 
     final colCatagory = Container(
       height: 240,
