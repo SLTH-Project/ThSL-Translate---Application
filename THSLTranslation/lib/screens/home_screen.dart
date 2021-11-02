@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         });*/
 
     final rowCatagory = Container(
-        height: 150, //115
+        height: 144,
         color: Colors.blue,
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
@@ -173,6 +173,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 );
               } else {
                 return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
                   children: snapshot.data!.docs.map((document) {
                     return InkWell(
                       onTap: () {
@@ -181,10 +183,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       child: Container(
                         margin: EdgeInsets.only(right: 24),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        width: 40, //real 98
-                        height: 115,
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.amberAccent),
+                        width: 122, //real 98
+                        height: 144,
                         child: Stack(
                             alignment: Alignment.topCenter,
                             children: <Widget>[
@@ -339,7 +341,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
 
     final capture = Positioned(
-        top: screenSize.width - 60,
+        top: screenSize.width - 120,
         child: Container(
             width: screenSize.width,
             alignment: Alignment.center,
@@ -362,7 +364,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 },
                 icon: Icon(
                   Icons.camera_alt,
-                  color: Colors.red,
+                  color: Colors.white,
                   size: 50,
                 ))));
 
@@ -411,7 +413,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   SizedBox(
                     height: 10,
                   ),
-                  rowCatagory
+                  //rowCatagory
                 ],
               ),
             );
