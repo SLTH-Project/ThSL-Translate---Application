@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.amber),
-                        width: 40,
+                        width: 40, //real 98
                         height: 115,
                         child: Stack(
                             alignment: Alignment.topCenter,
