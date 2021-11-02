@@ -305,8 +305,56 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
-    return //FutureBuilder(builder: builder);
-        Scaffold(
+    return FutureBuilder(
+        future: firebase,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("Error"),
+              ),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Scaffold(
+                backgroundColor: Color(0xFFEBEEF5),
+                appBar: AppBar(
+                  leading: Container(),
+                  centerTitle: true,
+                  title: Text('THSL Translate',
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Color(0xFF2B2B2B),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                  backgroundColor: Colors.white,
+                ),
+                body: SizedBox.expand(
+                    child: Stack(children: <Widget>[
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        camera,
+                        //capture,
+                        _buildPanel(),
+                        SizedBox(
+                          height: 100,
+                        ),
+                      ],
+                    ),
+                  ),
+                  capture,
+                  bottomSwipeUp
+                ])));
+          }
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        });
+    /*Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
         leading: Container(),
@@ -354,7 +402,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           ),
         ),
       ),*/
-    );
+    );*/
   }
 }
 
