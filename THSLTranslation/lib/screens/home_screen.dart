@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         });*/
 
     final rowCatagory = Container(
-        height: 115,
+        height: 150, //115
         color: Colors.blue,
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
@@ -182,16 +182,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         margin: EdgeInsets.only(right: 24),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.amber),
+                            color: Colors.white),
                         width: 40, //real 98
                         height: 115,
                         child: Stack(
                             alignment: Alignment.topCenter,
                             children: <Widget>[
+                              Image.network(
+                                document["imageURL"],
+                                height: 80,
+                              ),
                               Positioned(
                                 bottom: 0,
                                 child: Container(
-                                    height: 60,
+                                    height: 40,
                                     width: 98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -205,7 +209,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: <Widget>[
-                                              Text('ชื่อหมวด'),
+                                              Text(document["name"]),
                                             ]))),
                               )
                             ]),
