@@ -305,8 +305,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
-    return FutureBuilder(builder: builder);
-    Scaffold(
+    return //FutureBuilder(builder: builder);
+        Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
         leading: Container(),

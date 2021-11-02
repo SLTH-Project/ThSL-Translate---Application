@@ -42,9 +42,9 @@ dependencies:
   gallery_saver: any
   flutter_native_image: ^0.0.6+1
   image: ^3.0.8
-  firebase_core: ^0.4.0+9
+  firebase_core: ^1.8.0
   firebase_analytics: ^5.0.2
-  cloud_firestore: ^0.12.9+5
+  cloud_firestore: ^2.5.4
 
 
 dev_dependencies:
