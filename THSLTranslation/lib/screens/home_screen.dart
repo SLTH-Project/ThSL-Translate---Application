@@ -160,8 +160,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         });*/
 
     final rowCatagory = Container(
-        height: 144,
-        color: Colors.blue,
+        height: 160,
+        color: Colors.grey[200],
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection("CategoryPic")
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         margin: EdgeInsets.only(right: 24),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Colors.amberAccent),
+                            color: Colors.white),
                         width: 122, //real 98
                         height: 144,
                         child: Stack(
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     width: 98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
+                                      color: Colors.indigo[50],
                                     ),
                                     child: Padding(
                                         padding: EdgeInsets.all(1),
@@ -211,7 +211,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: <Widget>[
-                                              Text(document["name"]),
+                                              Text(
+                                                document["name"],
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Colors.black87,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
                                             ]))),
                               )
                             ]),
