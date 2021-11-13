@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final rowCatagory = Container(
         height: 160,
-        color: Colors.grey[200],
+        color: Colors.white,
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection("CategoryPic")
@@ -184,7 +184,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         margin: EdgeInsets.only(right: 24),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Colors.white),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Color(0x202b2b2b),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1))
+                            ]),
                         width: 122, //real 98
                         height: 144,
                         child: Stack(
