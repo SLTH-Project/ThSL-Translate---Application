@@ -147,20 +147,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    /*final category = StreamBuilder(
-        stream:
-            FirebaseFirestore.instance.collection("CategoryPic").snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return 
-        });*/
-
     final rowCatagory = Container(
-        height: 160,
+        height: 180,
         color: Colors.white,
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
@@ -181,7 +169,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         return;
                       },
                       child: Container(
-                        margin: EdgeInsets.only(right: 24),
+                        margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: Colors.white,
@@ -192,23 +180,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   blurRadius: 4,
                                   offset: Offset(0, 1))
                             ]),
-                        width: 122, //real 98
-                        height: 144,
+                        width: 144, //real 98
+                        //height: 144,
                         child: Stack(
                             alignment: Alignment.topCenter,
                             children: <Widget>[
                               Image.network(
                                 document["imageURL"],
-                                height: 80,
+                                height: 120,
                               ),
                               Positioned(
-                                bottom: 0,
+                                bottom: 10,
                                 child: Container(
                                     height: 40,
                                     width: 98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Colors.indigo[50],
+                                      //color: Colors.indigo[50],
                                     ),
                                     child: Padding(
                                         padding: EdgeInsets.all(1),
@@ -222,7 +210,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                 document["name"],
                                                 style: TextStyle(
                                                   fontFamily: 'Anakotmai',
-                                                  color: Colors.black87,
+                                                  color: Color(0xff2b2b2b),
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w400,
                                                 ),
@@ -235,47 +223,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   }).toList(),
                 );
               }
-              /*ListView(
-                children: snapshot.data!.docs.map((document) {
-                  return InkWell(
-                    onTap: () {
-                      return;
-                    },
-                    child: Container(
-                        margin: EdgeInsets.only(right: 24),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.amber),
-                        width: 98,
-                        height: 115,
-                        child: Stack(
-                            alignment: Alignment.topCenter,
-                            children: <Widget>[
-                              Positioned(
-                                bottom: 0,
-                                child: Container(
-                                    height: 60,
-                                    width: 98,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                        padding: EdgeInsets.all(1),
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text('ชื่อหมวด'),
-                                              Text('ชื่อหมวด2')
-                                            ]))),
-                              )
-                            ])),
-                  );
-                }).toList(),
-              );*/
             })
 
         /* ListView.builder(
@@ -319,44 +266,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),*/
         );
 
-    final colCatagory = Container(
-      height: 240,
-      color: Colors.orange,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Container(
-            color: Colors.red,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                rowCatagory,
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-
-    final camera = Container(
-      width: screenSize.width,
-      height: screenSize.width,
-      child: ClipRRect(
-        child: OverflowBox(
-          alignment: Alignment.center,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Container(
-                width: screenSize.width,
-                height: screenSize.width,
-                child: CameraPreview(controller)),
-          ),
-        ),
-      ),
-    );
-
     final capture = Positioned(
-        top: screenSize.width - 120,
+        bottom: 20,
         child: Container(
             width: screenSize.width,
             alignment: Alignment.center,
@@ -383,11 +294,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   size: 50,
                 ))));
 
+    final camera = Stack(
+      children: <Widget>[
+        Container(
+          width: screenSize.width,
+          height: screenSize.width,
+          child: ClipRRect(
+            child: OverflowBox(
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Container(
+                    width: screenSize.width,
+                    height: screenSize.width,
+                    child: CameraPreview(controller)),
+              ),
+            ),
+          ),
+        ),
+        capture,
+      ],
+    );
+
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
           initialChildSize: 0.1,
           minChildSize: 0.1,
-          maxChildSize: 0.5,
+          maxChildSize: 0.4,
           builder: (BuildContext context, scrollController) {
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -469,12 +402,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         //capture,
                         _buildPanel(),
                         SizedBox(
-                          height: 100,
+                          height: 120,
                         ),
                       ],
                     ),
                   ),
-                  capture,
+                  //capture,
                   bottomSwipeUp
                 ])));
           }
@@ -484,55 +417,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ),
           );
         });
-    /*Scaffold(
-      backgroundColor: Color(0xFFEBEEF5),
-      appBar: AppBar(
-        leading: Container(),
-        centerTitle: true,
-        title: Text('THSL Translate',
-            style: TextStyle(
-              fontFamily: 'Anakotmai',
-              color: Color(0xFF2B2B2B),
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        backgroundColor: Colors.white,
-      ),
-      body: SizedBox.expand(
-        child: Stack(children: <Widget>[
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                camera,
-                //capture,
-                _buildPanel(),
-                SizedBox(
-                  height: 100,
-                ),
-              ],
-            ),
-          ),
-          capture,
-          bottomSwipeUp
-        ]),
-      ),
-      /*floatingActionButton: Container(
-        height: 50,
-        child: FittedBox(
-          child: FloatingActionButton.extended(
-            onPressed: () async {},
-            icon: Image(
-              image: AssetImage(
-                'assets/images/logoyellow.png',
-              ),
-              height: 40,
-            ),
-            label: Text('คลังภาษามือไทย'),
-            backgroundColor: Colors.indigo,
-          ),
-        ),
-      ),*/
-    );*/
   }
 }
 
