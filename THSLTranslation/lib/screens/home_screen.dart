@@ -399,7 +399,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     child: Column(
                       children: [
                         camera,
-                        //capture,
                         _buildPanel(),
                         SizedBox(
                           height: 120,
@@ -407,7 +406,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ],
                     ),
                   ),
-                  //capture,
                   bottomSwipeUp
                 ])));
           }
