@@ -1,4 +1,5 @@
 //import 'dart:html';
+
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +23,7 @@ List<Item> generateItems(int numberOfItems) {
   return List<Item>.generate(numberOfItems, (int index) {
     return Item(
       headerValue: 'วิธีใช้งาน',
-      expandedValue: 'สวัสดีจ้าาาาาาาาา',
+      expandedValue: 'เขียนไปก็ไม่ขึ้น',
     );
   });
 }
@@ -62,8 +63,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Widget _buildPanel() {
-    return ExpansionPanelList(
+  final Future<FirebaseApp> firebase = Firebase.initializeApp();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
+    final CollectionReference categoryPicCollection =
+        FirebaseFirestore.instance.collection('CategoryPic');
+    final CollectionReference HowToCollection =
+        FirebaseFirestore.instance.collection('HowTo');
+    final CollectionReference animalCollection =
+        FirebaseFirestore.instance.collection('Category/animal/animalList');
+    final CollectionReference actionCollection =
+        FirebaseFirestore.instance.collection('Category/action/actionList');
+    bool yes = false;
+    print('yes = ');
+    print(yes);
+
+    final panel = ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _data[index].isExpanded = !isExpanded;
@@ -84,76 +102,73 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             );
           },
           body: Container(
-            height: 134,
-            color: Colors.blue,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: 3, //จำนวนหมวด
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {
-                    return;
-                  },
-                  child: Container(
-                      margin: EdgeInsets.only(right: 24),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      width: 259,
-                      height: 134,
-                      child: Stack(
-                          alignment: Alignment.topCenter,
-                          children: <Widget>[
-                            Positioned(
-                              top: 15,
-                              child: Image(
-                                image: AssetImage('assets/images/step1.png'),
-                                height: 63,
-                                width: 63,
-                              ),
-                            ),
-                            Positioned(
-                              top: 20,
-                              left: 20,
-                              child: Text(''' ตั้งกล้องให้ขนาดของลำตัวตั้งแต่
-เหนือศีรษะจนถึงเอวอยู่พอดีกรอบ'''),
-                            )
-                          ])),
-                );
-              },
-            ),
-          )
-          /*ListTile(
-            title: Text(item.expandedValue,
-                style: TextStyle(
-                  fontFamily: 'Anakotmai',
-                  color: Colors.black87,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                )),
-            //trailing: const Icon(Icons.delete), //icon ท้าย
-          )*/
-          ,
+              height: 150,
+              color: Colors.white,
+              child: StreamBuilder(
+                  stream: HowToCollection.snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return ListView(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        children: snapshot.data!.docs.map((document) {
+                          return Container(
+                              margin:
+                                  EdgeInsets.only(left: 24, top: 5, bottom: 20),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Color(0x202b2b2b),
+                                        spreadRadius: 2,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 1))
+                                  ]),
+                              width: 259,
+                              height: 134,
+                              child: Column(children: <Widget>[
+                                Image.network(
+                                  document["imageURL"],
+                                  height: 63,
+                                ),
+                                Text(
+                                  document["detail1"],
+                                  style: TextStyle(
+                                    fontFamily: 'Anakotmai',
+                                    color: Color(0xff2b2b2b),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Text(
+                                  document["detail2"],
+                                  style: TextStyle(
+                                    fontFamily: 'Anakotmai',
+                                    color: Color(0xff2b2b2b),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ]));
+                        }).toList(),
+                      );
+                    }
+                  })),
           isExpanded: item.isExpanded,
         );
       }).toList(),
     );
-  }
-
-  final Future<FirebaseApp> firebase = Firebase.initializeApp();
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
 
     final rowCatagory = Container(
         height: 180,
         color: Colors.white,
         child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection("CategoryPic")
-                .snapshots(),
+            stream: categoryPicCollection.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -166,6 +181,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   children: snapshot.data!.docs.map((document) {
                     return InkWell(
                       onTap: () {
+                        yes = true;
+                        print('yes = ');
+                        print(yes);
                         return;
                       },
                       child: Container(
@@ -180,8 +198,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   blurRadius: 4,
                                   offset: Offset(0, 1))
                             ]),
-                        width: 144, //real 98
-                        //height: 144,
+                        width: 144,
                         child: Stack(
                             alignment: Alignment.topCenter,
                             children: <Widget>[
@@ -223,48 +240,84 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   }).toList(),
                 );
               }
-            })
+            }));
 
-        /* ListView.builder(
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: 5, //จำนวนหมวด
-        itemBuilder: (BuildContext context, int index) {
-          return InkWell(
-            onTap: () {
-              return;
-            },
-            child: Container(
-                margin: EdgeInsets.only(right: 24),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), color: Colors.red),
-                width: 98,
-                height: 115,
-                child: Stack(alignment: Alignment.topCenter, children: <Widget>[
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                        height: 60,
-                        width: 98,
+    (context as Element).reassemble();
+
+    final rowVocab = Container(
+        height: 180,
+        color: Colors.white,
+        child: StreamBuilder(
+            stream: animalCollection.snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: snapshot.data!.docs.map((document) {
+                    return InkWell(
+                      onTap: () {
+                        return;
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                            padding: EdgeInsets.all(1),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text('ชื่อหมวด'),
-                                  Text('ชื่อหมวด2')
-                                ]))),
-                  )
-                ])),
-          );
-        },
-      ),*/
-        );
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Color(0x202b2b2b),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1))
+                            ]),
+                        width: 144,
+                        child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              Image.network(
+                                document["imageURL"],
+                                height: 120,
+                              ),
+                              Positioned(
+                                bottom: 10,
+                                child: Container(
+                                    height: 40,
+                                    width: 98,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      //color: Colors.indigo[50],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(1),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                document["name"],
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Color(0xff2b2b2b),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ]))),
+                              )
+                            ]),
+                      ),
+                    );
+                  }).toList(),
+                );
+              }
+            }));
 
     final capture = Positioned(
         bottom: 20,
@@ -313,6 +366,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           ),
         ),
         capture,
+        Image(
+          image: AssetImage('assets/images/frame-camera-front.png'),
+        ),
+        Image(
+          image: AssetImage('assets/images/frame-camera-square.png'),
+          height: screenSize.width,
+          width: screenSize.width,
+        ),
       ],
     );
 
@@ -357,7 +418,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   SizedBox(
                     height: 15,
                   ),
-                  rowCatagory,
+                  yes ? rowVocab : rowCatagory,
                   SizedBox(
                     height: 10,
                   ),
@@ -399,9 +460,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     child: Column(
                       children: [
                         camera,
-                        _buildPanel(),
+                        panel,
                         SizedBox(
-                          height: 120,
+                          height: 60,
                         ),
                       ],
                     ),
