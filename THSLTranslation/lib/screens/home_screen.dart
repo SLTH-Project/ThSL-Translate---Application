@@ -3,6 +3,7 @@
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:thsltranslation/screens/result_screen.dart';
@@ -269,12 +270,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               }
             }));
 
-    final showPic = showDialog(
-        context: context,
-        builder: (context) {
-          return Image(image: NetworkImage(''));
-        });
-
     rowVocab(int location) {
       print('in rowVocab');
 
@@ -302,15 +297,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             /*setState(() {
                               yes = false;
                               print('yes = ');
-                            });*/
+                            });
+
+                            return;*/
+                            print('clicked');
                             showDialog(
                                 context: context,
-                                builder: (context) {
-                                  return Image(
-                                      image:
-                                          NetworkImage(document["imageURL"]));
-                                });
-                            //return;
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -388,11 +396,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -470,11 +498,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -552,11 +599,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -634,11 +700,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -716,11 +801,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -798,11 +902,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -880,11 +1003,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -962,11 +1104,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -1044,11 +1205,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -1126,11 +1306,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -1208,11 +1407,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -1290,11 +1508,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       children: snapshot.data!.docs.map((document) {
                         return InkWell(
                           onTap: () {
-                            setState(() {
+                            /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
-                            return;
+                            return;*/
+                            print('clicked');
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"])),
+                                    ));
                           },
                           child: Container(
                             margin:
@@ -1403,7 +1640,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ),
           ),
         ),
-        capture,
         Image(
           image: AssetImage('assets/images/frame-camera-front.png'),
         ),
@@ -1412,6 +1648,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
+        capture
       ],
     );
 
