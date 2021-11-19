@@ -445,7 +445,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       });
                       //return;
                     },
-                    hoverColor: Colors.red,
                     child: Text(
                       yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
                       style: TextStyle(
