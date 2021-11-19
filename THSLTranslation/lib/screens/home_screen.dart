@@ -9,6 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:thsltranslation/screens/result_screen.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:tflite/tflite.dart';
 
 class Item {
   Item({
@@ -49,6 +52,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   final List<Item> _data = generateItems(1);
 
+  List _outputs = [];
+  //late File _image;
+  bool _loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -58,12 +65,91 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
 
     _initializeControllerFuture = controller.initialize();
+
+    _loading = true;
+
+    loadModel().then((value) {
+      setState(() {
+        _loading = false;
+      });
+    });
+  }
+
+  loadModel() async {
+    await Tflite.loadModel(
+      model: "assets/model_B_rmsProp.tflite",
+      labels: "assets/labels.txt",
+      numThreads: 1,
+    );
+  }
+
+  classifyImage(File image) async {
+    print("classifyImage running");
+    var output = await Tflite.runModelOnImage(
+        path: image.path,
+        imageMean: 127.5, //0
+        imageStd: 127.5, //255.0
+        numResults: 3,
+        threshold: 0.1, //0.2
+        asynch: true);
+
+    print("output = ");
+    print(output);
+
+    if (output!.isEmpty) {
+      print("in if output = []");
+      var tmp = {
+        "confidence": 0,
+        "index": 100,
+        "label": "Can't identify",
+      };
+      output = [...output, tmp];
+      print("output after change in if = ");
+      print(output);
+    }
+
+    setState(() {
+      _loading = false;
+      _outputs = output!;
+    });
+
+    print("_outputs = ");
+    print(_outputs);
+
+    print("classifyImage set state complete");
+    print(
+        "==============================================================================");
+    return await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          image: image,
+          name: _outputs[0]["label"],
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
+    Tflite.close();
     controller.dispose();
     super.dispose();
+  }
+
+  pickImage() async {
+    print("-----------------------------------------------------------");
+    var _image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (_image == null) {
+      print("image is null");
+      return null;
+    }
+    setState(() {
+      _loading = true;
+      File image = File(_image.path);
+
+      classifyImage(image);
+      print("after classify");
+    });
   }
 
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -349,7 +435,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               }));
     }
 
-    final capture = Positioned(
+    /*final capture = Positioned(
         bottom: 20,
         child: Container(
             width: screenSize.width,
@@ -375,7 +461,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Icons.camera_alt,
                   color: Colors.white,
                   size: 50,
-                ))));
+                ))));*/
 
     final camera = Stack(
       children: <Widget>[
@@ -403,7 +489,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
-        capture
+        //capture
       ],
     );
 
@@ -517,7 +603,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     ),
                   ),
                   bottomSwipeUp
-                ])));
+                ])),
+                floatingActionButton: FloatingActionButton(
+                  tooltip: 'Pick Image',
+                  onPressed: pickImage,
+                  child: Icon(
+                    Icons.add_a_photo,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  backgroundColor: Colors.amber,
+                ));
           }
           return Scaffold(
             body: Center(
