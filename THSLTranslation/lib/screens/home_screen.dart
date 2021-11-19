@@ -67,44 +67,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   bool yes = false;
-  int id = 0;
+  String location = '';
+  String categoryName = '';
 
   @override
   Widget build(BuildContext context) {
-    print('yes = ');
+    print('click category = ');
     print(yes);
+
     final screenSize = MediaQuery.of(context).size;
 
-    final CollectionReference categoryPicCollection =
+    /*final CollectionReference categoryPicCollection =
         FirebaseFirestore.instance.collection('CategoryPic');
+    setState(() {});
     final CollectionReference HowToCollection =
-        FirebaseFirestore.instance.collection('HowTo');
-    final CollectionReference actionCollection =
-        FirebaseFirestore.instance.collection('Category/action/actionList');
-    final CollectionReference animalCollection =
-        FirebaseFirestore.instance.collection('Category/animal/animalList');
-    final CollectionReference bodyCollection =
-        FirebaseFirestore.instance.collection('Category/body/bodyList');
-    final CollectionReference countryCollection =
-        FirebaseFirestore.instance.collection('Category/country/countryList');
-    final CollectionReference feelCollection =
-        FirebaseFirestore.instance.collection('Category/feel/feelList');
-    final CollectionReference foodCollection =
-        FirebaseFirestore.instance.collection('Category/food/foodList');
-    final CollectionReference locationCollection =
-        FirebaseFirestore.instance.collection('Category/location/locationList');
-    final CollectionReference mathCollection =
-        FirebaseFirestore.instance.collection('Category/math/mathList');
-    final CollectionReference numberCollection =
-        FirebaseFirestore.instance.collection('Category/number/numberList');
-    final CollectionReference otherCollection =
-        FirebaseFirestore.instance.collection('Category/other/otherList');
-    final CollectionReference pronounCollection =
-        FirebaseFirestore.instance.collection('Category/pronoun/pronounList');
-    final CollectionReference thingsCollection =
-        FirebaseFirestore.instance.collection('Category/things/thingsList');
-    final CollectionReference timeCollection =
-        FirebaseFirestore.instance.collection('Category/time/timeList');
+        FirebaseFirestore.instance.collection('HowTo');*/
 
     final panel = ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
@@ -130,7 +107,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               height: 150,
               color: Colors.white,
               child: StreamBuilder(
-                  stream: HowToCollection.snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('HowTo')
+                      .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
@@ -193,7 +172,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         height: 180,
         color: Colors.white,
         child: StreamBuilder(
-            stream: categoryPicCollection.snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('CategoryPic')
+                .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -208,11 +189,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       onTap: () {
                         setState(() {
                           yes = true;
-                          print('yes = ');
+                          print('click category = ');
                           print(yes);
-                          id = document["id"];
+                          location = document["location"];
+                          categoryName = "     <  " + document["name"];
                         });
-                        return;
+                        //return;
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
@@ -270,1328 +252,110 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               }
             }));
 
-    rowVocab(int location) {
+    rowVocab(String locate) {
       print('in rowVocab');
 
       print('location = ');
-      print(location);
+      print(locate);
 
-      if (location == 1) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: timeCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
+      return Container(
+          height: 180,
+          color: Colors.white,
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection(locate).snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return ListView(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: snapshot.data!.docs.map((document) {
+                      return InkWell(
+                        onTap: () {
+                          /*setState(() {
                               yes = false;
                               print('yes = ');
                             });
 
                             return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
+                          print('clicked');
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    title: Center(
+                                      child: Text(
+                                        document["name"],
+                                        style: TextStyle(
+                                          fontFamily: 'Anakotmai',
+                                          color: Color(0xff2b2b2b),
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
                                         ),
                                       ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 2) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: bodyCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
+                                    ),
+                                    content: Image(
+                                        image:
+                                            NetworkImage(document["imageURL"])),
+                                  ));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color(0x202b2b2b),
+                                    spreadRadius: 2,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 1))
+                              ]),
+                          width: 144,
+                          child: Stack(
+                              alignment: Alignment.topCenter,
+                              children: <Widget>[
+                                Image.network(
+                                  document["imageURL"],
+                                  height: 120,
+                                ),
+                                Positioned(
+                                  bottom: 10,
+                                  child: Container(
+                                      height: 40,
+                                      width: 98,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        //color: Colors.indigo[50],
                                       ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
+                                      child: Padding(
+                                          padding: EdgeInsets.all(1),
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Text(
+                                                  document["name"],
+                                                  style: TextStyle(
+                                                    fontFamily: 'Anakotmai',
+                                                    color: Color(0xff2b2b2b),
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 3) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: animalCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 4) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: actionCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 5) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: mathCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 6) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: foodCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 7) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: numberCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 8) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: feelCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 9) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: pronounCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 10) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: countryCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 11) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: locationCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else if (location == 12) {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: thingsCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      } else {
-        return Container(
-            height: 180,
-            color: Colors.white,
-            child: StreamBuilder(
-                stream: otherCollection.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((document) {
-                        return InkWell(
-                          onTap: () {
-                            /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-                            return;*/
-                            print('clicked');
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Center(
-                                        child: Text(
-                                          document["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Color(0xff2b2b2b),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Image(
-                                          image: NetworkImage(
-                                              document["imageURL"])),
-                                    ));
-                          },
-                          child: Container(
-                            margin:
-                                EdgeInsets.only(left: 24, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x202b2b2b),
-                                      spreadRadius: 2,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 1))
-                                ]),
-                            width: 144,
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[
-                                  Image.network(
-                                    document["imageURL"],
-                                    height: 120,
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    child: Container(
-                                        height: 40,
-                                        width: 98,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          //color: Colors.indigo[50],
-                                        ),
-                                        child: Padding(
-                                            padding: EdgeInsets.all(1),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    document["name"],
-                                                    style: TextStyle(
-                                                      fontFamily: 'Anakotmai',
-                                                      color: Color(0xff2b2b2b),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ]))),
-                                  )
-                                ]),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }));
-      }
+                                                ),
+                                              ]))),
+                                )
+                              ]),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              }));
     }
 
     final capture = Positioned(
@@ -1681,19 +445,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    'คลังภาษามือไทย 100 คำ',
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        yes = false;
+                        print('click to back (false) = ');
+                        print(yes);
+                      });
+                      //return;
+                    },
+                    hoverColor: Colors.red,
+                    child: Text(
+                      yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Colors.black87,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  /*Text(
+                    yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
                     style: TextStyle(
                       fontFamily: 'Anakotmai',
                       color: Colors.black87,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
-                  ),
+                  ),*/
                   SizedBox(
                     height: 15,
                   ),
-                  yes ? rowVocab(id) : rowCatagory,
+                  yes ? rowVocab(location) : rowCatagory,
                   SizedBox(
                     height: 10,
                   ),
@@ -1766,3 +550,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         }
                       },
                     ),*/
+
+    /*final CollectionReference actionCollection = FirebaseFirestore.instance.collection('Category/action/actionList');
+    final CollectionReference animalCollection = FirebaseFirestore.instance.collection('Category/animal/animalList');
+    final CollectionReference bodyCollection = FirebaseFirestore.instance.collection('Category/body/bodyList');
+    final CollectionReference countryCollection =
+        FirebaseFirestore.instance.collection('Category/country/countryList');
+    final CollectionReference feelCollection =
+        FirebaseFirestore.instance.collection('Category/feel/feelList');
+    final CollectionReference foodCollection =
+        FirebaseFirestore.instance.collection('Category/food/foodList');
+    final CollectionReference locationCollection =
+        FirebaseFirestore.instance.collection('Category/location/locationList');
+    final CollectionReference mathCollection = FirebaseFirestore.instance.collection('Category/math/mathList');
+    final CollectionReference numberCollection =
+        FirebaseFirestore.instance.collection('Category/number/numberList');
+    final CollectionReference otherCollection =
+        FirebaseFirestore.instance.collection('Category/other/otherList');
+    final CollectionReference pronounCollection =
+        FirebaseFirestore.instance.collection('Category/pronoun/pronounList');
+    final CollectionReference thingsCollection =
+        FirebaseFirestore.instance.collection('Category/things/thingsList');
+    final CollectionReference timeCollection = FirebaseFirestore.instance.collection('Category/time/timeList');*/
