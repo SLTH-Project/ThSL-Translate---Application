@@ -1,5 +1,7 @@
 //import 'dart:html';
 
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -72,16 +74,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print('click category = ');
+    print("================================================================");
+    print('START : click category = ');
     print(yes);
 
     final screenSize = MediaQuery.of(context).size;
-
-    /*final CollectionReference categoryPicCollection =
-        FirebaseFirestore.instance.collection('CategoryPic');
-    setState(() {});
-    final CollectionReference HowToCollection =
-        FirebaseFirestore.instance.collection('HowTo');*/
 
     final panel = ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
@@ -253,7 +250,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             }));
 
     rowVocab(String locate) {
-      print('in rowVocab');
+      print('----in rowVocab----');
 
       print('location = ');
       print(locate);
@@ -275,13 +272,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     children: snapshot.data!.docs.map((document) {
                       return InkWell(
                         onTap: () {
-                          /*setState(() {
-                              yes = false;
-                              print('yes = ');
-                            });
-
-                            return;*/
-                          print('clicked');
+                          print('click to show pic');
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
@@ -449,7 +440,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     onTap: () {
                       setState(() {
                         yes = false;
-                        print('click to back (false) = ');
+                        print('click to back to category (false) = ');
                         print(yes);
                       });
                       //return;
