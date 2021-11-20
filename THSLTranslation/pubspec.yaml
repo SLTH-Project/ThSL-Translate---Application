@@ -46,6 +46,7 @@ dependencies:
   firebase_core: ^1.8.0
   firebase_analytics: ^5.0.2
   cloud_firestore: ^2.5.4
+  tflite_flutter_helper: ^0.3.0
 
 
 dev_dependencies:

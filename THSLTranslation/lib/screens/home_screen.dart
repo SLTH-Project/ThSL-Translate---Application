@@ -13,9 +13,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-/*import org.tensorflow.lite.support.image.ImageProcessor;
-import org.tensorflow.lite.support.image.TensorImage;
-import org.tensorflow.lite.support.image.ops.ResizeOp;*/
+import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 
 class Item {
   Item({
@@ -153,20 +151,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       print("image height : ");
       print(decodedImage.height);
 
-      /*Bitmap assetsBitmap = getBitmapFromAsset(mContext, "picture.jpg");
+      ImageProcessor imageProcessor = ImageProcessorBuilder()
+          .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
+          .build();
 
-    ImageProcessor imageProcessor =
-            new ImageProcessor.Builder()
-                    .add(new ResizeOp(32, 32, ResizeOp.ResizeMethod.BILINEAR))
-                    //.add(new NormalizeOp(127.5f, 127.5f))
-                    .build();
+      TensorImage tensorImage = TensorImage.fromFile(image);
 
-    TensorImage tImage = new TensorImage(DataType.FLOAT32);
+      tensorImage = imageProcessor.process(tensorImage);
 
-    tImage.load(assetsBitmap);
-    tImage = imageProcessor.process(tImage);*/
-
-      classifyImage(image);
+      classifyImage(tensorImage);
       print("after classify");
     });
   }
