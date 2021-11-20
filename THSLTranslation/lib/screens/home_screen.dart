@@ -13,6 +13,10 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
+/*import org.tensorflow.lite.support.image.ImageProcessor;
+import org.tensorflow.lite.support.image.TensorImage;
+import org.tensorflow.lite.support.image.ops.ResizeOp;*/
+
 class Item {
   Item({
     required this.expandedValue,
@@ -139,9 +143,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       print("image is null");
       return null;
     }
-    setState(() {
+    setState(() async {
       _loading = true;
       File image = File(_image.path);
+
+      var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+      print("image width : ");
+      print(decodedImage.width);
+      print("image height : ");
+      print(decodedImage.height);
+
+      /*Bitmap assetsBitmap = getBitmapFromAsset(mContext, "picture.jpg");
+
+    ImageProcessor imageProcessor =
+            new ImageProcessor.Builder()
+                    .add(new ResizeOp(32, 32, ResizeOp.ResizeMethod.BILINEAR))
+                    //.add(new NormalizeOp(127.5f, 127.5f))
+                    .build();
+
+    TensorImage tImage = new TensorImage(DataType.FLOAT32);
+
+    tImage.load(assetsBitmap);
+    tImage = imageProcessor.process(tImage);*/
 
       classifyImage(image);
       print("after classify");
@@ -635,7 +658,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       },
                     ),*/
 
-    /*final CollectionReference actionCollection = FirebaseFirestore.instance.collection('Category/action/actionList');
+/*final CollectionReference actionCollection = FirebaseFirestore.instance.collection('Category/action/actionList');
     final CollectionReference animalCollection = FirebaseFirestore.instance.collection('Category/animal/animalList');
     final CollectionReference bodyCollection = FirebaseFirestore.instance.collection('Category/body/bodyList');
     final CollectionReference countryCollection =
