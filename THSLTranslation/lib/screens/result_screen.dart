@@ -175,12 +175,12 @@ class _ResultPageState extends State<ResultPage> {
             )),
         backgroundColor: Colors.white,
       ),
-      body: Column(
+      body: SingleChildScrollView(
+          child: Column(
         children: <Widget>[
           AspectRatio(
             aspectRatio: 1,
             child: Image.file(
-              //File(widget.imagePath),
               widget.image,
               fit: BoxFit.cover,
             ),
@@ -202,9 +202,12 @@ class _ResultPageState extends State<ResultPage> {
                 fontSize: 50,
                 fontWeight: FontWeight.w700,
               )),
-          reButton
+          reButton,
+          SizedBox(
+            height: 50,
+          )
         ],
-      ),
+      )),
 
       /*Image.file(
           File(widget.imagePath),
