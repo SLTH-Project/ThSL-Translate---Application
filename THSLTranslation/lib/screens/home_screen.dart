@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         builder: (context) => ResultPage(
           image: image,
           name: _outputs[0]["label"],
+          camera: widget.camera,
         ),
       ),
     );
@@ -435,7 +436,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               }));
     }
 
-    /*final capture = Positioned(
+    final capture = Positioned(
         bottom: 20,
         child: Container(
             width: screenSize.width,
@@ -445,14 +446,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 onPressed: () async {
                   try {
                     await _initializeControllerFuture;
-                    final image = await controller.takePicture();
-                    await Navigator.of(context).push(
+                    final img = await controller.takePicture();
+                    classifyImage(File(img.path));
+                    /*await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ResultPage(
-                          imagePath: image.path,
+                          image: File(img.path),
+                          name: ,
                         ),
                       ),
-                    );
+                    );*/
                   } catch (e) {
                     print(e);
                   }
@@ -461,7 +464,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Icons.camera_alt,
                   color: Colors.white,
                   size: 50,
-                ))));*/
+                ))));
 
     final camera = Stack(
       children: <Widget>[
@@ -489,7 +492,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
-        //capture
+        capture
       ],
     );
 

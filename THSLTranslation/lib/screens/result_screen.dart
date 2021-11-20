@@ -3,16 +3,17 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-//import 'package:image/image.dart' as imgg;
+
+import 'package:thsltranslation/screens/home_screen.dart';
 
 class ResultPage extends StatefulWidget {
-  //const ResultPage({Key? key, required this.imagePath}) : super(key: key);
-  const ResultPage({Key? key, required this.image, required this.name})
+  const ResultPage(
+      {Key? key, required this.image, required this.name, required this.camera})
       : super(key: key);
 
-  //final String imagePath;
   final File image;
   final String name;
+  final CameraDescription camera;
 
   @override
   State<ResultPage> createState() => _ResultPageState();
@@ -125,13 +126,46 @@ class _ResultPageState extends State<ResultPage> {
       vocab = 'เลข 0';
     }
 
+    final reButton = InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage(camera: widget.camera)));
+        },
+        child: Container(
+          padding: const EdgeInsets.only(top: 11),
+          width: 230,
+          height: 50,
+          decoration: BoxDecoration(
+              color: Color(0xff1821ae),
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+          child: Text(
+            'เริ่มการจับภาพใหม่',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Anakotmai',
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ));
+
     return Scaffold(
       backgroundColor: Color(0xF7F7F7FF),
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: Colors.grey,
-        ),
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(camera: widget.camera)));
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.grey,
+            )),
         title: Text('THSL Translate',
             style: TextStyle(
               fontFamily: 'Anakotmai',
@@ -152,7 +186,7 @@ class _ResultPageState extends State<ResultPage> {
             ),
           ),
           SizedBox(
-            height: 50,
+            height: 40,
           ),
           Text("ผลการแปลภาษามือไทย",
               style: TextStyle(
@@ -167,7 +201,8 @@ class _ResultPageState extends State<ResultPage> {
                 color: Color(0xFF2B2B2B),
                 fontSize: 50,
                 fontWeight: FontWeight.w700,
-              ))
+              )),
+          reButton
         ],
       ),
 
