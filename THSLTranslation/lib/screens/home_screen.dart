@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print(output);
 
     if (output!.isEmpty) {
-      print("in if output = []");
       var tmp = {
         "confidence": 0,
         "index": 100,
@@ -113,12 +112,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       _outputs = output!;
     });
 
-    print("_outputs = ");
-    print(_outputs);
-
     print("classifyImage set state complete");
-    print(
-        "==============================================================================");
+    print("==================================================================");
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
@@ -161,7 +156,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print("================================================================");
+    print("==================================================================");
     print('START : click category = ');
     print(yes);
 
@@ -273,8 +268,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       onTap: () {
                         setState(() {
                           yes = true;
-                          print('click category = ');
-                          print(yes);
+                          //print('click category = ');
+                          //print(yes);
                           location = document["location"];
                           categoryName = "     <  " + document["name"];
                         });
@@ -337,10 +332,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             }));
 
     rowVocab(String locate) {
-      print('----in rowVocab----');
+      //print('----in rowVocab----');
 
-      print('location = ');
-      print(locate);
+      //print('location = ');
+      //print(locate);
 
       return Container(
           height: 180,
@@ -359,7 +354,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     children: snapshot.data!.docs.map((document) {
                       return InkWell(
                         onTap: () {
-                          print('click to show pic');
+                          //print('click to show pic');
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
@@ -529,8 +524,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     onTap: () {
                       setState(() {
                         yes = false;
-                        print('click to back to category (false) = ');
-                        print(yes);
+                        //print('click to back to category (false) = ');
+                        //print(yes);
                       });
                       //return;
                     },
