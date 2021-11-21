@@ -151,15 +151,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       print("image height : ");
       print(decodedImage.height);
 
-      ImageProcessor imageProcessor = ImageProcessorBuilder()
+      /*ImageProcessor imageProcessor = ImageProcessorBuilder()
           .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
           .build();
 
       TensorImage tensorImage = TensorImage.fromFile(image);
 
-      tensorImage = imageProcessor.process(tensorImage);
+      tensorImage = imageProcessor.process(tensorImage);*/
 
-      classifyImage(tensorImage);
+      classifyImage(image);
       print("after classify");
     });
   }
