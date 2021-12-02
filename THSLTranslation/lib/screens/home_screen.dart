@@ -35,7 +35,7 @@ class Item {
 List<Item> generateItems(int numberOfItems) {
   return List<Item>.generate(numberOfItems, (int index) {
     return Item(
-      headerValue: 'วิธีใช้งาน',
+      headerValue: '     วิธีใช้งาน',
       expandedValue: 'เขียนไปก็ไม่ขึ้น',
     );
   });
@@ -104,6 +104,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   _predict(File image) async {
+    print("in predict");
     img.Image imageInput = img.decodeImage(_image!.readAsBytesSync())!;
     var pred = _classifier.predict(imageInput);
 
@@ -147,9 +148,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print('START : click category = ');
     print(yes);
 
+    if (yes == false) {
+      setState(() {
+        yes = false;
+      });
+    }
+
     final screenSize = MediaQuery.of(context).size;
 
     final panel = ExpansionPanelList(
+      expandedHeaderPadding: EdgeInsets.all(1),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _data[index].isExpanded = !isExpanded;
@@ -164,7 +172,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   style: TextStyle(
                     fontFamily: 'Anakotmai',
                     color: Colors.black87,
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                   )),
             );
@@ -188,7 +196,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         children: snapshot.data!.docs.map((document) {
                           return Container(
                               margin:
-                                  EdgeInsets.only(left: 24, top: 5, bottom: 20),
+                                  EdgeInsets.only(left: 24, top: 5, bottom: 25),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.white,
@@ -199,32 +207,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                         blurRadius: 4,
                                         offset: Offset(0, 1))
                                   ]),
-                              width: 259,
-                              height: 134,
-                              child: Column(children: <Widget>[
-                                Image.network(
-                                  document["imageURL"],
-                                  height: 63,
-                                ),
-                                Text(
-                                  document["detail1"],
-                                  style: TextStyle(
-                                    fontFamily: 'Anakotmai',
-                                    color: Color(0xff2b2b2b),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Text(
-                                  document["detail2"],
-                                  style: TextStyle(
-                                    fontFamily: 'Anakotmai',
-                                    color: Color(0xff2b2b2b),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ]));
+                              width: 200,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Image.network(
+                                      document["imageURL"],
+                                      height: 65,
+                                    ),
+                                    Text(
+                                      document["detail1"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff2b2b2b),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      document["detail2"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff2b2b2b),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ]));
                         }).toList(),
                       );
                     }
@@ -235,7 +244,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
 
     final rowCatagory = Container(
-        height: 180,
+        height: 110,
         color: Colors.white,
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
@@ -270,20 +279,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             boxShadow: [
                               BoxShadow(
                                   color: Color(0x202b2b2b),
-                                  spreadRadius: 2,
+                                  spreadRadius: 3,
                                   blurRadius: 4,
                                   offset: Offset(0, 1))
                             ]),
-                        width: 144,
+                        width: 90,
                         child: Stack(
                             alignment: Alignment.topCenter,
                             children: <Widget>[
                               Image.network(
                                 document["imageURL"],
-                                height: 120,
+                                height: 70,
                               ),
                               Positioned(
-                                bottom: 10,
+                                bottom: 0,
                                 child: Container(
                                     height: 40,
                                     width: 98,
@@ -304,7 +313,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                 style: TextStyle(
                                                   fontFamily: 'Anakotmai',
                                                   color: Color(0xff2b2b2b),
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -325,7 +334,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       //print(locate);
 
       return Container(
-          height: 180,
+          height: 110,
           color: Colors.white,
           child: StreamBuilder(
               stream: FirebaseFirestore.instance.collection(locate).snapshots(),
@@ -345,22 +354,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                    title: Center(
-                                      child: Text(
-                                        document["name"],
-                                        style: TextStyle(
-                                          fontFamily: 'Anakotmai',
-                                          color: Color(0xff2b2b2b),
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                  title: Center(
+                                    child: Text(
+                                      document["name"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff2b2b2b),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                    content: Image(
-                                        image:
-                                            NetworkImage(document["imageURL"])),
-                                  ));
+                                  ),
+                                  content: Container(
+                                    child: Image(
+                                      image: NetworkImage(document["imageURL"]),
+                                    ),
+                                  )));
                         },
+                        /*onHover: () {
+
+                        },*/
                         child: Container(
                           margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
                           decoration: BoxDecoration(
@@ -369,20 +382,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               boxShadow: [
                                 BoxShadow(
                                     color: Color(0x202b2b2b),
-                                    spreadRadius: 2,
+                                    spreadRadius: 3,
                                     blurRadius: 4,
                                     offset: Offset(0, 1))
                               ]),
-                          width: 144,
+                          width: 90,
                           child: Stack(
                               alignment: Alignment.topCenter,
                               children: <Widget>[
                                 Image.network(
                                   document["imageURL"],
-                                  height: 120,
+                                  height: 70,
                                 ),
                                 Positioned(
-                                  bottom: 10,
+                                  bottom: 0,
                                   child: Container(
                                       height: 40,
                                       width: 98,
@@ -403,7 +416,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                   style: TextStyle(
                                                     fontFamily: 'Anakotmai',
                                                     color: Color(0xff2b2b2b),
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
@@ -419,17 +432,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     final capture = Positioned(
-        bottom: 20,
-        child: Container(
-            width: screenSize.width,
-            alignment: Alignment.center,
+        //right: 5,
+        //bottom: 20,
+        child: /*Container(
+            width: screenSize.width / 2,
+            //alignment: Alignment.center,
             //color: Colors.white,
-            child: IconButton(
+            child:*/
+            IconButton(
                 onPressed: () async {
                   try {
                     await _initializeControllerFuture;
-                    final img = await controller.takePicture();
+                    final imageFromCamera = await controller.takePicture();
                     //classifyImage(File(img.path));
+                    setState(() {
+                      _image = File(imageFromCamera.path);
+                      print("----capture----");
+                      _predict(_image!);
+                    });
                   } catch (e) {
                     print(e);
                   }
@@ -438,7 +458,27 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Icons.camera_alt,
                   color: Colors.white,
                   size: 50,
-                ))));
+                ))
+        //)
+        );
+
+    final gallery = Positioned(
+        //left: 5,
+        //bottom: 20,
+        child: /*Container(
+            width: screenSize.width / 2,
+            //alignment: Alignment.center,
+            //color: Colors.white,
+            child:*/
+            IconButton(
+                onPressed: getImage,
+                icon: Icon(
+                  Icons.photo_library,
+                  color: Colors.white,
+                  size: 50,
+                ))
+        //)
+        );
 
     final camera = Stack(
       children: <Widget>[
@@ -466,14 +506,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
-        capture
+        Positioned(
+          bottom: 20,
+          child: Container(
+            width: screenSize.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                capture,
+                SizedBox(
+                  width: 30,
+                ),
+                gallery
+              ],
+            ),
+          ),
+        ),
+        //capture
       ],
     );
 
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
-          initialChildSize: 0.1,
-          minChildSize: 0.1,
+          initialChildSize: 0.12,
+          minChildSize: 0.12,
           maxChildSize: 0.4,
           builder: (BuildContext context, scrollController) {
             return Container(
@@ -513,28 +569,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       style: TextStyle(
                         fontFamily: 'Anakotmai',
                         color: Colors.black87,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
-                  /*Text(
-                    yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
-                    style: TextStyle(
-                      fontFamily: 'Anakotmai',
-                      color: Colors.black87,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),*/
                   SizedBox(
                     height: 15,
                   ),
                   yes ? rowVocab(location) : rowCatagory,
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
-                  //rowCatagory
                 ],
               ),
             );
@@ -553,35 +599,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                backgroundColor: Color(0xFFEBEEF5),
-                appBar: AppBar(
-                  leading: Container(),
-                  centerTitle: true,
-                  title: Text('THSL Translate',
-                      style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Color(0xFF2B2B2B),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      )),
-                  backgroundColor: Colors.white,
-                ),
-                body: SizedBox.expand(
-                    child: Stack(children: <Widget>[
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        camera,
-                        panel,
-                        SizedBox(
-                          height: 60,
-                        ),
-                      ],
-                    ),
+              backgroundColor: Color(0xFFEBEEF5),
+              appBar: AppBar(
+                leading: Container(),
+                centerTitle: true,
+                title: Text('THSL Translate',
+                    style: TextStyle(
+                      fontFamily: 'Anakotmai',
+                      color: Color(0xFF2B2B2B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    )),
+                backgroundColor: Colors.white,
+              ),
+              body: SizedBox.expand(
+                  child: Stack(children: <Widget>[
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      camera,
+                      panel,
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
                   ),
-                  bottomSwipeUp
-                ])),
-                floatingActionButton: FloatingActionButton(
+                ),
+                bottomSwipeUp
+              ])),
+              /*floatingActionButton: FloatingActionButton(
                   tooltip: 'Pick Image',
                   //onPressed: pickImage,
                   onPressed: getImage,
@@ -591,7 +637,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     color: Colors.white,
                   ),
                   backgroundColor: Colors.amber,
-                ));
+                )*/
+            );
           }
           return Scaffold(
             body: Center(

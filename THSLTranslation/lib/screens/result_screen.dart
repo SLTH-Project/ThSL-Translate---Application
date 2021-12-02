@@ -2,7 +2,6 @@
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 import 'dart:io';
 
 import 'package:thsltranslation/screens/home_screen.dart';
@@ -24,6 +23,7 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> {
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
     String vocab = '';
 
@@ -138,8 +138,8 @@ class _ResultPageState extends State<ResultPage> {
         },
         child: Container(
           padding: const EdgeInsets.only(top: 11),
-          width: 230,
-          height: 50,
+          width: 180,
+          height: 40,
           decoration: BoxDecoration(
               color: Color(0xff1821ae),
               borderRadius: BorderRadius.all(Radius.circular(100))),
@@ -149,7 +149,7 @@ class _ResultPageState extends State<ResultPage> {
             style: TextStyle(
               fontFamily: 'Anakotmai',
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -181,34 +181,45 @@ class _ResultPageState extends State<ResultPage> {
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
-          AspectRatio(
-            aspectRatio: 1,
-            child: Image.file(
-              widget.image,
-              fit: BoxFit.cover,
+          Container(
+            width: screenSize.width,
+            height: screenSize.width,
+            color: Color(0xFFEBEEF5),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Center(
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  child: Image.file(
+                    widget.image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-          ),
-          SizedBox(
-            height: 40,
           ),
           Text("ผลการแปลภาษามือไทย",
               style: TextStyle(
                 fontFamily: 'Anakotmai',
                 color: Color(0xFF2B2B2B),
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: FontWeight.normal,
               )),
           Text(vocab,
               style: TextStyle(
                 fontFamily: 'Anakotmai',
                 color: Color(0xFF2B2B2B),
-                fontSize: 50,
+                fontSize: 36,
                 fontWeight: FontWeight.w700,
               )),
+          SizedBox(
+            height: 5,
+          ),
           reButton,
           SizedBox(
-            height: 50,
-          )
+            height: 20,
+          ),
         ],
       )),
 
