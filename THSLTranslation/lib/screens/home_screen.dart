@@ -13,7 +13,13 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-/*import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';*/
+import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
+
+import 'package:image/image.dart' as img;
+import 'package:thsltranslation/models/classifier.dart';
+import 'package:thsltranslation/models/classifier_quant.dart';
+import 'package:thsltranslation/models/classifier_float.dart';
+import 'package:logger/logger.dart';
 
 class Item {
   Item({
@@ -58,9 +64,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   //late File _image;
   bool _loading = false;
 
+  //----------Classify---------------------
+  late Classifier _classifier;
+
+  var logger = Logger();
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Image? _imageWidget;
+
+  img.Image? fox;
+
+  Category? category;
+  //----------------------------------------
+
   @override
   void initState() {
     super.initState();
+    _classifier = ClassifierFloat();
     controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
@@ -70,14 +92,44 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     _loading = true;
 
-    loadModel().then((value) {
+    /*loadModel().then((value) {
       setState(() {
         _loading = false;
       });
+    });*/
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(pickedFile!.path);
+      _imageWidget = Image.file(_image!);
+
+      _predict(_image!);
     });
   }
 
-  loadModel() async {
+  _predict(File image) async {
+    img.Image imageInput = img.decodeImage(_image!.readAsBytesSync())!;
+    var pred = _classifier.predict(imageInput);
+
+    setState(() {
+      this.category = pred;
+    });
+
+    return await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          image: image,
+          name: category!.label,
+          camera: widget.camera,
+        ),
+      ),
+    );
+  }
+
+  /*loadModel() async {
     await Tflite.loadModel(
       model: "assets/model_B_rmsProp.tflite",
       labels: "assets/labels.txt",
@@ -125,7 +177,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
       ),
     );
-  }
+  }*/
 
   @override
   void dispose() {
@@ -134,7 +186,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  pickImage() async {
+  /*pickImage() async {
     print("-----------------------------------------------------------");
     var _image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (_image == null) {
@@ -151,18 +203,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       print("image height : ");
       print(decodedImage.height);
 
-      /*ImageProcessor imageProcessor = ImageProcessorBuilder()
+      ImageProcessor imageProcessor = ImageProcessorBuilder()
           .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
           .build();
 
       TensorImage tensorImage = TensorImage.fromFile(image);
 
-      tensorImage = imageProcessor.process(tensorImage);*/
+      tensorImage = imageProcessor.process(tensorImage);
 
+      //classifyImage(tensorImage);
       classifyImage(image);
       print("after classify");
     });
-  }
+  }*/
 
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
@@ -458,7 +511,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   try {
                     await _initializeControllerFuture;
                     final img = await controller.takePicture();
-                    classifyImage(File(img.path));
+                    //classifyImage(File(img.path));
                     /*await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ResultPage(
@@ -590,45 +643,45 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-              backgroundColor: Color(0xFFEBEEF5),
-              appBar: AppBar(
-                leading: Container(),
-                centerTitle: true,
-                title: Text('THSL Translate',
-                    style: TextStyle(
-                      fontFamily: 'Anakotmai',
-                      color: Color(0xFF2B2B2B),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    )),
-                backgroundColor: Colors.white,
-              ),
-              body: SizedBox.expand(
-                  child: Stack(children: <Widget>[
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      camera,
-                      panel,
-                      SizedBox(
-                        height: 60,
-                      ),
-                    ],
-                  ),
+                backgroundColor: Color(0xFFEBEEF5),
+                appBar: AppBar(
+                  leading: Container(),
+                  centerTitle: true,
+                  title: Text('THSL Translate',
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Color(0xFF2B2B2B),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                  backgroundColor: Colors.white,
                 ),
-                bottomSwipeUp
-              ])),
-              /*floatingActionButton: FloatingActionButton(
+                body: SizedBox.expand(
+                    child: Stack(children: <Widget>[
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        camera,
+                        panel,
+                        SizedBox(
+                          height: 60,
+                        ),
+                      ],
+                    ),
+                  ),
+                  bottomSwipeUp
+                ])),
+                floatingActionButton: FloatingActionButton(
                   tooltip: 'Pick Image',
-                  onPressed: pickImage,
+                  //onPressed: pickImage,
+                  onPressed: getImage,
                   child: Icon(
                     Icons.add_a_photo,
                     size: 20,
                     color: Colors.white,
                   ),
                   backgroundColor: Colors.amber,
-                )*/
-            );
+                ));
           }
           return Scaffold(
             body: Center(

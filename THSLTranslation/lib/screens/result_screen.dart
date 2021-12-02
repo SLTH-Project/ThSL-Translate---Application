@@ -2,6 +2,7 @@
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 import 'dart:io';
 
 import 'package:thsltranslation/screens/home_screen.dart';
@@ -12,6 +13,7 @@ class ResultPage extends StatefulWidget {
       : super(key: key);
 
   final File image;
+  //final TensorImage image;
   final String name;
   final CameraDescription camera;
 
