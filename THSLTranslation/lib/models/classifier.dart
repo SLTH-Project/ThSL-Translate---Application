@@ -1,4 +1,4 @@
-import 'dart:math';
+//import 'dart:math';
 
 import 'package:image/image.dart';
 import 'package:collection/collection.dart';
@@ -21,10 +21,8 @@ abstract class Classifier {
   late TfLiteType _inputType;
   late TfLiteType _outputType;
 
-  //final String _labelsFileName = 'assets/labels.txt';
-  final String _labelsFileName = 'assets/labels2.txt';
+  final String _labelsFileName = 'assets/labels.txt';
 
-  //final int _labelsLength = 1001;
   final int _labelsLength = 50;
 
   late var _probabilityProcessor;
@@ -76,12 +74,12 @@ abstract class Classifier {
   }
 
   TensorImage _preProcess() {
-    //int cropSize = min(_inputImage.height, _inputImage.width);
     int cropSize = 224;
     return ImageProcessorBuilder()
-        .add(ResizeWithCropOrPadOp(cropSize, cropSize))
+        .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
+        /*.add(ResizeWithCropOrPadOp(cropSize, cropSize))
         .add(ResizeOp(
-            _inputShape[1], _inputShape[2], ResizeMethod.NEAREST_NEIGHBOUR))
+            _inputShape[1], _inputShape[2], ResizeMethod.NEAREST_NEIGHBOUR))*/
         .add(preProcessNormalizeOp)
         .build()
         .process(_inputImage);
@@ -91,7 +89,19 @@ abstract class Classifier {
     final pres = DateTime.now().millisecondsSinceEpoch;
     _inputImage = TensorImage(_inputType);
     _inputImage.loadImage(image);
+
+    print("image width = ");
+    print(image.width);
+    print("image height = ");
+    print(image.height);
+
     _inputImage = _preProcess();
+
+    print("image width after pre process = ");
+    print(_inputImage.width);
+    print("image height after pre process = ");
+    print(_inputImage.height);
+
     final pre = DateTime.now().millisecondsSinceEpoch - pres;
 
     print('Time to load image: $pre ms');

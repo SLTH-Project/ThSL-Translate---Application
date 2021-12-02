@@ -17,7 +17,6 @@ import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 
 import 'package:image/image.dart' as img;
 import 'package:thsltranslation/models/classifier.dart';
-import 'package:thsltranslation/models/classifier_quant.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
 
@@ -60,7 +59,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   final List<Item> _data = generateItems(1);
 
-  List _outputs = [];
+  //List _outputs = [];
   //late File _image;
   bool _loading = false;
 
@@ -71,8 +70,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   File? _image;
   final picker = ImagePicker();
-
-  Image? _imageWidget;
 
   img.Image? fox;
 
@@ -90,13 +87,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     _initializeControllerFuture = controller.initialize();
 
-    _loading = true;
-
-    /*loadModel().then((value) {
-      setState(() {
-        _loading = false;
-      });
-    });*/
+    setState(() {
+      _loading = true;
+    });
   }
 
   Future getImage() async {
@@ -104,8 +97,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     setState(() {
       _image = File(pickedFile!.path);
-      _imageWidget = Image.file(_image!);
-
+//      _imageWidget = Image.file(_image!);
+      print("get image");
       _predict(_image!);
     });
   }
@@ -118,6 +111,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       this.category = pred;
     });
 
+    print("predict : ");
+    print(category!.label);
+
+    print("confidence : ");
+    print(category!.score);
+
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
@@ -129,93 +128,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  /*loadModel() async {
-    await Tflite.loadModel(
-      model: "assets/model_B_rmsProp.tflite",
-      labels: "assets/labels.txt",
-      numThreads: 1,
-    );
-  }
-
-  classifyImage(File image) async {
-    print("classifyImage running");
-    var output = await Tflite.runModelOnImage(
-        path: image.path,
-        imageMean: 127.5, //0
-        imageStd: 127.5, //255.0
-        numResults: 3,
-        threshold: 0.1, //0.2
-        asynch: true);
-
-    print("output = ");
-    print(output);
-
-    if (output!.isEmpty) {
-      var tmp = {
-        "confidence": 0,
-        "index": 100,
-        "label": "Can't identify",
-      };
-      output = [...output, tmp];
-      print("output after change in if = ");
-      print(output);
-    }
-
-    setState(() {
-      _loading = false;
-      _outputs = output!;
-    });
-
-    print("classifyImage set state complete");
-    print("==================================================================");
-    return await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ResultPage(
-          image: image,
-          name: _outputs[0]["label"],
-          camera: widget.camera,
-        ),
-      ),
-    );
-  }*/
-
   @override
   void dispose() {
     Tflite.close();
     controller.dispose();
     super.dispose();
   }
-
-  /*pickImage() async {
-    print("-----------------------------------------------------------");
-    var _image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (_image == null) {
-      print("image is null");
-      return null;
-    }
-    setState(() async {
-      _loading = true;
-      File image = File(_image.path);
-
-      var decodedImage = await decodeImageFromList(image.readAsBytesSync());
-      print("image width : ");
-      print(decodedImage.width);
-      print("image height : ");
-      print(decodedImage.height);
-
-      ImageProcessor imageProcessor = ImageProcessorBuilder()
-          .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
-          .build();
-
-      TensorImage tensorImage = TensorImage.fromFile(image);
-
-      tensorImage = imageProcessor.process(tensorImage);
-
-      //classifyImage(tensorImage);
-      classifyImage(image);
-      print("after classify");
-    });
-  }*/
 
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
@@ -512,14 +430,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     await _initializeControllerFuture;
                     final img = await controller.takePicture();
                     //classifyImage(File(img.path));
-                    /*await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ResultPage(
-                          image: File(img.path),
-                          name: ,
-                        ),
-                      ),
-                    );*/
                   } catch (e) {
                     print(e);
                   }
