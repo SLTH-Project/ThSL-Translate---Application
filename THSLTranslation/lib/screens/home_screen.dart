@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
+/*import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';*/
 
 class Item {
   Item({
@@ -590,35 +590,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                backgroundColor: Color(0xFFEBEEF5),
-                appBar: AppBar(
-                  leading: Container(),
-                  centerTitle: true,
-                  title: Text('THSL Translate',
-                      style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Color(0xFF2B2B2B),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      )),
-                  backgroundColor: Colors.white,
-                ),
-                body: SizedBox.expand(
-                    child: Stack(children: <Widget>[
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        camera,
-                        panel,
-                        SizedBox(
-                          height: 60,
-                        ),
-                      ],
-                    ),
+              backgroundColor: Color(0xFFEBEEF5),
+              appBar: AppBar(
+                leading: Container(),
+                centerTitle: true,
+                title: Text('THSL Translate',
+                    style: TextStyle(
+                      fontFamily: 'Anakotmai',
+                      color: Color(0xFF2B2B2B),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    )),
+                backgroundColor: Colors.white,
+              ),
+              body: SizedBox.expand(
+                  child: Stack(children: <Widget>[
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      camera,
+                      panel,
+                      SizedBox(
+                        height: 60,
+                      ),
+                    ],
                   ),
-                  bottomSwipeUp
-                ])),
-                floatingActionButton: FloatingActionButton(
+                ),
+                bottomSwipeUp
+              ])),
+              /*floatingActionButton: FloatingActionButton(
                   tooltip: 'Pick Image',
                   onPressed: pickImage,
                   child: Icon(
@@ -627,7 +627,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     color: Colors.white,
                   ),
                   backgroundColor: Colors.amber,
-                ));
+                )*/
+            );
           }
           return Scaffold(
             body: Center(
