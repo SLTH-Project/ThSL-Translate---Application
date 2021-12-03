@@ -181,7 +181,14 @@ class _ResultPageState extends State<ResultPage> {
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
-          Container(
+          AspectRatio(
+            aspectRatio: 1,
+            child: Image.file(
+              widget.image,
+              fit: BoxFit.cover,
+            ),
+          ),
+          /*Container(
             width: screenSize.width,
             height: screenSize.width,
             color: Color(0xFFEBEEF5),
@@ -199,7 +206,7 @@ class _ResultPageState extends State<ResultPage> {
               ),
             ),
             //),
-          ),
+          ),*/
           Text("ผลการแปลภาษามือไทย",
               style: TextStyle(
                 fontFamily: 'Anakotmai',
