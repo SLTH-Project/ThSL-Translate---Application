@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  final Future<FirebaseApp> firebase = Firebase.initializeApp();
+  //final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   bool yes = false;
   String location = '';
@@ -140,13 +140,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      print(
-          "==================================================================");
-      print('START : click category = ');
-      print(yes);
-    });
-
+    print("==================================================================");
+    print('START : click category = ');
+    print(yes);
+    //final Future<FirebaseApp> firebase = Firebase.initializeApp();
     final screenSize = MediaQuery.of(context).size;
 
     final panel = ExpansionPanelList(
@@ -560,7 +557,48 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
-    return FutureBuilder(
+    return Scaffold(
+      backgroundColor: Color(0xFFEBEEF5),
+      appBar: AppBar(
+        leading: Container(),
+        centerTitle: true,
+        title: Text('THSL Translate',
+            style: TextStyle(
+              fontFamily: 'Anakotmai',
+              color: Color(0xFF2B2B2B),
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            )),
+        backgroundColor: Colors.white,
+      ),
+      body: SizedBox.expand(
+          child: Stack(children: <Widget>[
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              camera,
+              panel,
+              SizedBox(
+                height: 50,
+              ),
+            ],
+          ),
+        ),
+        bottomSwipeUp
+      ])),
+      /*floatingActionButton: FloatingActionButton(
+                  tooltip: 'Pick Image',
+                  //onPressed: pickImage,
+                  onPressed: getImage,
+                  child: Icon(
+                    Icons.add_a_photo,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  backgroundColor: Colors.amber,
+                )*/
+    );
+    /*return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -618,7 +656,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               child: CircularProgressIndicator(),
             ),
           );
-        });
+        });*/
   }
 }
 
