@@ -185,19 +185,20 @@ class _ResultPageState extends State<ResultPage> {
             width: screenSize.width,
             height: screenSize.width,
             color: Color(0xFFEBEEF5),
-            child: AspectRatio(
+            child: /*AspectRatio(
               aspectRatio: 1,
-              child: Center(
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  child: Image.file(
-                    widget.image,
-                    fit: BoxFit.cover,
-                  ),
+              child: */
+                Center(
+              child: Container(
+                width: 300,
+                height: 300,
+                child: Image.file(
+                  widget.image,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
+            //),
           ),
           Text("ผลการแปลภาษามือไทย",
               style: TextStyle(

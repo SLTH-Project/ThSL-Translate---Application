@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   //List _outputs = [];
   //late File _image;
-  bool _loading = false;
+  //bool _loading = false;
 
   //----------Classify---------------------
   late Classifier _classifier;
@@ -86,10 +86,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
 
     _initializeControllerFuture = controller.initialize();
-
-    setState(() {
-      _loading = true;
-    });
   }
 
   Future getImage() async {
@@ -144,15 +140,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print("==================================================================");
-    print('START : click category = ');
-    print(yes);
-
-    if (yes == false) {
-      setState(() {
-        yes = false;
-      });
-    }
+    setState(() {
+      print(
+          "==================================================================");
+      print('START : click category = ');
+      print(yes);
+    });
 
     final screenSize = MediaQuery.of(context).size;
 
@@ -432,53 +425,34 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     final capture = Positioned(
-        //right: 5,
-        //bottom: 20,
-        child: /*Container(
-            width: screenSize.width / 2,
-            //alignment: Alignment.center,
-            //color: Colors.white,
-            child:*/
-            IconButton(
-                onPressed: () async {
-                  try {
-                    await _initializeControllerFuture;
-                    final imageFromCamera = await controller.takePicture();
-                    //classifyImage(File(img.path));
-                    setState(() {
-                      _image = File(imageFromCamera.path);
-                      print("----capture----");
-                      _predict(_image!);
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                icon: Icon(
-                  Icons.camera_alt,
-                  color: Colors.white,
-                  size: 50,
-                ))
-        //)
-        );
+        child: IconButton(
+            onPressed: () async {
+              try {
+                await _initializeControllerFuture;
+                final imageFromCamera = await controller.takePicture();
+                setState(() {
+                  _image = File(imageFromCamera.path);
+                  print("----capture----");
+                  _predict(_image!);
+                });
+              } catch (e) {
+                print(e);
+              }
+            },
+            icon: Icon(
+              Icons.camera_alt,
+              color: Colors.white,
+              size: 50,
+            )));
 
     final gallery = Positioned(
-        //left: 5,
-        //bottom: 20,
-        child: /*Container(
-            width: screenSize.width / 2,
-            //alignment: Alignment.center,
-            //color: Colors.white,
-            child:*/
-            IconButton(
-                onPressed: getImage,
-                icon: Icon(
-                  Icons.photo_library,
-                  color: Colors.white,
-                  size: 50,
-                ))
-        //)
-        );
+        child: IconButton(
+            onPressed: getImage,
+            icon: Icon(
+              Icons.photo_library,
+              color: Colors.white,
+              size: 50,
+            )));
 
     final camera = Stack(
       children: <Widget>[
@@ -522,7 +496,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ),
           ),
         ),
-        //capture
       ],
     );
 
