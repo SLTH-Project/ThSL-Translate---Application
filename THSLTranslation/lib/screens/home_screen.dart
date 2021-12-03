@@ -453,22 +453,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final camera = Stack(
       children: <Widget>[
-        Container(
+        /*Container(
           width: screenSize.width,
           height: screenSize.width,
           child: ClipRRect(
             child: OverflowBox(
               alignment: Alignment.center,
-              child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Container(
-                    width: screenSize.width,
-                    height: screenSize.width,
-                    child: CameraPreview(controller)),
-              ),
-            ),
-          ),
+              child:*/
+        FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Container(
+              width: screenSize.width,
+              height: screenSize.width,
+              child: CameraPreview(controller)),
         ),
+        /*),
+          ),
+        ),*/
         Image(
           image: AssetImage('assets/images/frame-camera-front.png'),
         ),
