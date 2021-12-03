@@ -4,7 +4,6 @@
 
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -12,7 +11,7 @@ import 'package:thsltranslation/screens/result_screen.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 
 import 'package:image/image.dart' as img;
@@ -558,7 +557,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
-    return Scaffold(
+    /*return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
         leading: Container(),
@@ -598,9 +597,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ),
                   backgroundColor: Colors.amber,
                 )*/
-    );
-    /*return FutureBuilder(
-        future: firebase,
+    );*/
+    return FutureBuilder(
+        future: Firebase.initializeApp(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Scaffold(
@@ -657,7 +656,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               child: CircularProgressIndicator(),
             ),
           );
-        });*/
+        });
   }
 }
 

@@ -181,17 +181,18 @@ class _ResultPageState extends State<ResultPage> {
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
-          AspectRatio(
+          /*AspectRatio(
             aspectRatio: 1,
             child: Image.file(
               widget.image,
               fit: BoxFit.cover,
             ),
-          ),
-          /*Container(
+          ),*/
+          Container(
             width: screenSize.width,
             height: screenSize.width,
-            color: Color(0xFFEBEEF5),
+            //color: Color(0xFFEBEEF5),
+            color: Colors.amber,
             child: /*AspectRatio(
               aspectRatio: 1,
               child: */
@@ -206,7 +207,7 @@ class _ResultPageState extends State<ResultPage> {
               ),
             ),
             //),
-          ),*/
+          ),
           SizedBox(
             height: 20,
           ),
