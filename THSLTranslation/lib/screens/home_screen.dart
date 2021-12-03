@@ -421,6 +421,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     final capture = Positioned(
+        bottom: 20,
+        left: 100,
         child: IconButton(
             onPressed: () async {
               try {
@@ -442,6 +444,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             )));
 
     final gallery = Positioned(
+        bottom: 20,
+        right: 100,
         child: IconButton(
             onPressed: getImage,
             icon: Icon(
@@ -477,7 +481,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
-        Positioned(
+        /*Positioned(
           bottom: 20,
           child: Container(
             width: screenSize.width,
@@ -492,7 +496,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               ],
             ),
           ),
-        ),
+        ),*/
+        capture,
+        gallery
       ],
     );
 
@@ -557,7 +563,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
-    /*return Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
         leading: Container(),
@@ -597,8 +603,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ),
                   backgroundColor: Colors.amber,
                 )*/
-    );*/
-    return FutureBuilder(
+    );
+    /*return FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -628,7 +634,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      camera,
+                      //camera,
                       panel,
                       SizedBox(
                         height: 50,
@@ -656,7 +662,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               child: CircularProgressIndicator(),
             ),
           );
-        });
+        });*/
   }
 }
 

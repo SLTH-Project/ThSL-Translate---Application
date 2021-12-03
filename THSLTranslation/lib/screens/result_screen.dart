@@ -191,8 +191,8 @@ class _ResultPageState extends State<ResultPage> {
           Container(
             width: screenSize.width,
             height: screenSize.width,
-            //color: Color(0xFFEBEEF5),
-            color: Colors.amber,
+            color: Color(0xFFEBEEF5),
+            //color: Colors.amber,
             child: /*AspectRatio(
               aspectRatio: 1,
               child: */
