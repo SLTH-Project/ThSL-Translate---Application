@@ -207,6 +207,9 @@ class _ResultPageState extends State<ResultPage> {
             ),
             //),
           ),*/
+          SizedBox(
+            height: 20,
+          ),
           Text("ผลการแปลภาษามือไทย",
               style: TextStyle(
                 fontFamily: 'Anakotmai',
