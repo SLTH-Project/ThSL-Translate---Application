@@ -592,17 +592,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
         bottomSwipeUp
       ])),
-      /*floatingActionButton: FloatingActionButton(
-                  tooltip: 'Pick Image',
-                  //onPressed: pickImage,
-                  onPressed: getImage,
-                  child: Icon(
-                    Icons.add_a_photo,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                  backgroundColor: Colors.amber,
-                )*/
     );
     /*return FutureBuilder(
         future: Firebase.initializeApp(),
