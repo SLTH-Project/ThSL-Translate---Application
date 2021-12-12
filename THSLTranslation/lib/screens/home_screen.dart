@@ -258,7 +258,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           location = document["location"];
                           categoryName = "     <  " + document["name"];
                         });
-                        //return;
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
