@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:thsltranslation/screens/result_screen.dart';
+import 'package:thsltranslation/screens/camera_screen.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -131,8 +132,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  //final Future<FirebaseApp> firebase = Firebase.initializeApp();
-
   bool yes = false;
   String location = '';
   String categoryName = '';
@@ -142,7 +141,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print("==================================================================");
     print('START : click category = ');
     print(yes);
-    //final Future<FirebaseApp> firebase = Firebase.initializeApp();
     final screenSize = MediaQuery.of(context).size;
 
     final panel = ExpansionPanelList(
@@ -562,27 +560,216 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }),
     );
 
+    final intro = Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text("แปลท่าทาง พร้อมเรียนรู้คำศัพท์ภาษามือไทย",
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Color(0xFF2B2B2B),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 5),
+            child: Text(
+                "โดยคลังคำศัพท์ภาษามือไทยพื้นฐานในชีวิตประจำวันมากถึง 100 คำ",
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Color(0xFF828280),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                )),
+          )
+        ],
+      ),
+    );
+
+    final howTo = Container(
+        height: 118,
+        color: Colors.white,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance.collection('HowTo').snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: snapshot.data!.docs.map((document) {
+                    return Container(
+                        padding: EdgeInsets.only(top: 16, bottom: 19),
+                        margin: EdgeInsets.only(left: 22),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFF1812AE),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Color(0x202b2b2b),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1))
+                            ]),
+                        width: 229,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                ),
+                                child: Image.network(
+                                  document["imageURL"],
+                                  height: 65,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      document["detail1"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      document["detail2"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      document["detail3"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      document["detail4"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ]));
+                  }).toList(),
+                );
+              }
+            }));
+
+    final choices = Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 50, right: 50),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+            color: Color(0x202b2b2b),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 1))
+      ]),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CameraPage(camera: widget.camera)));
+                  },
+                  icon: Icon(
+                    Icons.camera_alt,
+                    color: Color(0xFF1821AE),
+                    size: 25,
+                  )),
+              Text("Camera",
+                  style: TextStyle(
+                    fontFamily: 'Anakotmai',
+                    color: Color(0xFF2B2B2B),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  )),
+            ],
+          ),
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.photo_library,
+                    color: Color(0xFF1821AE),
+                    size: 25,
+                  )),
+              Text("Gallery",
+                  style: TextStyle(
+                    fontFamily: 'Anakotmai',
+                    color: Color(0xFF2B2B2B),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  )),
+            ],
+          ),
+        ],
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
-      appBar: AppBar(
-        leading: Container(),
-        centerTitle: true,
-        title: Text('THSL Translate',
-            style: TextStyle(
-              fontFamily: 'Anakotmai',
-              color: Color(0xFF2B2B2B),
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        backgroundColor: Colors.white,
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            leading: Container(),
+            centerTitle: true,
+            title: Text('THSL Translate',
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                )),
+            backgroundColor: Color(0xFF1821AE),
+          )),
       body: SizedBox.expand(
           child: Stack(children: <Widget>[
         SingleChildScrollView(
           child: Column(
             children: [
-              camera,
-              panel,
+              intro,
+              howTo,
+              choices,
+              //camera,
+              //panel,
               SizedBox(
                 height: 50,
               ),
