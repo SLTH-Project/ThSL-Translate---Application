@@ -6,7 +6,9 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:thsltranslation/screens/camera_screen.dart';
+import 'package:tflite/tflite.dart';
+/*import 'dart:async';
 import 'package:thsltranslation/screens/result_screen.dart';
 import 'package:thsltranslation/screens/camera_screen.dart';
 import 'dart:io';
@@ -18,9 +20,9 @@ import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 import 'package:image/image.dart' as img;
 import 'package:thsltranslation/models/classifier.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
-import 'package:logger/logger.dart';
+import 'package:logger/logger.dart';*/
 
-class Item {
+/*class Item {
   Item({
     required this.expandedValue,
     required this.headerValue,
@@ -39,7 +41,7 @@ List<Item> generateItems(int numberOfItems) {
       expandedValue: 'เขียนไปก็ไม่ขึ้น',
     );
   });
-}
+}*/
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -54,17 +56,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  late CameraController controller;
+  /*late CameraController controller;
   late Future<void> _initializeControllerFuture;
 
   final List<Item> _data = generateItems(1);
 
-  //List _outputs = [];
-  //late File _image;
-  //bool _loading = false;
+  List _outputs = [];
+  late File _image;
+  bool _loading = false;*/
 
   //----------Classify---------------------
-  late Classifier _classifier;
+  /*late Classifier _classifier;
 
   var logger = Logger();
 
@@ -73,22 +75,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   img.Image? fox;
 
-  Category? category;
+  Category? category;*/
   //----------------------------------------
 
   @override
   void initState() {
     super.initState();
-    _classifier = ClassifierFloat();
-    controller = CameraController(
+    //_classifier = ClassifierFloat();
+    /*controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
     );
 
-    _initializeControllerFuture = controller.initialize();
+    _initializeControllerFuture = controller.initialize();*/
   }
 
-  Future getImage() async {
+  /*Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
@@ -123,12 +125,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
       ),
     );
-  }
+  }*/
 
   @override
   void dispose() {
     Tflite.close();
-    controller.dispose();
+    //controller.dispose();
     super.dispose();
   }
 
@@ -141,9 +143,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print("==================================================================");
     print('START : click category = ');
     print(yes);
-    final screenSize = MediaQuery.of(context).size;
 
-    final panel = ExpansionPanelList(
+    /*final panel = ExpansionPanelList(
       expandedHeaderPadding: EdgeInsets.all(1),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
@@ -228,7 +229,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           isExpanded: item.isExpanded,
         );
       }).toList(),
-    );
+    );*/
 
     final rowCatagory = Container(
         height: 110,
@@ -417,7 +418,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               }));
     }
 
-    final capture = Positioned(
+    /*final capture = Positioned(
         bottom: 20,
         left: 100,
         child: IconButton(
@@ -497,7 +498,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         capture,
         gallery
       ],
-    );
+    );*/
 
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
@@ -768,11 +769,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               intro,
               howTo,
               choices,
-              //camera,
-              //panel,
-              SizedBox(
-                height: 50,
-              ),
             ],
           ),
         ),
