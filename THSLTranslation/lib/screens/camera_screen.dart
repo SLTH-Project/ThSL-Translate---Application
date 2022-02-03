@@ -105,6 +105,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  bool yes = false;
+  String location = '';
+  String categoryName = '';
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -145,13 +149,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     final camera = Stack(
       children: <Widget>[
-        /*Container(
-          width: screenSize.width,
-          height: screenSize.width,
-          child: ClipRRect(
-            child: OverflowBox(
-              alignment: Alignment.center,
-              child:*/
         FittedBox(
           fit: BoxFit.fitWidth,
           child: Container(
@@ -159,9 +156,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               height: screenSize.width,
               child: CameraPreview(controller)),
         ),
-        /*),
-          ),
-        ),*/
         Image(
           image: AssetImage('assets/images/frame-camera-front.png'),
         ),
@@ -170,25 +164,257 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
-        /*Positioned(
-          bottom: 20,
-          child: Container(
-            width: screenSize.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                capture,
-                SizedBox(
-                  width: 30,
-                ),
-                gallery
-              ],
-            ),
-          ),
-        ),*/
         capture,
         gallery
       ],
+    );
+
+    final rowCatagory = Container(
+        height: 110,
+        color: Colors.white,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('CategoryPic')
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: snapshot.data!.docs.map((document) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          yes = true;
+                          //print('click category = ');
+                          //print(yes);
+                          location = document["location"];
+                          categoryName = "     <  " + document["name"];
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Color(0x202b2b2b),
+                                  spreadRadius: 3,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1))
+                            ]),
+                        width: 90,
+                        child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              Image.network(
+                                document["imageURL"],
+                                height: 70,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                    height: 40,
+                                    width: 98,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      //color: Colors.indigo[50],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(1),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                document["name"],
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Color(0xff2b2b2b),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ]))),
+                              )
+                            ]),
+                      ),
+                    );
+                  }).toList(),
+                );
+              }
+            }));
+
+    rowVocab(String locate) {
+      //print('----in rowVocab----');
+
+      //print('location = ');
+      //print(locate);
+
+      return Container(
+          height: 110,
+          color: Colors.white,
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection(locate).snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return ListView(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: snapshot.data!.docs.map((document) {
+                      return InkWell(
+                        onTap: () {
+                          //print('click to show pic');
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                  title: Center(
+                                    child: Text(
+                                      document["name"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff2b2b2b),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  content: Container(
+                                    child: Image(
+                                      image: NetworkImage(document["imageURL"]),
+                                    ),
+                                  )));
+                        },
+                        /*onHover: () {
+
+                        },*/
+                        child: Container(
+                          margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color(0x202b2b2b),
+                                    spreadRadius: 3,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 1))
+                              ]),
+                          width: 90,
+                          child: Stack(
+                              alignment: Alignment.topCenter,
+                              children: <Widget>[
+                                Image.network(
+                                  document["imageURL"],
+                                  height: 70,
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                      height: 40,
+                                      width: 98,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        //color: Colors.indigo[50],
+                                      ),
+                                      child: Padding(
+                                          padding: EdgeInsets.all(1),
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Text(
+                                                  document["name"],
+                                                  style: TextStyle(
+                                                    fontFamily: 'Anakotmai',
+                                                    color: Color(0xff2b2b2b),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ]))),
+                                )
+                              ]),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              }));
+    }
+
+    final bottomSwipeUp = SizedBox.expand(
+      child: DraggableScrollableSheet(
+          initialChildSize: 0.12,
+          minChildSize: 0.12,
+          maxChildSize: 0.4,
+          builder: (BuildContext context, scrollController) {
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)]),
+              child: ListView(
+                controller: scrollController,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      height: 8,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        yes = false;
+                        //print('click to back to category (false) = ');
+                        //print(yes);
+                      });
+                      //return;
+                    },
+                    child: Text(
+                      yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  yes ? rowVocab(location) : rowCatagory,
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
+            );
+          }),
     );
 
     return Scaffold(
@@ -205,7 +431,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               },
               child: Icon(
                 Icons.arrow_back_ios,
-                color: Colors.grey,
+                color: Colors.white,
               )),
           title: Text('THSL Translate',
               style: TextStyle(
@@ -217,7 +443,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           backgroundColor: Color(0xFF1821AE),
         ),
       ),
-      body: camera,
+      body: SizedBox.expand(
+          child: Stack(children: <Widget>[
+        SingleChildScrollView(
+          child: Column(
+            children: [camera],
+          ),
+        ),
+        bottomSwipeUp
+      ])),
     );
   }
 }
