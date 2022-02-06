@@ -74,7 +74,7 @@ abstract class Classifier {
   }
 
   TensorImage _preProcess() {
-    int cropSize = 224;
+    //int cropSize = 224;
     return ImageProcessorBuilder()
         .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
         /*.add(ResizeWithCropOrPadOp(cropSize, cropSize))
