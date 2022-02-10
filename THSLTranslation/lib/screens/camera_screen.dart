@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:thsltranslation/screens/result_screen.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -14,7 +13,6 @@ import 'package:image/image.dart' as img;
 import 'package:thsltranslation/models/classifier.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
-import 'package:thsltranslation/screens/home_screen.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({

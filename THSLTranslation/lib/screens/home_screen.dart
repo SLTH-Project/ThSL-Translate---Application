@@ -8,19 +8,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thsltranslation/screens/camera_screen.dart';
 import 'package:tflite/tflite.dart';
-/*import 'dart:async';
-import 'package:thsltranslation/screens/result_screen.dart';
-import 'package:thsltranslation/screens/camera_screen.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:tflite/tflite.dart';
+import 'package:image/image.dart' as img;
+import 'dart:async';
+import 'package:thsltranslation/screens/result_screen.dart';
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 
-import 'package:image/image.dart' as img;
 import 'package:thsltranslation/models/classifier.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
-import 'package:logger/logger.dart';*/
+import 'package:logger/logger.dart';
 
 /*class Item {
   Item({
@@ -66,7 +64,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool _loading = false;*/
 
   //----------Classify---------------------
-  /*late Classifier _classifier;
+  Classifier _classifier = ClassifierFloat();
 
   var logger = Logger();
 
@@ -75,14 +73,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   img.Image? fox;
 
-  Category? category;*/
+  Category? category;
   //----------------------------------------
 
   @override
   void initState() {
     super.initState();
-    //_classifier = ClassifierFloat();
-    /*controller = CameraController(
+    _classifier = ClassifierFloat();
+    /* controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
     );
@@ -90,7 +88,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     _initializeControllerFuture = controller.initialize();*/
   }
 
-  /*Future getImage() async {
+  Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
@@ -125,7 +123,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
       ),
     );
-  }*/
+  }
 
   @override
   void dispose() {
@@ -418,88 +416,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               }));
     }
 
-    /*final capture = Positioned(
-        bottom: 20,
-        left: 100,
-        child: IconButton(
-            onPressed: () async {
-              try {
-                await _initializeControllerFuture;
-                final imageFromCamera = await controller.takePicture();
-                setState(() {
-                  _image = File(imageFromCamera.path);
-                  print("----capture----");
-                  _predict(_image!);
-                });
-              } catch (e) {
-                print(e);
-              }
-            },
-            icon: Icon(
-              Icons.camera_alt,
-              color: Colors.white,
-              size: 50,
-            )));
-
-    final gallery = Positioned(
-        bottom: 20,
-        right: 100,
-        child: IconButton(
-            onPressed: getImage,
-            icon: Icon(
-              Icons.photo_library,
-              color: Colors.white,
-              size: 50,
-            )));
-
-    final camera = Stack(
-      children: <Widget>[
-        /*Container(
-          width: screenSize.width,
-          height: screenSize.width,
-          child: ClipRRect(
-            child: OverflowBox(
-              alignment: Alignment.center,
-              child:*/
-        FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Container(
-              width: screenSize.width,
-              height: screenSize.width,
-              child: CameraPreview(controller)),
-        ),
-        /*),
-          ),
-        ),*/
-        Image(
-          image: AssetImage('assets/images/frame-camera-front.png'),
-        ),
-        Image(
-          image: AssetImage('assets/images/frame-camera-square.png'),
-          height: screenSize.width,
-          width: screenSize.width,
-        ),
-        /*Positioned(
-          bottom: 20,
-          child: Container(
-            width: screenSize.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                capture,
-                SizedBox(
-                  width: 30,
-                ),
-                gallery
-              ],
-            ),
-          ),
-        ),*/
-        capture,
-        gallery
-      ],
-    );*/
-
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
           initialChildSize: 0.12,
@@ -729,7 +645,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           Column(
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: getImage,
                   icon: Icon(
                     Icons.photo_library,
                     color: Color(0xFF1821AE),
