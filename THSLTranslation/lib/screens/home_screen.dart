@@ -567,6 +567,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       child: Column(
         children: [
           Container(
+            color: Colors.white,
             alignment: Alignment.centerLeft,
             child: Text("แปลท่าทาง พร้อมเรียนรู้คำศัพท์ภาษามือไทย",
                 style: TextStyle(
@@ -577,6 +578,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 )),
           ),
           Container(
+            color: Colors.white,
             margin: EdgeInsets.only(top: 5),
             child: Text(
                 "โดยคลังคำศัพท์ภาษามือไทยพื้นฐานในชีวิตประจำวันมากถึง 100 คำ",
@@ -594,6 +596,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final howTo = Container(
         height: 118,
         color: Colors.white,
+        //padding: EdgeInsets.only(bottom: 10),
         child: StreamBuilder(
             stream: FirebaseFirestore.instance.collection('HowTo').snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

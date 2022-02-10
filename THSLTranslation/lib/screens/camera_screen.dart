@@ -59,6 +59,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     );
 
     _initializeControllerFuture = controller.initialize();
+
+    meaningVocab = false;
   }
 
   Future getImage() async {
@@ -87,7 +89,9 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     print("confidence : ");
     print(category!.score);
 
-    return await Navigator.of(context).push(
+    meaningVocab = true;
+
+    /*return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
           image: image,
@@ -95,7 +99,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           camera: widget.camera,
         ),
       ),
-    );
+    );*/
   }
 
   @override
@@ -108,6 +112,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   bool yes = false;
   String location = '';
   String categoryName = '';
+  bool meaningVocab = false;
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +140,30 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               color: Colors.white,
               size: 50,
             )));
+
+    final meaning = Positioned(
+        top: 20,
+        child: Container(
+          width: screenSize.width,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                color: Color(0xffd1d3ef),
+                child: Text(meaningVocab ? category!.label : "",
+                    style: TextStyle(
+                      fontFamily: 'Anakotmai',
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    )),
+              )
+            ],
+          ),
+        ));
 
     final gallery = Positioned(
         bottom: 20,
@@ -164,6 +193,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           height: screenSize.width,
           width: screenSize.width,
         ),
+        meaningVocab ? meaning : Container(),
         capture,
         gallery
       ],
