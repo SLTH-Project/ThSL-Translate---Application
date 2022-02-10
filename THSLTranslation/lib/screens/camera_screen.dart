@@ -464,7 +464,17 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
-      appBar: PreferredSize(
+      appBar: AppBar(
+        title: Text('THSL Translate',
+            style: TextStyle(
+              fontFamily: 'Anakotmai',
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            )),
+        backgroundColor: Color(0xFF1821AE),
+      )
+      /*PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           leading: GestureDetector(
@@ -487,7 +497,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               )),
           backgroundColor: Color(0xFF1821AE),
         ),
-      ),
+      )*/
+      ,
       body: SizedBox.expand(
           child: Stack(children: <Widget>[
         SingleChildScrollView(
