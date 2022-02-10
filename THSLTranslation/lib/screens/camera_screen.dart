@@ -194,8 +194,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           width: screenSize.width,
         ),
         meaningVocab ? meaning : Container(),
-        capture,
-        gallery
+        //capture,
+        //gallery
       ],
     );
 
@@ -447,41 +447,59 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           }),
     );
 
-    return Scaffold(
-      backgroundColor: Color(0xFFEBEEF5),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: AppBar(
-          leading: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(camera: widget.camera)));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          title: Text('THSL Translate',
-              style: TextStyle(
-                fontFamily: 'Anakotmai',
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              )),
-          backgroundColor: Color(0xFF1821AE),
-        ),
-      ),
-      body: SizedBox.expand(
-          child: Stack(children: <Widget>[
-        SingleChildScrollView(
-          child: Column(
-            children: [camera],
+    while (true) {
+      Timer(Duration(milliseconds: 500), () async {
+        //after 0.5 seconds this will be called,
+        try {
+          await _initializeControllerFuture;
+          final imageFromCamera = await controller.takePicture();
+          setState(() {
+            _image = File(imageFromCamera.path);
+            print("----capture----");
+            _predict(_image!);
+          });
+        } catch (e) {
+          print(e);
+        }
+      });
+
+      return Scaffold(
+        backgroundColor: Color(0xFFEBEEF5),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(camera: widget.camera)));
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            title: Text('THSL Translate',
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                )),
+            backgroundColor: Color(0xFF1821AE),
           ),
         ),
-        bottomSwipeUp
-      ])),
-    );
+        body: SizedBox.expand(
+            child: Stack(children: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: [camera],
+            ),
+          ),
+          bottomSwipeUp
+        ])),
+      );
+    }
   }
 }
