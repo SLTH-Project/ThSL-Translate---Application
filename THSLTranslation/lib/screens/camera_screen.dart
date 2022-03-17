@@ -111,12 +111,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   String location = '';
   String categoryName = '';
   bool meaningVocab = false;
+  bool stop = false;
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    final capture = Positioned(
+    /*final capture = Positioned(
         bottom: 20,
         left: 100,
         child: IconButton(
@@ -137,7 +138,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               Icons.camera_alt,
               color: Colors.white,
               size: 50,
-            )));
+            )));*/
 
     final meaning = Positioned(
         top: 20,
@@ -163,7 +164,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           ),
         ));
 
-    final gallery = Positioned(
+    /*final gallery = Positioned(
         bottom: 20,
         right: 100,
         child: IconButton(
@@ -172,7 +173,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               Icons.photo_library,
               color: Colors.white,
               size: 50,
-            )));
+            )));*/
 
     final camera = Stack(
       children: <Widget>[
@@ -445,20 +446,22 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           }),
     );
 
-    Timer(Duration(milliseconds: 250), () async {
-      //after 0.25 seconds this will be called,
-      try {
-        await _initializeControllerFuture;
-        final imageFromCamera = await controller.takePicture();
-        setState(() {
-          _image = File(imageFromCamera.path);
-          print("----capture----");
-          _predict(_image!);
-        });
-      } catch (e) {
-        print(e);
-      }
-    });
+    if (stop == false) {
+      Timer(Duration(milliseconds: 250), () async {
+        //after 0.25 seconds this will be called,
+        try {
+          await _initializeControllerFuture;
+          final imageFromCamera = await controller.takePicture();
+          setState(() {
+            _image = File(imageFromCamera.path);
+            print("----capture----");
+            _predict(_image!);
+          });
+        } catch (e) {
+          print(e);
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
