@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:tflite/tflite.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
-//import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:image/image.dart' as img;
 import 'package:thsltranslation/models/classifier.dart';
@@ -299,14 +300,28 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       )),
                 ),
                 onTap: () {
-                  setState(() {
+                  setState(() async {
                     stop = !stop;
+                    print('------------stop------------');
+
+                    FirebaseStorage storage = FirebaseStorage.instance;
+                    Reference ref = storage.ref().child(
+                        'camera_pictures/image_' + DateTime.now().toString());
+                    await ref.putFile(_image!);
+                    String URLL = await ref.getDownloadURL();
+
+                    print('imageURLL = ');
+                    print(URLL);
+
                     CollectionReference histories =
                         FirebaseFirestore.instance.collection('History');
                     histories.add({
                       'category': "หมวดเทส",
-                      'imageURL': "",
+                      'imageURL': URLL,
+                      'vocab': meaningThai
                     });
+
+                    print('---------- add history complete -------------');
                   });
                 },
               )
