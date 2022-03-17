@@ -267,6 +267,46 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           ),
         ));
 
+    final stopButton = Positioned(
+        bottom: 20,
+        child: Container(
+          width: screenSize.width,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InkWell(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xfff7f7f7),
+                      borderRadius: BorderRadius.circular(100),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black87,
+                            spreadRadius: 0.01,
+                            blurRadius: 7.5,
+                            offset: Offset(0, 2))
+                      ]),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                  child: Text('หยุดการแปลชั่วคราว',
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      )),
+                ),
+                onTap: () {
+                  setState(() {
+                    stop = !stop;
+                  });
+                },
+              )
+            ],
+          ),
+        ));
+
     /*final gallery = Positioned(
         bottom: 20,
         right: 100,
@@ -296,8 +336,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           width: screenSize.width,
         ),
         meaningVocab ? meaning : Container(),
-        //capture,
-        //gallery
+        stopButton
       ],
     );
 
