@@ -142,6 +142,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print('START : click category = ');
     print(yes);
 
+    /*categoryName(Icon icon, Text textt) {
+      return Row(
+        children: [
+          icon,
+          SizedBox(
+            width: 5,
+          ),
+          textt
+        ],
+      );
+    }*/
+
     /*final panel = ExpansionPanelList(
       expandedHeaderPadding: EdgeInsets.all(1),
       expansionCallback: (int index, bool isExpanded) {
@@ -253,6 +265,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           //print('click category = ');
                           //print(yes);
                           location = document["location"];
+                          /*categoryName(
+                            Icon(
+                              Icons.arrow_right,
+                              color: Colors.black87,
+                              size: 10,
+                            ),
+                            Text(
+                              document["name"],
+                              style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),),
+                              
+                          );*/
                           categoryName = "     <  " + document["name"];
                         });
                       },
@@ -454,7 +482,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       });
                       //return;
                     },
-                    child: Text(
+                    child:
+                        /*yes ? categoryName(
+                            Icon(
+                              Icons.arrow_right,
+                              color: Colors.black87,
+                              size: 10,
+                            ),
+                            Text(
+                              '     คลังภาษามือไทย 100 คำ',
+                              style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),),
+                              
+                          ) */
+                        Text(
                       yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
                       style: TextStyle(
                         fontFamily: 'Anakotmai',
