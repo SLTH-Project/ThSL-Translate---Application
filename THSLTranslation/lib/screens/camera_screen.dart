@@ -192,16 +192,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     } else if (category!.label == 'zero') {
       meaningThai = 'เลข 0';
     }
-
-    /*return await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ResultPage(
-          image: image,
-          name: category!.label,
-          camera: widget.camera,
-        ),
-      ),
-    );*/
   }
 
   @override
@@ -213,7 +203,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
   bool yes = false;
   String location = '';
-  String categoryName = '';
+  Row rowCategoryName = Row();
   bool meaningVocab = false;
   bool stop = false;
   String meaningThai = '';
@@ -245,6 +235,24 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               color: Colors.white,
               size: 50,
             )));*/
+
+    setCategoryName(Icon icon, Text textt) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 25,
+          ),
+          icon,
+          SizedBox(
+            width: 10,
+          ),
+          textt
+        ],
+      );
+    }
 
     final meaning = Positioned(
         top: 20,
@@ -379,7 +387,21 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           //print('click category = ');
                           //print(yes);
                           location = document["location"];
-                          categoryName = "     <  " + document["name"];
+                          rowCategoryName = setCategoryName(
+                              Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.black87,
+                                size: 20,
+                              ),
+                              Text(
+                                document["name"],
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ));
                         });
                       },
                       child: Container(
@@ -572,24 +594,32 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     height: 15,
                   ),
                   InkWell(
-                    onTap: () {
-                      setState(() {
-                        yes = false;
-                        //print('click to back to category (false) = ');
-                        //print(yes);
-                      });
-                      //return;
-                    },
-                    child: Text(
-                      yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
-                      style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                      onTap: () {
+                        setState(() {
+                          yes = false;
+                          //print('click to back to category (false) = ');
+                          //print(yes);
+                        });
+                        //return;
+                      },
+                      child: yes
+                          ? rowCategoryName
+                          : setCategoryName(
+                              Icon(
+                                Icons.menu_book,
+                                color: Colors.black87,
+                                size: 20,
+                              ),
+                              Text(
+                                'คลังภาษามือไทย 100 คำ',
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            )),
                   SizedBox(
                     height: 15,
                   ),

@@ -8,12 +8,10 @@ import 'package:thsltranslation/screens/home_screen.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'dart:async';
-import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -236,10 +234,32 @@ class _ResultPageState extends State<ResultPage> {
     super.dispose();
   }
 
+  bool yes = false;
+  String location = '';
+  Row rowCategoryName = Row();
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
+
+    setCategoryName(Icon icon, Text textt) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 25,
+          ),
+          icon,
+          SizedBox(
+            width: 10,
+          ),
+          textt
+        ],
+      );
+    }
 
     final meaning = Positioned(
         top: 20,
@@ -309,112 +329,370 @@ class _ResultPageState extends State<ResultPage> {
                   )
                 ])));
 
-    return Scaffold(
-      backgroundColor: Color(0xF7F7F7FF),
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40.0),
-          child: AppBar(
-            leading: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage(camera: widget.camera)));
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
+    final rowCatagory = Container(
+        height: 110,
+        color: Colors.white,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('CategoryPic')
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: snapshot.data!.docs.map((document) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          yes = true;
+                          //print('click category = ');
+                          //print(yes);
+                          location = document["location"];
+                          rowCategoryName = setCategoryName(
+                              Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.black87,
+                                size: 20,
+                              ),
+                              Text(
+                                document["name"],
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ));
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Color(0x202b2b2b),
+                                  spreadRadius: 3,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1))
+                            ]),
+                        width: 90,
+                        child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              Image.network(
+                                document["imageURL"],
+                                height: 70,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                    height: 40,
+                                    width: 98,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      //color: Colors.indigo[50],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(1),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                document["name"],
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Color(0xff2b2b2b),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ]))),
+                              )
+                            ]),
+                      ),
+                    );
+                  }).toList(),
+                );
+              }
+            }));
+
+    rowVocab(String locate) {
+      //print('----in rowVocab----');
+
+      //print('location = ');
+      //print(locate);
+
+      return Container(
+          height: 110,
+          color: Colors.white,
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection(locate).snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return ListView(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: snapshot.data!.docs.map((document) {
+                      return InkWell(
+                        onTap: () {
+                          //print('click to show pic');
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                  title: Center(
+                                    child: Text(
+                                      document["name"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff2b2b2b),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  content: Container(
+                                    child: Image(
+                                      image: NetworkImage(document["imageURL"]),
+                                    ),
+                                  )));
+                        },
+                        /*onHover: () {
+
+                        },*/
+                        child: Container(
+                          margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color(0x202b2b2b),
+                                    spreadRadius: 3,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 1))
+                              ]),
+                          width: 90,
+                          child: Stack(
+                              alignment: Alignment.topCenter,
+                              children: <Widget>[
+                                Image.network(
+                                  document["imageURL"],
+                                  height: 70,
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                      height: 40,
+                                      width: 98,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        //color: Colors.indigo[50],
+                                      ),
+                                      child: Padding(
+                                          padding: EdgeInsets.all(1),
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Text(
+                                                  document["name"],
+                                                  style: TextStyle(
+                                                    fontFamily: 'Anakotmai',
+                                                    color: Color(0xff2b2b2b),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ]))),
+                                )
+                              ]),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              }));
+    }
+
+    final bottomSwipeUp = SizedBox.expand(
+      child: DraggableScrollableSheet(
+          initialChildSize: 0.12,
+          minChildSize: 0.12,
+          maxChildSize: 0.4,
+          builder: (BuildContext context, scrollController) {
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              decoration: BoxDecoration(
                   color: Colors.white,
-                )),
-            title: Text('THSL Translate: Import image',
-                style: TextStyle(
-                  fontFamily: 'Anakotmai',
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                )),
-            backgroundColor: Color(0xFF1821AE),
-          )),
-      body: SingleChildScrollView(
-          child: Column(
-        children: <Widget>[
-          Stack(
-            children: [
-              Container(
-                width: screenSize.width,
-                height: screenSize.width,
-                color: Color(0xFFEBEEF5),
-                child: Center(
-                  child: Container(
-                    width: screenSize.width,
-                    height: screenSize.width,
-                    child: Image.file(
-                      widget.image,
-                      fit: BoxFit.cover,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)]),
+              child: ListView(
+                controller: scrollController,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      height: 8,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(5)),
                     ),
                   ),
-                ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          yes = false;
+                          //print('click to back to category (false) = ');
+                          //print(yes);
+                        });
+                        //return;
+                      },
+                      child: yes
+                          ? rowCategoryName
+                          : setCategoryName(
+                              Icon(
+                                Icons.menu_book,
+                                color: Colors.black87,
+                                size: 20,
+                              ),
+                              Text(
+                                'คลังภาษามือไทย 100 คำ',
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            )),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  yes ? rowVocab(location) : rowCatagory,
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
               ),
-              meaning,
-              reButton
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          haveHistory
-              ? Row(
-                  children: [
-                    Container(
-                      width: screenSize.width * 0.70,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 25),
-                      child: Text(
-                        "ประวัติการแปลของคุณ",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Anakotmai',
-                          color: Color(0xff2b2b2b),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.width * 0.30,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(right: 25),
-                      child: Text(
-                        'ลบทั้งหมด',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Anakotmai',
-                          color: Color(0xffE74C3C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
-        ],
-      )),
-
-      /*Image.file(
-          File(widget.imagePath),
-          scale: 0.61,
-        )*/
-      /*AspectRatio(
-          aspectRatio: 487 / 451,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.fitWidth,
-                    alignment: FractionalOffset.topCenter,
-                    image: AssetImage(widget.imagePath))),
-          ),
-        )*/
+            );
+          }),
     );
+
+    return Scaffold(
+        backgroundColor: Color(0xF7F7F7FF),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(40.0),
+            child: AppBar(
+              leading: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomePage(camera: widget.camera)));
+                  },
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  )),
+              title: Text('THSL Translate: Import image',
+                  style: TextStyle(
+                    fontFamily: 'Anakotmai',
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  )),
+              backgroundColor: Color(0xFF1821AE),
+            )),
+        body: SizedBox.expand(
+            child: Stack(children: <Widget>[
+          SingleChildScrollView(
+              child: Column(
+            children: <Widget>[
+              Stack(
+                children: [
+                  Container(
+                    width: screenSize.width,
+                    height: screenSize.width,
+                    color: Color(0xFFEBEEF5),
+                    child: Center(
+                      child: Container(
+                        width: screenSize.width,
+                        height: screenSize.width,
+                        child: Image.file(
+                          widget.image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  meaning,
+                  reButton
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              haveHistory
+                  ? Row(
+                      children: [
+                        Container(
+                          width: screenSize.width * 0.70,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 25),
+                          child: Text(
+                            "ประวัติการแปลของคุณ",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Anakotmai',
+                              color: Color(0xff2b2b2b),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: screenSize.width * 0.30,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 25),
+                          child: Text(
+                            'ลบทั้งหมด',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Anakotmai',
+                              color: Color(0xffE74C3C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+            ],
+          )),
+          bottomSwipeUp
+        ])));
   }
 }
