@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   //----------------------------------------
 
   String meaningThai = '';
+  String categoryThai = '';
 
   @override
   void initState() {
@@ -119,107 +120,157 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (category!.label == 'add') {
       meaningThai = 'บวก';
+      categoryThai = 'คณิตศาสตร์';
     } else if (category!.label == 'animal') {
       meaningThai = 'สัตว์';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'bowl') {
       meaningThai = 'ถ้วย';
+      categoryThai = 'สิ่งของ';
     } else if (category!.label == 'buffalo') {
       meaningThai = 'กระบือ';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'care') {
       meaningThai = 'ห่วงใย';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'cat') {
       meaningThai = 'แมว';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'chest') {
       meaningThai = 'อก';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'cow') {
       meaningThai = 'วัว';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'deer') {
       meaningThai = 'กวาง';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'divide') {
       meaningThai = 'หาร';
+      categoryThai = 'คณิตศาสตร์';
     } else if (category!.label == 'double') {
       meaningThai = 'ทวีคูณ';
+      categoryThai = 'คณิตศาสตร์';
     } else if (category!.label == 'eight') {
       meaningThai = 'เลข 8';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'elbow') {
       meaningThai = 'ข้อศอก';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'eye') {
       meaningThai = 'ตา';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'finger') {
       meaningThai = 'นิ้ว';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'five') {
       meaningThai = 'เลข 5';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'four') {
       meaningThai = 'เลข 4';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'gun') {
       meaningThai = 'ปืน';
+      categoryThai = 'สิ่งของ';
     } else if (category!.label == 'hair') {
       meaningThai = 'ผม';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'hand') {
       meaningThai = 'มือ';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'he') {
       meaningThai = 'เขา';
+      categoryThai = 'คำสรรพนาม';
     } else if (category!.label == 'head') {
       meaningThai = 'ศีรษะ';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'love') {
       meaningThai = 'รัก';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'me') {
       meaningThai = 'ฉัน';
+      categoryThai = 'คำสรรพนาม';
     } else if (category!.label == 'meditate') {
       meaningThai = 'นั่งสมาธิ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'mushroom') {
       meaningThai = 'เห็ด';
+      categoryThai = 'อาหาร';
     } else if (category!.label == 'nine') {
       meaningThai = 'เลข 9';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'noon') {
       meaningThai = 'เที่ยงวัน';
+      categoryThai = 'เวลา';
     } else if (category!.label == 'nose') {
       meaningThai = 'จมูก';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'one') {
       meaningThai = 'เลข 1';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'rat') {
       meaningThai = 'หนู';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'remember') {
       meaningThai = 'จดจำ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'rhinoceros') {
       meaningThai = 'แรด';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'salty') {
       meaningThai = 'เค็ม';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'serve') {
       meaningThai = 'บริการ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'seven') {
       meaningThai = 'เลข 7';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'shirt') {
       meaningThai = 'เสื้อ';
+      categoryThai = 'สิ่งของ';
     } else if (category!.label == 'shoulder') {
       meaningThai = 'ไหล่';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'sick') {
       meaningThai = 'ป่วย';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'six') {
       meaningThai = 'เลข 6';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'soldier') {
       meaningThai = 'ทหาร';
+      categoryThai = 'อื่น ๆ';
     } else if (category!.label == 'teeth') {
       meaningThai = 'ฟัน';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'three') {
       meaningThai = 'เลข 3';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'tiger') {
       meaningThai = 'เสือ';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'time') {
       meaningThai = 'เวลา';
+      categoryThai = 'เวลา';
     } else if (category!.label == 'tongue') {
       meaningThai = 'ลิ้น';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'two') {
       meaningThai = 'เลข 2';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'wedding') {
       meaningThai = 'งานแต่งงาน';
+      categoryThai = 'สถานที่';
     } else if (category!.label == 'win') {
       meaningThai = 'ชนะ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'zero') {
       meaningThai = 'เลข 0';
+      categoryThai = 'ตัวเลข';
     }
 
-    print('------------stop------------');
+    print('--------save history to firebase------------');
 
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage
@@ -246,7 +297,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       MaterialPageRoute(
         builder: (context) => ResultPage(
           image: image,
-          //name: category!.label,
           name: meaningThai,
           camera: widget.camera,
         ),
@@ -397,8 +447,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       onTap: () {
                         setState(() {
                           yes = true;
-                          //print('click category = ');
-                          //print(yes);
                           location = document["location"];
                           rowCategoryName = setCategoryName(
                               Icon(
@@ -473,11 +521,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             }));
 
     rowVocab(String locate) {
-      //print('----in rowVocab----');
-
-      //print('location = ');
-      //print(locate);
-
       return Container(
           height: 110,
           color: Colors.white,
@@ -495,7 +538,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     children: snapshot.data!.docs.map((document) {
                       return InkWell(
                         onTap: () {
-                          //print('click to show pic');
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
@@ -516,9 +558,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     ),
                                   )));
                         },
-                        /*onHover: () {
-
-                        },*/
                         child: Container(
                           margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
                           decoration: BoxDecoration(
@@ -609,8 +648,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       onTap: () {
                         setState(() {
                           yes = false;
-                          //print('click to back to category (false) = ');
-                          //print(yes);
                         });
                       },
                       child: yes
@@ -679,7 +716,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final howTo = Container(
         height: 118,
         color: Colors.white,
-        //padding: EdgeInsets.only(bottom: 10),
         child: StreamBuilder(
             stream: FirebaseFirestore.instance.collection('HowTo').snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -213,29 +213,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    /*final capture = Positioned(
-        bottom: 20,
-        left: 100,
-        child: IconButton(
-            onPressed: () async {
-              try {
-                await _initializeControllerFuture;
-                final imageFromCamera = await controller.takePicture();
-                setState(() {
-                  _image = File(imageFromCamera.path);
-                  print("----capture----");
-                  _predict(_image!);
-                });
-              } catch (e) {
-                print(e);
-              }
-            },
-            icon: Icon(
-              Icons.camera_alt,
-              color: Colors.white,
-              size: 50,
-            )));*/
-
     setCategoryName(Icon icon, Text textt) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -651,7 +628,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
 
     final historyColumn = Container(
-        height: 500,
+        height: screenSize.height * 0.5,
         //color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(
@@ -683,7 +660,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                   blurRadius: 4,
                                   offset: Offset(0, 1))
                             ]),
-                        //width: 229,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
