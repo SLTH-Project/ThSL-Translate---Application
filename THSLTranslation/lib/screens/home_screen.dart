@@ -15,6 +15,7 @@ import 'package:thsltranslation/screens/result_screen.dart';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:thsltranslation/models/classifier.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
@@ -76,6 +77,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Category? category;
   //----------------------------------------
 
+  String meaningThai = '';
+
   @override
   void initState() {
     super.initState();
@@ -114,11 +117,137 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print("confidence : ");
     print(category!.score);
 
+    if (category!.label == 'add') {
+      meaningThai = 'บวก';
+    } else if (category!.label == 'animal') {
+      meaningThai = 'สัตว์';
+    } else if (category!.label == 'bowl') {
+      meaningThai = 'ถ้วย';
+    } else if (category!.label == 'buffalo') {
+      meaningThai = 'กระบือ';
+    } else if (category!.label == 'care') {
+      meaningThai = 'ห่วงใย';
+    } else if (category!.label == 'cat') {
+      meaningThai = 'แมว';
+    } else if (category!.label == 'chest') {
+      meaningThai = 'อก';
+    } else if (category!.label == 'cow') {
+      meaningThai = 'วัว';
+    } else if (category!.label == 'deer') {
+      meaningThai = 'กวาง';
+    } else if (category!.label == 'divide') {
+      meaningThai = 'หาร';
+    } else if (category!.label == 'double') {
+      meaningThai = 'ทวีคูณ';
+    } else if (category!.label == 'eight') {
+      meaningThai = 'เลข 8';
+    } else if (category!.label == 'elbow') {
+      meaningThai = 'ข้อศอก';
+    } else if (category!.label == 'eye') {
+      meaningThai = 'ตา';
+    } else if (category!.label == 'finger') {
+      meaningThai = 'นิ้ว';
+    } else if (category!.label == 'five') {
+      meaningThai = 'เลข 5';
+    } else if (category!.label == 'four') {
+      meaningThai = 'เลข 4';
+    } else if (category!.label == 'gun') {
+      meaningThai = 'ปืน';
+    } else if (category!.label == 'hair') {
+      meaningThai = 'ผม';
+    } else if (category!.label == 'hand') {
+      meaningThai = 'มือ';
+    } else if (category!.label == 'he') {
+      meaningThai = 'เขา';
+    } else if (category!.label == 'head') {
+      meaningThai = 'ศีรษะ';
+    } else if (category!.label == 'love') {
+      meaningThai = 'รัก';
+    } else if (category!.label == 'me') {
+      meaningThai = 'ฉัน';
+    } else if (category!.label == 'meditate') {
+      meaningThai = 'นั่งสมาธิ';
+    } else if (category!.label == 'mushroom') {
+      meaningThai = 'เห็ด';
+    } else if (category!.label == 'nine') {
+      meaningThai = 'เลข 9';
+    } else if (category!.label == 'noon') {
+      meaningThai = 'เที่ยงวัน';
+    } else if (category!.label == 'nose') {
+      meaningThai = 'จมูก';
+    } else if (category!.label == 'one') {
+      meaningThai = 'เลข 1';
+    } else if (category!.label == 'rat') {
+      meaningThai = 'หนู';
+    } else if (category!.label == 'remember') {
+      meaningThai = 'จดจำ';
+    } else if (category!.label == 'rhinoceros') {
+      meaningThai = 'แรด';
+    } else if (category!.label == 'salty') {
+      meaningThai = 'เค็ม';
+    } else if (category!.label == 'serve') {
+      meaningThai = 'บริการ';
+    } else if (category!.label == 'seven') {
+      meaningThai = 'เลข 7';
+    } else if (category!.label == 'shirt') {
+      meaningThai = 'เสื้อ';
+    } else if (category!.label == 'shoulder') {
+      meaningThai = 'ไหล่';
+    } else if (category!.label == 'sick') {
+      meaningThai = 'ป่วย';
+    } else if (category!.label == 'six') {
+      meaningThai = 'เลข 6';
+    } else if (category!.label == 'soldier') {
+      meaningThai = 'ทหาร';
+    } else if (category!.label == 'teeth') {
+      meaningThai = 'ฟัน';
+    } else if (category!.label == 'three') {
+      meaningThai = 'เลข 3';
+    } else if (category!.label == 'tiger') {
+      meaningThai = 'เสือ';
+    } else if (category!.label == 'time') {
+      meaningThai = 'เวลา';
+    } else if (category!.label == 'tongue') {
+      meaningThai = 'ลิ้น';
+    } else if (category!.label == 'two') {
+      meaningThai = 'เลข 2';
+    } else if (category!.label == 'wedding') {
+      meaningThai = 'งานแต่งงาน';
+    } else if (category!.label == 'win') {
+      meaningThai = 'ชนะ';
+    } else if (category!.label == 'zero') {
+      meaningThai = 'เลข 0';
+    }
+
+    print('------------stop------------');
+
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage
+        .ref()
+        .child('camera_pictures/image_' + DateTime.now().toString());
+    await ref.putFile(_image!);
+    String URLL = await ref.getDownloadURL();
+
+    print('imageURLL = ');
+    print(URLL);
+
+    CollectionReference histories =
+        FirebaseFirestore.instance.collection('History');
+    histories.add({
+      'category': "หมวดเทส",
+      'imageURL': URLL,
+      'vocab': meaningThai,
+      'timestamp': DateTime.now()
+    });
+
+    print('---------- add history complete -------------');
+
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
           image: image,
-          name: category!.label,
+          //name: category!.label,
+          name: meaningThai,
           camera: widget.camera,
         ),
       ),

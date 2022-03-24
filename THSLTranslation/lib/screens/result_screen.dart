@@ -6,6 +6,22 @@ import 'dart:io';
 
 import 'package:thsltranslation/screens/home_screen.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:tflite/tflite.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
+import 'dart:async';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:thsltranslation/models/classifier.dart';
+import 'package:thsltranslation/models/classifier_float.dart';
+import 'package:logger/logger.dart';
+
 class ResultPage extends StatefulWidget {
   const ResultPage(
       {Key? key, required this.image, required this.name, required this.camera})
@@ -21,116 +37,238 @@ class ResultPage extends StatefulWidget {
 }
 
 class _ResultPageState extends State<ResultPage> {
+  bool haveHistory = false;
+
+  //----------Classify---------------------
+  Classifier _classifier = ClassifierFloat();
+
+  var logger = Logger();
+
+  File? _image;
+  final picker = ImagePicker();
+
+  img.Image? fox;
+
+  Category? category;
+  //----------------------------------------
+
+  String meaningThai = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _classifier = ClassifierFloat();
+    /* controller = CameraController(
+      widget.camera,
+      ResolutionPreset.medium,
+    );
+
+    _initializeControllerFuture = controller.initialize();*/
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(pickedFile!.path);
+//      _imageWidget = Image.file(_image!);
+      print("get image");
+      _predict(_image!);
+    });
+  }
+
+  _predict(File image) async {
+    print("in predict");
+    img.Image imageInput = img.decodeImage(_image!.readAsBytesSync())!;
+    var pred = _classifier.predict(imageInput);
+
+    setState(() {
+      this.category = pred;
+    });
+
+    print("predict : ");
+    print(category!.label);
+
+    print("confidence : ");
+    print(category!.score);
+
+    if (category!.label == 'add') {
+      meaningThai = 'บวก';
+    } else if (category!.label == 'animal') {
+      meaningThai = 'สัตว์';
+    } else if (category!.label == 'bowl') {
+      meaningThai = 'ถ้วย';
+    } else if (category!.label == 'buffalo') {
+      meaningThai = 'กระบือ';
+    } else if (category!.label == 'care') {
+      meaningThai = 'ห่วงใย';
+    } else if (category!.label == 'cat') {
+      meaningThai = 'แมว';
+    } else if (category!.label == 'chest') {
+      meaningThai = 'อก';
+    } else if (category!.label == 'cow') {
+      meaningThai = 'วัว';
+    } else if (category!.label == 'deer') {
+      meaningThai = 'กวาง';
+    } else if (category!.label == 'divide') {
+      meaningThai = 'หาร';
+    } else if (category!.label == 'double') {
+      meaningThai = 'ทวีคูณ';
+    } else if (category!.label == 'eight') {
+      meaningThai = 'เลข 8';
+    } else if (category!.label == 'elbow') {
+      meaningThai = 'ข้อศอก';
+    } else if (category!.label == 'eye') {
+      meaningThai = 'ตา';
+    } else if (category!.label == 'finger') {
+      meaningThai = 'นิ้ว';
+    } else if (category!.label == 'five') {
+      meaningThai = 'เลข 5';
+    } else if (category!.label == 'four') {
+      meaningThai = 'เลข 4';
+    } else if (category!.label == 'gun') {
+      meaningThai = 'ปืน';
+    } else if (category!.label == 'hair') {
+      meaningThai = 'ผม';
+    } else if (category!.label == 'hand') {
+      meaningThai = 'มือ';
+    } else if (category!.label == 'he') {
+      meaningThai = 'เขา';
+    } else if (category!.label == 'head') {
+      meaningThai = 'ศีรษะ';
+    } else if (category!.label == 'love') {
+      meaningThai = 'รัก';
+    } else if (category!.label == 'me') {
+      meaningThai = 'ฉัน';
+    } else if (category!.label == 'meditate') {
+      meaningThai = 'นั่งสมาธิ';
+    } else if (category!.label == 'mushroom') {
+      meaningThai = 'เห็ด';
+    } else if (category!.label == 'nine') {
+      meaningThai = 'เลข 9';
+    } else if (category!.label == 'noon') {
+      meaningThai = 'เที่ยงวัน';
+    } else if (category!.label == 'nose') {
+      meaningThai = 'จมูก';
+    } else if (category!.label == 'one') {
+      meaningThai = 'เลข 1';
+    } else if (category!.label == 'rat') {
+      meaningThai = 'หนู';
+    } else if (category!.label == 'remember') {
+      meaningThai = 'จดจำ';
+    } else if (category!.label == 'rhinoceros') {
+      meaningThai = 'แรด';
+    } else if (category!.label == 'salty') {
+      meaningThai = 'เค็ม';
+    } else if (category!.label == 'serve') {
+      meaningThai = 'บริการ';
+    } else if (category!.label == 'seven') {
+      meaningThai = 'เลข 7';
+    } else if (category!.label == 'shirt') {
+      meaningThai = 'เสื้อ';
+    } else if (category!.label == 'shoulder') {
+      meaningThai = 'ไหล่';
+    } else if (category!.label == 'sick') {
+      meaningThai = 'ป่วย';
+    } else if (category!.label == 'six') {
+      meaningThai = 'เลข 6';
+    } else if (category!.label == 'soldier') {
+      meaningThai = 'ทหาร';
+    } else if (category!.label == 'teeth') {
+      meaningThai = 'ฟัน';
+    } else if (category!.label == 'three') {
+      meaningThai = 'เลข 3';
+    } else if (category!.label == 'tiger') {
+      meaningThai = 'เสือ';
+    } else if (category!.label == 'time') {
+      meaningThai = 'เวลา';
+    } else if (category!.label == 'tongue') {
+      meaningThai = 'ลิ้น';
+    } else if (category!.label == 'two') {
+      meaningThai = 'เลข 2';
+    } else if (category!.label == 'wedding') {
+      meaningThai = 'งานแต่งงาน';
+    } else if (category!.label == 'win') {
+      meaningThai = 'ชนะ';
+    } else if (category!.label == 'zero') {
+      meaningThai = 'เลข 0';
+    }
+
+    print('------------stop------------');
+
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage
+        .ref()
+        .child('camera_pictures/image_' + DateTime.now().toString());
+    await ref.putFile(_image!);
+    String URLL = await ref.getDownloadURL();
+
+    print('imageURLL = ');
+    print(URLL);
+
+    CollectionReference histories =
+        FirebaseFirestore.instance.collection('History');
+    histories.add({
+      'category': "หมวดเทส",
+      'imageURL': URLL,
+      'vocab': meaningThai,
+      'timestamp': DateTime.now()
+    });
+
+    print('---------- add history complete -------------');
+
+    return await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          image: image,
+          //name: category!.label,
+          name: meaningThai,
+          camera: widget.camera,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    Tflite.close();
+    //controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
-    String vocab = '';
 
-    if (widget.name == 'add') {
-      vocab = 'บวก';
-    } else if (widget.name == 'animal') {
-      vocab = 'สัตว์';
-    } else if (widget.name == 'bowl') {
-      vocab = 'ถ้วย';
-    } else if (widget.name == 'buffalo') {
-      vocab = 'กระบือ';
-    } else if (widget.name == 'care') {
-      vocab = 'ห่วงใย';
-    } else if (widget.name == 'cat') {
-      vocab = 'แมว';
-    } else if (widget.name == 'chest') {
-      vocab = 'อก';
-    } else if (widget.name == 'cow') {
-      vocab = 'วัว';
-    } else if (widget.name == 'deer') {
-      vocab = 'กวาง';
-    } else if (widget.name == 'divide') {
-      vocab = 'หาร';
-    } else if (widget.name == 'double') {
-      vocab = 'ทวีคูณ';
-    } else if (widget.name == 'eight') {
-      vocab = 'เลข 8';
-    } else if (widget.name == 'elbow') {
-      vocab = 'ข้อศอก';
-    } else if (widget.name == 'eye') {
-      vocab = 'ตา';
-    } else if (widget.name == 'finger') {
-      vocab = 'นิ้ว';
-    } else if (widget.name == 'five') {
-      vocab = 'เลข 5';
-    } else if (widget.name == 'four') {
-      vocab = 'เลข 4';
-    } else if (widget.name == 'gun') {
-      vocab = 'ปืน';
-    } else if (widget.name == 'hair') {
-      vocab = 'ผม';
-    } else if (widget.name == 'hand') {
-      vocab = 'มือ';
-    } else if (widget.name == 'he') {
-      vocab = 'เขา';
-    } else if (widget.name == 'head') {
-      vocab = 'ศีรษะ';
-    } else if (widget.name == 'love') {
-      vocab = 'รัก';
-    } else if (widget.name == 'me') {
-      vocab = 'ฉัน';
-    } else if (widget.name == 'meditate') {
-      vocab = 'นั่งสมาธิ';
-    } else if (widget.name == 'mushroom') {
-      vocab = 'เห็ด';
-    } else if (widget.name == 'nine') {
-      vocab = 'เลข 9';
-    } else if (widget.name == 'noon') {
-      vocab = 'เที่ยงวัน';
-    } else if (widget.name == 'nose') {
-      vocab = 'จมูก';
-    } else if (widget.name == 'one') {
-      vocab = 'เลข 1';
-    } else if (widget.name == 'rat') {
-      vocab = 'หนู';
-    } else if (widget.name == 'remember') {
-      vocab = 'จดจำ';
-    } else if (widget.name == 'rhinoceros') {
-      vocab = 'แรด';
-    } else if (widget.name == 'salty') {
-      vocab = 'เค็ม';
-    } else if (widget.name == 'serve') {
-      vocab = 'บริการ';
-    } else if (widget.name == 'seven') {
-      vocab = 'เลข 7';
-    } else if (widget.name == 'shirt') {
-      vocab = 'เสื้อ';
-    } else if (widget.name == 'shoulder') {
-      vocab = 'ไหล่';
-    } else if (widget.name == 'sick') {
-      vocab = 'ป่วย';
-    } else if (widget.name == 'six') {
-      vocab = 'เลข 6';
-    } else if (widget.name == 'soldier') {
-      vocab = 'ทหาร';
-    } else if (widget.name == 'teeth') {
-      vocab = 'ฟัน';
-    } else if (widget.name == 'three') {
-      vocab = 'เลข 3';
-    } else if (widget.name == 'tiger') {
-      vocab = 'เสือ';
-    } else if (widget.name == 'time') {
-      vocab = 'เวลา';
-    } else if (widget.name == 'tongue') {
-      vocab = 'ลิ้น';
-    } else if (widget.name == 'two') {
-      vocab = 'เลข 2';
-    } else if (widget.name == 'wedding') {
-      vocab = 'งานแต่งงาน';
-    } else if (widget.name == 'win') {
-      vocab = 'ชนะ';
-    } else if (widget.name == 'zero') {
-      vocab = 'เลข 0';
-    }
+    final meaning = Positioned(
+        top: 20,
+        child: Container(
+          width: screenSize.width,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 255, 255, 0.5),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: Text(widget.name,
+                    style: TextStyle(
+                      fontFamily: 'Anakotmai',
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                    )),
+              )
+            ],
+          ),
+        ));
 
     final reButton = Positioned(
-        bottom: 40,
+        bottom: 20,
         child: Container(
             width: screenSize.width,
             child: Row(
@@ -138,33 +276,37 @@ class _ResultPageState extends State<ResultPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    HomePage(camera: widget.camera)));
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 11),
-                        width: 180,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Color(0xff1821ae),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100))),
-                        child: Text(
-                          'เริ่มการจับภาพใหม่',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Anakotmai',
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                  Material(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    color: Color.fromRGBO(255, 255, 255, 0),
+                    child: InkWell(
+                        onTap: () {
+                          getImage();
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                      ))
+                        hoverColor: Color.fromRGBO(255, 255, 255, 1),
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 9),
+                          width: 180,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 255, 255, 0.75),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100))),
+                          child: Text(
+                            'เลือกภาพเพิ่มเติม',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Anakotmai',
+                              color: Color(0xff2b2b2b),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )),
+                  )
                 ])));
 
     return Scaffold(
@@ -204,8 +346,8 @@ class _ResultPageState extends State<ResultPage> {
                 color: Color(0xFFEBEEF5),
                 child: Center(
                   child: Container(
-                    width: 300,
-                    height: 300,
+                    width: screenSize.width,
+                    height: screenSize.width,
                     child: Image.file(
                       widget.image,
                       fit: BoxFit.cover,
@@ -213,28 +355,48 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                 ),
               ),
+              meaning,
               reButton
             ],
           ),
           SizedBox(
-            height: 10,
-          ),
-          Text("ผลการแปลภาษามือไทย",
-              style: TextStyle(
-                fontFamily: 'Anakotmai',
-                color: Color(0xFF2B2B2B),
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              )),
-          Text(vocab,
-              style: TextStyle(
-                fontFamily: 'Anakotmai',
-                color: Color(0xFF2B2B2B),
-                fontSize: 36,
-                fontWeight: FontWeight.w700,
-              )),
-          SizedBox(
             height: 20,
+          ),
+          Row(
+            children: [
+              Container(
+                width: screenSize.width * 0.70,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 25),
+                child: Text(
+                  "ประวัติการแปลของคุณ",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Anakotmai',
+                    color: Color(0xff2b2b2b),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              haveHistory
+                  ? Container(
+                      width: screenSize.width * 0.30,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(right: 25),
+                      child: Text(
+                        'ลบทั้งหมด',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: 'Anakotmai',
+                          color: Color(0xffE74C3C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
           ),
         ],
       )),

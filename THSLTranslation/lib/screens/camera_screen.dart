@@ -256,7 +256,9 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             children: [
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10),
-                color: Color(0xffd1d3ef),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 255, 255, 0.5),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
                 child: Text(meaningVocab ? meaningThai : "",
                     style: TextStyle(
                       fontFamily: 'Anakotmai',
@@ -318,7 +320,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     histories.add({
                       'category': "หมวดเทส",
                       'imageURL': URLL,
-                      'vocab': meaningThai
+                      'vocab': meaningThai,
+                      'timestamp': DateTime.now()
                     });
 
                     print('---------- add history complete -------------');
