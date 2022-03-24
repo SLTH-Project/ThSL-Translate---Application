@@ -217,6 +217,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   bool meaningVocab = false;
   bool stop = false;
   String meaningThai = '';
+  bool haveHistory = true;
 
   @override
   Widget build(BuildContext context) {
@@ -619,6 +620,86 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       });
     }
 
+    final historyColumn = Container(
+        height: 500,
+        //color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 25.0),
+        child: StreamBuilder(
+            stream:
+                FirebaseFirestore.instance.collection('History').snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  children: snapshot.data!.docs.map((document) {
+                    return Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 19),
+                        margin: EdgeInsets.fromLTRB(5, 22, 5, 0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Color(0x202b2b2b),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1))
+                            ]),
+                        //width: 229,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      document["imageURL"],
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )),
+                              Container(
+                                margin: EdgeInsets.only(left: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      document["vocab"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff2b2b2b),
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      document["category"],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff828280),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ]));
+                  }).toList(),
+                );
+              }
+            }));
+
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
@@ -630,37 +711,57 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               fontWeight: FontWeight.w700,
             )),
         backgroundColor: Color(0xFF1821AE),
-      )
-      /*PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: AppBar(
-          leading: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(camera: widget.camera)));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          title: Text('THSL Translate',
-              style: TextStyle(
-                fontFamily: 'Anakotmai',
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              )),
-          backgroundColor: Color(0xFF1821AE),
-        ),
-      )*/
-      ,
+      ),
       body: SizedBox.expand(
           child: Stack(children: <Widget>[
         SingleChildScrollView(
           child: Column(
-            children: [camera],
+            children: [
+              camera,
+              SizedBox(
+                height: 20,
+              ),
+              haveHistory
+                  ? Row(
+                      children: [
+                        Container(
+                          width: screenSize.width * 0.70,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 25),
+                          child: Text(
+                            "ประวัติการแปลของคุณ",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Anakotmai',
+                              color: Color(0xff2b2b2b),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: screenSize.width * 0.30,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 25),
+                          child: Text(
+                            'ลบทั้งหมด',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Anakotmai',
+                              color: Color(0xffE74C3C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              historyColumn,
+              SizedBox(
+                height: 50,
+              ),
+            ],
           ),
         ),
         bottomSwipeUp

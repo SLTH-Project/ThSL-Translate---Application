@@ -362,25 +362,25 @@ class _ResultPageState extends State<ResultPage> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              Container(
-                width: screenSize.width * 0.70,
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 25),
-                child: Text(
-                  "ประวัติการแปลของคุณ",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: 'Anakotmai',
-                    color: Color(0xff2b2b2b),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              haveHistory
-                  ? Container(
+          haveHistory
+              ? Row(
+                  children: [
+                    Container(
+                      width: screenSize.width * 0.70,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(left: 25),
+                      child: Text(
+                        "ประวัติการแปลของคุณ",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: 'Anakotmai',
+                          color: Color(0xff2b2b2b),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Container(
                       width: screenSize.width * 0.30,
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(right: 25),
@@ -394,10 +394,10 @@ class _ResultPageState extends State<ResultPage> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                    )
-                  : Container(),
-            ],
-          ),
+                    ),
+                  ],
+                )
+              : Container(),
         ],
       )),
 
