@@ -93,104 +93,304 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     if (category!.label == 'add') {
       meaningThai = 'บวก';
+      categoryThai = 'คณิตศาสตร์';
     } else if (category!.label == 'animal') {
       meaningThai = 'สัตว์';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'bowl') {
       meaningThai = 'ถ้วย';
+      categoryThai = 'สิ่งของ';
     } else if (category!.label == 'buffalo') {
       meaningThai = 'กระบือ';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'care') {
       meaningThai = 'ห่วงใย';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'cat') {
       meaningThai = 'แมว';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'chest') {
       meaningThai = 'อก';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'cow') {
       meaningThai = 'วัว';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'deer') {
       meaningThai = 'กวาง';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'divide') {
       meaningThai = 'หาร';
+      categoryThai = 'คณิตศาสตร์';
     } else if (category!.label == 'double') {
       meaningThai = 'ทวีคูณ';
+      categoryThai = 'คณิตศาสตร์';
     } else if (category!.label == 'eight') {
       meaningThai = 'เลข 8';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'elbow') {
       meaningThai = 'ข้อศอก';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'eye') {
       meaningThai = 'ตา';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'finger') {
       meaningThai = 'นิ้ว';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'five') {
       meaningThai = 'เลข 5';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'four') {
       meaningThai = 'เลข 4';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'gun') {
       meaningThai = 'ปืน';
+      categoryThai = 'สิ่งของ';
     } else if (category!.label == 'hair') {
       meaningThai = 'ผม';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'hand') {
       meaningThai = 'มือ';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'he') {
       meaningThai = 'เขา';
+      categoryThai = 'คำสรรพนาม';
     } else if (category!.label == 'head') {
       meaningThai = 'ศีรษะ';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'love') {
       meaningThai = 'รัก';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'me') {
       meaningThai = 'ฉัน';
+      categoryThai = 'คำสรรพนาม';
     } else if (category!.label == 'meditate') {
       meaningThai = 'นั่งสมาธิ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'mushroom') {
       meaningThai = 'เห็ด';
+      categoryThai = 'อาหาร';
     } else if (category!.label == 'nine') {
       meaningThai = 'เลข 9';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'noon') {
       meaningThai = 'เที่ยงวัน';
+      categoryThai = 'เวลา';
     } else if (category!.label == 'nose') {
       meaningThai = 'จมูก';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'one') {
       meaningThai = 'เลข 1';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'rat') {
       meaningThai = 'หนู';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'remember') {
       meaningThai = 'จดจำ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'rhinoceros') {
       meaningThai = 'แรด';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'salty') {
       meaningThai = 'เค็ม';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'serve') {
       meaningThai = 'บริการ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'seven') {
       meaningThai = 'เลข 7';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'shirt') {
       meaningThai = 'เสื้อ';
+      categoryThai = 'สิ่งของ';
     } else if (category!.label == 'shoulder') {
       meaningThai = 'ไหล่';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'sick') {
       meaningThai = 'ป่วย';
+      categoryThai = 'อาการ';
     } else if (category!.label == 'six') {
       meaningThai = 'เลข 6';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'soldier') {
       meaningThai = 'ทหาร';
+      categoryThai = 'อื่น ๆ';
     } else if (category!.label == 'teeth') {
       meaningThai = 'ฟัน';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'three') {
       meaningThai = 'เลข 3';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'tiger') {
       meaningThai = 'เสือ';
+      categoryThai = 'สัตว์';
     } else if (category!.label == 'time') {
       meaningThai = 'เวลา';
+      categoryThai = 'เวลา';
     } else if (category!.label == 'tongue') {
       meaningThai = 'ลิ้น';
+      categoryThai = 'ร่างกาย';
     } else if (category!.label == 'two') {
       meaningThai = 'เลข 2';
+      categoryThai = 'ตัวเลข';
     } else if (category!.label == 'wedding') {
       meaningThai = 'งานแต่งงาน';
+      categoryThai = 'สถานที่';
     } else if (category!.label == 'win') {
       meaningThai = 'ชนะ';
+      categoryThai = 'การกระทำ';
     } else if (category!.label == 'zero') {
       meaningThai = 'เลข 0';
+      categoryThai = 'ตัวเลข';
+    } else if (category!.label == 'airplane') {
+      meaningThai = 'เครื่องบิน';
+      categoryThai = 'ยานพาหนะ';
+    } else if (category!.label == 'angry') {
+      meaningThai = 'โกรธ';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'bat') {
+      meaningThai = 'ค้างคาว';
+      categoryThai = 'สัตว์';
+    } else if (category!.label == 'bite') {
+      meaningThai = 'กัด';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'bow the head') {
+      meaningThai = 'ก้มศีรษะ';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'bread') {
+      meaningThai = 'ขนมปัง';
+      categoryThai = 'อาหาร';
+    } else if (category!.label == 'cockle') {
+      meaningThai = 'หอยแครง';
+      categoryThai = 'สัตว์';
+    } else if (category!.label == 'cough') {
+      meaningThai = 'ไอ';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'crab') {
+      meaningThai = 'ปู';
+      categoryThai = 'สัตว์';
+    } else if (category!.label == 'crutches') {
+      meaningThai = 'ไม้ค้ำยัน';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'disease') {
+      meaningThai = 'โรค';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'ear') {
+      meaningThai = 'หู';
+      categoryThai = 'ร่างกาย';
+    } else if (category!.label == 'eyelash') {
+      meaningThai = 'ขนตา';
+      categoryThai = 'ร่างกาย';
+    } else if (category!.label == 'feeling') {
+      meaningThai = 'ความรู้สึก';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'fine') {
+      meaningThai = 'สบาย';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'fish sauce') {
+      meaningThai = 'น้ำปลา';
+      categoryThai = 'อาหาร';
+    } else if (category!.label == 'food') {
+      meaningThai = 'อาหาร';
+      categoryThai = 'อาหาร';
+    } else if (category!.label == 'full') {
+      meaningThai = 'อิ่ม';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'ginger') {
+      meaningThai = 'ขิง';
+      categoryThai = 'อาหาร';
+    } else if (category!.label == 'glass') {
+      meaningThai = 'แก้วน้ำ';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'glasses') {
+      meaningThai = 'แว่นตา';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'good luck') {
+      meaningThai = 'โชคดี';
+      categoryThai = 'อื่น ๆ';
+    } else if (category!.label == 'hotel') {
+      meaningThai = 'โรงแรม';
+      categoryThai = 'สถานที่';
+    } else if (category!.label == 'iron') {
+      meaningThai = 'เตารีด';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'key') {
+      meaningThai = 'กุญแจ';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'kiss') {
+      meaningThai = 'จูบ';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'lie prone') {
+      meaningThai = 'นอนคว่ำ';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'lie still') {
+      meaningThai = 'นอนนิ่ง';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'location') {
+      meaningThai = 'สถานที่';
+      categoryThai = 'สถานที่';
+    } else if (category!.label == 'meet') {
+      meaningThai = 'พบ';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'milk') {
+      meaningThai = 'นม';
+      categoryThai = 'อาหาร';
+    } else if (category!.label == 'name') {
+      meaningThai = 'ชื่อ';
+      categoryThai = 'คำสรรพนาม';
+    } else if (category!.label == 'now') {
+      meaningThai = 'ขณะนี้';
+      categoryThai = 'เวลา';
+    } else if (category!.label == 'open mouth') {
+      meaningThai = 'อ้าปาก';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'person') {
+      meaningThai = 'คน/บุคคล';
+      categoryThai = 'คำสรรพนาม';
+    } else if (category!.label == 'pregnant') {
+      meaningThai = 'ตั้งครรภ์';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'prevent') {
+      meaningThai = 'ป้องกัน';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'request') {
+      meaningThai = 'ขอ';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'ride a motorcycle') {
+      meaningThai = 'ขี่มอเตอร์ไซต์';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'sailboat') {
+      meaningThai = 'เรือใบ';
+      categoryThai = 'ยานพาหนะ';
+    } else if (category!.label == 'snail') {
+      meaningThai = 'หอยทาก';
+      categoryThai = 'สัตว์';
+    } else if (category!.label == 'soup') {
+      meaningThai = 'แกงจืด';
+      categoryThai = 'อาหาร';
+    } else if (category!.label == 'spoon') {
+      meaningThai = 'ช้อน';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'stand') {
+      meaningThai = 'ยืน';
+      categoryThai = 'การกระทำ';
+    } else if (category!.label == 'strong') {
+      meaningThai = 'แข็งแรง';
+      categoryThai = 'อาการ';
+    } else if (category!.label == 'telephone') {
+      meaningThai = 'โทรศัพท์';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'television') {
+      meaningThai = 'โทรทัศน์';
+      categoryThai = 'สิ่งของ';
+    } else if (category!.label == 'tilapia') {
+      meaningThai = 'ปลานิล';
+      categoryThai = 'สัตว์';
+    } else if (category!.label == 'waist') {
+      meaningThai = 'เอว';
+      categoryThai = 'ร่างกาย';
+    } else if (category!.label == 'water') {
+      meaningThai = 'น้ำ';
+      categoryThai = 'อาหาร';
     }
   }
 
@@ -207,6 +407,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   bool meaningVocab = false;
   bool stop = false;
   String meaningThai = '';
+  String categoryThai = '';
   bool haveHistory = true;
 
   @override
@@ -304,7 +505,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     CollectionReference histories =
                         FirebaseFirestore.instance.collection('History');
                     histories.add({
-                      'category': "หมวดเทส",
+                      'category': categoryThai,
                       'imageURL': URLL,
                       'vocab': meaningThai,
                       'timestamp': DateTime.now()

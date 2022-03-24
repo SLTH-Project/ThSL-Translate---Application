@@ -435,7 +435,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     CollectionReference histories =
         FirebaseFirestore.instance.collection('History');
     histories.add({
-      'category': "หมวดเทส",
+      'category': categoryThai,
       'imageURL': URLL,
       'vocab': meaningThai,
       'timestamp': DateTime.now()
