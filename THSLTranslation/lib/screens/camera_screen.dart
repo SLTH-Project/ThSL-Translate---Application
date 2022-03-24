@@ -625,8 +625,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         //color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(
-            stream:
-                FirebaseFirestore.instance.collection('History').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('History')
+                .orderBy("timestamp", descending: true)
+                .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -640,7 +642,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     return Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 16, horizontal: 19),
-                        margin: EdgeInsets.fromLTRB(5, 22, 5, 0),
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 22),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: Colors.white,
@@ -757,9 +759,12 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       ],
                     )
                   : Container(),
-              historyColumn,
               SizedBox(
-                height: 50,
+                height: 10,
+              ),
+              haveHistory ? historyColumn : Container(),
+              SizedBox(
+                height: 75,
               ),
             ],
           ),
