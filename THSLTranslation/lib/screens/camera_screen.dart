@@ -329,17 +329,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           ),
         ));
 
-    /*final gallery = Positioned(
-        bottom: 20,
-        right: 100,
-        child: IconButton(
-            onPressed: getImage,
-            icon: Icon(
-              Icons.photo_library,
-              color: Colors.white,
-              size: 50,
-            )));*/
-
     final camera = Stack(
       children: <Widget>[
         FittedBox(

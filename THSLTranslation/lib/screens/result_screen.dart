@@ -129,87 +129,95 @@ class _ResultPageState extends State<ResultPage> {
       vocab = 'เลข 0';
     }
 
-    final reButton = InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(camera: widget.camera)));
-        },
+    final reButton = Positioned(
+        bottom: 40,
         child: Container(
-          padding: const EdgeInsets.only(top: 11),
-          width: 180,
-          height: 40,
-          decoration: BoxDecoration(
-              color: Color(0xff1821ae),
-              borderRadius: BorderRadius.all(Radius.circular(100))),
-          child: Text(
-            'เริ่มการจับภาพใหม่',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Anakotmai',
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ));
+            width: screenSize.width,
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomePage(camera: widget.camera)));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 11),
+                        width: 180,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Color(0xff1821ae),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100))),
+                        child: Text(
+                          'เริ่มการจับภาพใหม่',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Anakotmai',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ))
+                ])));
 
     return Scaffold(
       backgroundColor: Color(0xF7F7F7FF),
-      appBar: AppBar(
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(camera: widget.camera)));
-            },
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.grey,
-            )),
-        title: Text('THSL Translate',
-            style: TextStyle(
-              fontFamily: 'Anakotmai',
-              color: Color(0xFF2B2B2B),
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        backgroundColor: Colors.white,
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(camera: widget.camera)));
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            title: Text('THSL Translate: Import image',
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                )),
+            backgroundColor: Color(0xFF1821AE),
+          )),
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
-          /*AspectRatio(
-            aspectRatio: 1,
-            child: Image.file(
-              widget.image,
-              fit: BoxFit.cover,
-            ),
-          ),*/
-          Container(
-            width: screenSize.width,
-            height: screenSize.width,
-            color: Color(0xFFEBEEF5),
-            //color: Colors.amber,
-            child: /*AspectRatio(
-              aspectRatio: 1,
-              child: */
-                Center(
-              child: Container(
-                width: 300,
-                height: 300,
-                child: Image.file(
-                  widget.image,
-                  fit: BoxFit.cover,
+          Stack(
+            children: [
+              Container(
+                width: screenSize.width,
+                height: screenSize.width,
+                color: Color(0xFFEBEEF5),
+                child: Center(
+                  child: Container(
+                    width: 300,
+                    height: 300,
+                    child: Image.file(
+                      widget.image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            //),
+              reButton
+            ],
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Text("ผลการแปลภาษามือไทย",
               style: TextStyle(
@@ -225,10 +233,6 @@ class _ResultPageState extends State<ResultPage> {
                 fontSize: 36,
                 fontWeight: FontWeight.w700,
               )),
-          SizedBox(
-            height: 5,
-          ),
-          reButton,
           SizedBox(
             height: 20,
           ),

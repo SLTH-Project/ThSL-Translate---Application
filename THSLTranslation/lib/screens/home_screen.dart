@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   bool yes = false;
   String location = '';
-  String categoryName = '';
+  Row rowCategoryName = Row();
 
   @override
   Widget build(BuildContext context) {
@@ -142,17 +142,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print('START : click category = ');
     print(yes);
 
-    /*categoryName(Icon icon, Text textt) {
+    setCategoryName(Icon icon, Text textt) {
       return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            width: 25,
+          ),
           icon,
           SizedBox(
-            width: 5,
+            width: 10,
           ),
           textt
         ],
       );
-    }*/
+    }
 
     /*final panel = ExpansionPanelList(
       expandedHeaderPadding: EdgeInsets.all(1),
@@ -265,23 +271,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           //print('click category = ');
                           //print(yes);
                           location = document["location"];
-                          /*categoryName(
-                            Icon(
-                              Icons.arrow_right,
-                              color: Colors.black87,
-                              size: 10,
-                            ),
-                            Text(
-                              document["name"],
-                              style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),),
-                              
-                          );*/
-                          categoryName = "     <  " + document["name"];
+                          rowCategoryName = setCategoryName(
+                              Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.black87,
+                                size: 20,
+                              ),
+                              Text(
+                                document["name"],
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ));
                         });
                       },
                       child: Container(
@@ -311,7 +315,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     width: 98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      //color: Colors.indigo[50],
                                     ),
                                     child: Padding(
                                         padding: EdgeInsets.all(1),
@@ -474,41 +477,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     height: 15,
                   ),
                   InkWell(
-                    onTap: () {
-                      setState(() {
-                        yes = false;
-                        //print('click to back to category (false) = ');
-                        //print(yes);
-                      });
-                      //return;
-                    },
-                    child:
-                        /*yes ? categoryName(
-                            Icon(
-                              Icons.arrow_right,
-                              color: Colors.black87,
-                              size: 10,
-                            ),
-                            Text(
-                              '     คลังภาษามือไทย 100 คำ',
-                              style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),),
-                              
-                          ) */
-                        Text(
-                      yes ? categoryName : '     คลังภาษามือไทย 100 คำ',
-                      style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                      onTap: () {
+                        setState(() {
+                          yes = false;
+                          //print('click to back to category (false) = ');
+                          //print(yes);
+                        });
+                      },
+                      child: yes
+                          ? rowCategoryName
+                          : setCategoryName(
+                              Icon(
+                                Icons.menu_book,
+                                color: Colors.black87,
+                                size: 20,
+                              ),
+                              Text(
+                                'คลังภาษามือไทย 100 คำ',
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            )),
                   SizedBox(
                     height: 15,
                   ),
