@@ -480,7 +480,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                             offset: Offset(0, 2))
                       ]),
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                  child: Text('หยุดการแปลชั่วคราว',
+                  child: Text(stop ? 'ดำเนินการแปลต่อ' : 'หยุดการแปลชั่วคราว',
                       style: TextStyle(
                         fontFamily: 'Anakotmai',
                         color: Colors.black,
@@ -491,8 +491,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 onTap: () {
                   setState(() async {
                     print('------------stop------------');
+                    setState(() {
+                      stop = !stop;
+                    });
+                    print('stop = ');
+                    print(stop);
 
-                    if (stop == false) {
+                    if (stop == true) {
                       FirebaseStorage storage = FirebaseStorage.instance;
                       Reference ref = storage.ref().child(
                           'camera_pictures/image_' + DateTime.now().toString());
@@ -510,12 +515,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
                       print('---------- add history complete -------------');
                     }
-
-                    setState(() {
-                      stop = !stop;
-                    });
-                    print('stop = ');
-                    print(stop);
                   });
                 },
               )
