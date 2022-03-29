@@ -834,7 +834,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     final historyColumn = Container(
         height: screenSize.height * 0.5,
-        //color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
@@ -851,63 +850,174 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   children: snapshot.data!.docs.map((document) {
-                    return Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 19),
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 22),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color(0x202b2b2b),
-                                  spreadRadius: 2,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 1))
-                            ]),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      document["imageURL"],
-                                      fit: BoxFit.fill,
-                                    ),
-                                  )),
-                              Container(
-                                margin: EdgeInsets.only(left: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      document["vocab"],
-                                      style: TextStyle(
-                                        fontFamily: 'Anakotmai',
-                                        color: Color(0xff2b2b2b),
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w700,
+                    return InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  title: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 1, 1, 0),
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            alignment:
+                                                FractionalOffset.topRight,
+                                            child: GestureDetector(
+                                              child: Icon(
+                                                Icons.clear,
+                                                color: Color(0xffAEAEAB),
+                                              ),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      document["category"],
-                                      style: TextStyle(
-                                        fontFamily: 'Anakotmai',
-                                        color: Color(0xff828280),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                                      Center(
+                                        child: Text(
+                                          document["vocab"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Center(
+                                        child: Text(
+                                          "หมวด" + document["category"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff828280),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          width: 300,
+                                          height: 230,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: Image.network(
+                                              document["imageURL"],
+                                              fit: BoxFit.fill,
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            FirebaseFirestore.instance
+                                                .collection('History')
+                                                .doc(document.id)
+                                                .delete();
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: Container(
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xffE74C3C),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8, horizontal: 14),
+                                            child: Center(
+                                              child: Text('ลบ',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Anakotmai',
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  )),
+                                            )),
+                                      )
+                                    ],
+                                  ));
+                            });
+                      },
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color(0x202b2b2b),
+                                    spreadRadius: 2,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 1))
+                              ]),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        document["imageURL"],
+                                        fit: BoxFit.fill,
+                                      ),
+                                    )),
+                                Container(
+                                  margin: EdgeInsets.only(left: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        document["vocab"],
+                                        style: TextStyle(
+                                          fontFamily: 'Anakotmai',
+                                          color: Color(0xff555555),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Text(
+                                        "หมวด" + document["category"],
+                                        style: TextStyle(
+                                          fontFamily: 'Anakotmai',
+                                          color: Color(0xff828280),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ]));
+                              ])),
+                    );
+                    /*;*/
                   }).toList(),
                 );
               }
