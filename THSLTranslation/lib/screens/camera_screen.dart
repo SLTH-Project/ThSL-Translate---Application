@@ -977,48 +977,86 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                     offset: Offset(0, 1))
                               ]),
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.network(
-                                        document["imageURL"],
-                                        fit: BoxFit.fill,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Image.network(
+                                            document["imageURL"],
+                                            fit: BoxFit.fill,
+                                          ),
+                                        )),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            document["vocab"],
+                                            style: TextStyle(
+                                              fontFamily: 'Anakotmai',
+                                              color: Color(0xff555555),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          Text(
+                                            "หมวด" + document["category"],
+                                            style: TextStyle(
+                                              fontFamily: 'Anakotmai',
+                                              color: Color(0xff828280),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    )),
-                                Container(
-                                  margin: EdgeInsets.only(left: 16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        document["vocab"],
-                                        style: TextStyle(
-                                          fontFamily: 'Anakotmai',
-                                          color: Color(0xff555555),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      Text(
-                                        "หมวด" + document["category"],
-                                        style: TextStyle(
-                                          fontFamily: 'Anakotmai',
-                                          color: Color(0xff828280),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 1, right: 1),
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        alignment: FractionalOffset.topRight,
+                                        child: GestureDetector(
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Color(0xffAEAEAB),
+                                          ),
+                                          onTap: () {
+                                            setState(() {
+                                              FirebaseFirestore.instance
+                                                  .collection('History')
+                                                  .doc(document.id)
+                                                  .delete();
+                                              FirebaseStorage.instance
+                                                  .refFromURL(
+                                                      document["imageURL"])
+                                                  .delete();
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
                               ])),
                     );
                     /*;*/
