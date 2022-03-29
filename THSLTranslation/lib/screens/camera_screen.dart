@@ -56,7 +56,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   bool stop = false;
   String meaningThai = '';
   String categoryThai = '';
-  bool haveHistory = true;
+  bool haveHistory = false;
 
   @override
   void initState() {
@@ -414,6 +414,18 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
+    FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+      if (snapshot.docs.isNotEmpty == true) {
+        haveHistory = true;
+        print('---------have history = -----------');
+        print(haveHistory);
+      } else {
+        haveHistory = false;
+        print('---------have history = -----------');
+        print(haveHistory);
+      }
+    });
+
     setCategoryName(Icon icon, Text textt) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -493,6 +505,22 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     print('------------stop------------');
                     setState(() {
                       stop = !stop;
+                    });
+                    setState(() {
+                      FirebaseFirestore.instance
+                          .collection('History')
+                          .get()
+                          .then((snapshot) {
+                        if (snapshot.docs.isNotEmpty == true) {
+                          haveHistory = true;
+                          print('---------have history = -----------');
+                          print(haveHistory);
+                        } else {
+                          haveHistory = false;
+                          print('---------have history = -----------');
+                          print(haveHistory);
+                        }
+                      });
                     });
                     print('stop = ');
                     print(stop);
@@ -1051,6 +1079,25 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                       document["imageURL"])
                                                   .delete();
                                             });
+                                            setState(() {
+                                              FirebaseFirestore.instance
+                                                  .collection('History')
+                                                  .get()
+                                                  .then((snapshot) {
+                                                if (snapshot.docs.isNotEmpty ==
+                                                    true) {
+                                                  haveHistory = true;
+                                                  print(
+                                                      '---------have history = -----------');
+                                                  print(haveHistory);
+                                                } else {
+                                                  haveHistory = false;
+                                                  print(
+                                                      '---------have history = -----------');
+                                                  print(haveHistory);
+                                                }
+                                              });
+                                            });
                                           },
                                         ),
                                       ),
@@ -1108,14 +1155,46 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           width: screenSize.width * 0.30,
                           alignment: Alignment.centerLeft,
                           padding: EdgeInsets.only(right: 25),
-                          child: Text(
-                            'ลบทั้งหมด',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontFamily: 'Anakotmai',
-                              color: Color(0xffE74C3C),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .get()
+                                    .then((snapshot) {
+                                  for (DocumentSnapshot ds in snapshot.docs) {
+                                    ds.reference.delete();
+                                  }
+                                });
+                              });
+                              setState(() {
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .get()
+                                    .then((snapshot) {
+                                  if (snapshot.docs.isNotEmpty == true) {
+                                    haveHistory = true;
+                                    print(
+                                        '---------have history = -----------');
+                                    print(haveHistory);
+                                  } else {
+                                    haveHistory = false;
+                                    print(
+                                        '---------have history = -----------');
+                                    print(haveHistory);
+                                  }
+                                });
+                              });
+                            },
+                            child: Text(
+                              'ลบทั้งหมด',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontFamily: 'Anakotmai',
+                                color: Color(0xffE74C3C),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ),
                         ),
