@@ -49,6 +49,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Category? category;
   //----------------------------------------
 
+  bool yes = false;
+  String location = '';
+  Row rowCategoryName = Row();
+  bool meaningVocab = false;
+  bool stop = false;
+  String meaningThai = '';
+  String categoryThai = '';
+  bool haveHistory = true;
+
   @override
   void initState() {
     super.initState();
@@ -401,15 +410,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  bool yes = false;
-  String location = '';
-  Row rowCategoryName = Row();
-  bool meaningVocab = false;
-  bool stop = false;
-  String meaningThai = '';
-  String categoryThai = '';
-  bool haveHistory = true;
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -490,28 +490,32 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 ),
                 onTap: () {
                   setState(() async {
-                    stop = !stop;
                     print('------------stop------------');
 
-                    FirebaseStorage storage = FirebaseStorage.instance;
-                    Reference ref = storage.ref().child(
-                        'camera_pictures/image_' + DateTime.now().toString());
-                    await ref.putFile(_image!);
-                    String URLL = await ref.getDownloadURL();
+                    if (stop == false) {
+                      FirebaseStorage storage = FirebaseStorage.instance;
+                      Reference ref = storage.ref().child(
+                          'camera_pictures/image_' + DateTime.now().toString());
+                      await ref.putFile(_image!);
+                      String URLL = await ref.getDownloadURL();
 
-                    print('imageURLL = ');
-                    print(URLL);
+                      CollectionReference histories =
+                          FirebaseFirestore.instance.collection('History');
+                      histories.add({
+                        'category': categoryThai,
+                        'imageURL': URLL,
+                        'vocab': meaningThai,
+                        'timestamp': DateTime.now()
+                      });
 
-                    CollectionReference histories =
-                        FirebaseFirestore.instance.collection('History');
-                    histories.add({
-                      'category': categoryThai,
-                      'imageURL': URLL,
-                      'vocab': meaningThai,
-                      'timestamp': DateTime.now()
+                      print('---------- add history complete -------------');
+                    }
+
+                    setState(() {
+                      stop = !stop;
                     });
-
-                    print('---------- add history complete -------------');
+                    print('stop = ');
+                    print(stop);
                   });
                 },
               )
@@ -812,6 +816,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     );
 
     if (stop == false) {
+      print('----camera realtime detect----');
       Timer(Duration(milliseconds: 250), () async {
         //after 0.25 seconds this will be called,
         try {
