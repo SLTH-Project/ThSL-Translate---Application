@@ -932,6 +932,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                 .collection('History')
                                                 .doc(document.id)
                                                 .delete();
+                                            FirebaseStorage.instance
+                                                .refFromURL(
+                                                    document["imageURL"])
+                                                .delete();
                                             Navigator.pop(context);
                                           });
                                         },
