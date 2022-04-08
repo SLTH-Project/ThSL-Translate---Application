@@ -691,42 +691,65 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                  title: Column(children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 1, 1, 0),
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: Container(
-                                          alignment: FractionalOffset.topRight,
+                                  title: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 1, 1, 0),
                                           child: GestureDetector(
-                                            child: Icon(
-                                              Icons.clear,
-                                              color: Color(0xffAEAEAB),
+                                            onTap: () {},
+                                            child: Container(
+                                              alignment:
+                                                  FractionalOffset.topRight,
+                                              child: GestureDetector(
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  color: Color(0xffAEAEAB),
+                                                ),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
                                             ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        document["name"],
-                                        style: TextStyle(
-                                          fontFamily: 'Anakotmai',
-                                          color: Color(0xff2b2b2b),
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w700,
+                                        Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ]),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        child: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"]),
                                         ),
                                       ),
-                                    )
-                                  ]),
-                                  content: Container(
-                                    child: Image(
-                                      image: NetworkImage(document["imageURL"]),
-                                    ),
+                                      Center(
+                                        child: Text(
+                                          document["detail"],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   )));
                         },
                         child: Container(

@@ -628,11 +628,6 @@ class _ResultPageState extends State<ResultPage> {
             }));
 
     rowVocab(String locate) {
-      //print('----in rowVocab----');
-
-      //print('location = ');
-      //print(locate);
-
       return Container(
           height: 110,
           color: Colors.white,
@@ -650,30 +645,70 @@ class _ResultPageState extends State<ResultPage> {
                     children: snapshot.data!.docs.map((document) {
                       return InkWell(
                         onTap: () {
-                          //print('click to show pic');
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                  title: Center(
-                                    child: Text(
-                                      document["name"],
-                                      style: TextStyle(
-                                        fontFamily: 'Anakotmai',
-                                        color: Color(0xff2b2b2b),
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w700,
+                                  title: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 1, 1, 0),
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: Container(
+                                              alignment:
+                                                  FractionalOffset.topRight,
+                                              child: GestureDetector(
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  color: Color(0xffAEAEAB),
+                                                ),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          document["name"],
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Color(0xff2b2b2b),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ]),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        child: Image(
+                                          image: NetworkImage(
+                                              document["imageURL"]),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  content: Container(
-                                    child: Image(
-                                      image: NetworkImage(document["imageURL"]),
-                                    ),
+                                      Center(
+                                        child: Text(
+                                          document["detail"],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   )));
                         },
-                        /*onHover: () {
-
-                        },*/
                         child: Container(
                           margin: EdgeInsets.only(left: 24, top: 5, bottom: 5),
                           decoration: BoxDecoration(
