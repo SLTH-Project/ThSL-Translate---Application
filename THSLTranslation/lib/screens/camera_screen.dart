@@ -896,6 +896,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
 
     final historyColumn = Container(
+        color: Colors.blue,
         height: screenSize.height * 0.5,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(
@@ -910,7 +911,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 );
               } else {
                 return ListView(
-                  physics: BouncingScrollPhysics(),
+                  physics: ClampingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   children: snapshot.data!.docs.map((document) {
                     return InkWell(
@@ -1147,6 +1148,19 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               }
             }));
 
+    final bgHistory = Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.all(10),
+          color: Color(0xFFEBEEF5),
+          child: Center(
+            child: Text('ไม่มีประวัติการแปล'),
+          ),
+        ),
+        historyColumn
+      ],
+    );
+
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
@@ -1168,119 +1182,116 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               SizedBox(
                 height: 20,
               ),
-              haveHistory
-                  ? Row(
-                      children: [
-                        Container(
-                          width: screenSize.width * 0.70,
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 25),
-                          child: Text(
-                            "ประวัติการแปลของคุณ",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontFamily: 'Anakotmai',
-                              color: Color(0xff2b2b2b),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: screenSize.width * 0.30,
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 25),
-                          child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8))),
-                                        title: Column(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 1, 1, 0),
-                                              child: GestureDetector(
-                                                onTap: () {},
-                                                child: Container(
-                                                  alignment:
-                                                      FractionalOffset.topRight,
-                                                  child: GestureDetector(
-                                                    child: Icon(
-                                                      Icons.clear,
-                                                      color: Color(0xffAEAEAB),
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 61,
-                                              height: 61,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xFFFFF5F5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
+              //haveHistory ?
+              Row(
+                children: [
+                  Container(
+                    width: screenSize.width * 0.70,
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(left: 25),
+                    child: Text(
+                      "ประวัติการแปลของคุณ",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Color(0xff2b2b2b),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: screenSize.width * 0.30,
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(right: 25),
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  title: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 1, 1, 0),
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            alignment:
+                                                FractionalOffset.topRight,
+                                            child: GestureDetector(
                                               child: Icon(
-                                                Icons.delete,
-                                                size: 40,
-                                                color: Color(0xffE74C3C),
+                                                Icons.clear,
+                                                color: Color(0xffAEAEAB),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 24,
-                                            ),
-                                            Text('ยืนยันการลบประวัติ',
-                                                style: TextStyle(
-                                                  fontFamily: 'Anakotmai',
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                )),
-                                            Text('การแปลภาษามือไทยทั้งหมด',
-                                                style: TextStyle(
-                                                  fontFamily: 'Anakotmai',
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                )),
-                                            SizedBox(
-                                              height: 36,
-                                            ),
-                                            InkWell(
                                               onTap: () {
-                                                setState(() {
-                                                  FirebaseFirestore.instance
-                                                      .collection('History')
-                                                      .get()
-                                                      .then((snapshot) {
-                                                    for (DocumentSnapshot ds
-                                                        in snapshot.docs) {
-                                                      ds.reference.delete();
-                                                    }
-                                                  });
-                                                });
                                                 Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 61,
+                                        height: 61,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFFFFF5F5),
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: Icon(
+                                          Icons.delete,
+                                          size: 40,
+                                          color: Color(0xffE74C3C),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 24,
+                                      ),
+                                      Text('ยืนยันการลบประวัติ',
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      Text('การแปลภาษามือไทยทั้งหมด',
+                                          style: TextStyle(
+                                            fontFamily: 'Anakotmai',
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      SizedBox(
+                                        height: 36,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            FirebaseFirestore.instance
+                                                .collection('History')
+                                                .get()
+                                                .then((snapshot) {
+                                              for (DocumentSnapshot ds
+                                                  in snapshot.docs) {
+                                                ds.reference.delete();
+                                              }
+                                            });
+                                          });
+                                          Navigator.pop(context);
 
-                                                /*setState(() {
+                                          /*setState(() {
                                                     FirebaseFirestore.instance
                                                         .collection('History')
                                                         .get()
@@ -1298,53 +1309,51 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                       }
                                                     });
                                                   });*/
-                                              },
-                                              child: Container(
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffE74C3C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8,
-                                                    horizontal: 14),
-                                                child: Center(
-                                                  child: Text('ลบทั้งหมด',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Anakotmai',
-                                                        color: Colors.white,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      )),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ));
-                                  });
-                            },
-                            child: Text(
-                              'ลบทั้งหมด',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: 'Anakotmai',
-                                color: Color(0xffE74C3C),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+                                        },
+                                        child: Container(
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffE74C3C),
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 14),
+                                          child: Center(
+                                            child: Text('ลบทั้งหมด',
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                )),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ));
+                            });
+                      },
+                      child: Text(
+                        'ลบทั้งหมด',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: 'Anakotmai',
+                          color: Color(0xffE74C3C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
                         ),
-                      ],
-                    )
-                  : Container(),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+              //: Container()
+              ,
               SizedBox(
                 height: 10,
               ),
-              haveHistory ? historyColumn : Container(),
+              bgHistory,
               SizedBox(
                 height: 75,
               ),
