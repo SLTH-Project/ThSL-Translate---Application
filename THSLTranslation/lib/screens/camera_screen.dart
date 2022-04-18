@@ -896,7 +896,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
 
     final historyColumn = Container(
-        color: Colors.blue,
+        //color: Colors.blue,
         height: screenSize.height * 0.5,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(

@@ -7,8 +7,7 @@ class ClassifierFloat extends Classifier {
   ClassifierFloat({int? numThreads}) : super(numThreads: numThreads);
 
   @override
-  //String get modelName => 'mobilenet_v1_1.0_224.tflite';
-  String get modelName => 'model_B_rmsProp.tflite';
+  String get modelName => 'model_MBv2.tflite';
 
   @override
   NormalizeOp get preProcessNormalizeOp => NormalizeOp(127.5, 127.5);
