@@ -414,16 +414,18 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-      if (snapshot.docs.isNotEmpty == true) {
-        haveHistory = true;
-        print('---------have history = -----------');
-        print(haveHistory);
-      } else {
-        haveHistory = false;
-        print('---------have history = -----------');
-        print(haveHistory);
-      }
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------1have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------1have history = -----------');
+          print(haveHistory);
+        }
+      });
     });
 
     setCategoryName(Icon icon, Text textt) {
@@ -443,6 +445,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         ],
       );
     }
+
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------5have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------5have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     final meaning = Positioned(
         top: 20,
@@ -469,6 +485,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             ],
           ),
         ));
+
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------6have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------6have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     final stopButton = Positioned(
         bottom: 20,
@@ -500,13 +530,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         fontWeight: FontWeight.w500,
                       )),
                 ),
-                onTap: () {
-                  setState(() async {
-                    print('------------stop------------');
-                    setState(() {
-                      stop = !stop;
-                    });
-                    setState(() {
+                onTap: () async {
+                  //setState(() async {
+                  print('------------stop------------');
+                  setState(() {
+                    stop = !stop;
+                  });
+                  /*setState(() {
                       FirebaseFirestore.instance
                           .collection('History')
                           .get()
@@ -521,34 +551,64 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           print(haveHistory);
                         }
                       });
+                    });*/
+
+                  print('stop = ');
+                  print(stop);
+
+                  if (stop == true) {
+                    FirebaseStorage storage = FirebaseStorage.instance;
+                    Reference ref = storage.ref().child(
+                        'camera_pictures/image_' + DateTime.now().toString());
+                    await ref.putFile(_image!);
+                    String URLL = await ref.getDownloadURL();
+
+                    CollectionReference histories =
+                        FirebaseFirestore.instance.collection('History');
+                    histories.add({
+                      'category': categoryThai,
+                      'imageURL': URLL,
+                      'vocab': meaningThai,
+                      'timestamp': DateTime.now()
                     });
-                    print('stop = ');
-                    print(stop);
 
-                    if (stop == true) {
-                      FirebaseStorage storage = FirebaseStorage.instance;
-                      Reference ref = storage.ref().child(
-                          'camera_pictures/image_' + DateTime.now().toString());
-                      await ref.putFile(_image!);
-                      String URLL = await ref.getDownloadURL();
+                    print('---------- add history complete -------------');
+                  }
 
-                      CollectionReference histories =
-                          FirebaseFirestore.instance.collection('History');
-                      histories.add({
-                        'category': categoryThai,
-                        'imageURL': URLL,
-                        'vocab': meaningThai,
-                        'timestamp': DateTime.now()
-                      });
-
-                      print('---------- add history complete -------------');
+                  var snapshot = await FirebaseFirestore.instance
+                      .collection('History')
+                      .get();
+                  setState(() {
+                    if (snapshot.docs.isNotEmpty == true) {
+                      haveHistory = true;
+                      print('---------2have history = -----------');
+                      print(haveHistory);
+                    } else {
+                      haveHistory = false;
+                      print('---------2have history = -----------');
+                      print(haveHistory);
                     }
                   });
+                  //});
                 },
               )
             ],
           ),
         ));
+
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------7have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------7have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     final camera = Stack(
       children: <Widget>[
@@ -571,6 +631,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         stopButton
       ],
     );
+
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------8have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------8have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     final rowCatagory = Container(
         height: 110,
@@ -668,6 +742,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 );
               }
             }));
+
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------9have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------9have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     rowVocab(String locate) {
       return Container(
@@ -808,6 +896,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               }));
     }
 
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------10have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------10have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
+
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
           initialChildSize: 0.12,
@@ -877,6 +979,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           }),
     );
 
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------11have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------11have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
+
     if (stop == false) {
       print('----camera realtime detect----');
       Timer(Duration(milliseconds: 250), () async {
@@ -894,6 +1010,20 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         }
       });
     }
+
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------12have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------12have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     final historyColumn = Container(
         //color: Colors.blue,
@@ -1104,7 +1234,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                             Icons.clear,
                                             color: Color(0xffAEAEAB),
                                           ),
-                                          onTap: () {
+                                          onTap: () async {
                                             setState(() {
                                               FirebaseFirestore.instance
                                                   .collection('History')
@@ -1115,24 +1245,23 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                       document["imageURL"])
                                                   .delete();
                                             });
+                                            var snapshot =
+                                                await FirebaseFirestore.instance
+                                                    .collection('History')
+                                                    .get();
                                             setState(() {
-                                              FirebaseFirestore.instance
-                                                  .collection('History')
-                                                  .get()
-                                                  .then((snapshot) {
-                                                if (snapshot.docs.isNotEmpty ==
-                                                    true) {
-                                                  haveHistory = true;
-                                                  print(
-                                                      '---------have history = -----------');
-                                                  print(haveHistory);
-                                                } else {
-                                                  haveHistory = false;
-                                                  print(
-                                                      '---------have history = -----------');
-                                                  print(haveHistory);
-                                                }
-                                              });
+                                              if (snapshot.docs.isNotEmpty ==
+                                                  true) {
+                                                haveHistory = true;
+                                                print(
+                                                    '---------3have history = -----------');
+                                                print(haveHistory);
+                                              } else {
+                                                haveHistory = false;
+                                                print(
+                                                    '---------3have history = -----------');
+                                                print(haveHistory);
+                                              }
                                             });
                                           },
                                         ),
@@ -1148,18 +1277,19 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               }
             }));
 
-    final bgHistory = Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          color: Color(0xFFEBEEF5),
-          child: Center(
-            child: Text('ไม่มีประวัติการแปล'),
-          ),
-        ),
-        historyColumn
-      ],
-    );
+    setState(() {
+      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+        if (snapshot.docs.isNotEmpty == true) {
+          haveHistory = true;
+          print('---------13have history = -----------');
+          print(haveHistory);
+        } else {
+          haveHistory = false;
+          print('---------13have history = -----------');
+          print(haveHistory);
+        }
+      });
+    });
 
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
@@ -1182,116 +1312,155 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               SizedBox(
                 height: 20,
               ),
-              //haveHistory ?
-              Row(
-                children: [
-                  Container(
-                    width: screenSize.width * 0.70,
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 25),
-                    child: Text(
-                      "ประวัติการแปลของคุณ",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Color(0xff2b2b2b),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: screenSize.width * 0.30,
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(right: 25),
-                    child: InkWell(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  title: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 1, 1, 0),
-                                        child: GestureDetector(
-                                          onTap: () {},
-                                          child: Container(
-                                            alignment:
-                                                FractionalOffset.topRight,
-                                            child: GestureDetector(
-                                              child: Icon(
-                                                Icons.clear,
-                                                color: Color(0xffAEAEAB),
+              haveHistory
+                  ? Row(
+                      children: [
+                        Container(
+                          width: screenSize.width * 0.70,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 25),
+                          child: Text(
+                            "ประวัติการแปลของคุณ",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Anakotmai',
+                              color: Color(0xff2b2b2b),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: screenSize.width * 0.30,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 25),
+                          child: InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8))),
+                                        title: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 1, 1, 0),
+                                              child: GestureDetector(
+                                                onTap: () {},
+                                                child: Container(
+                                                  alignment:
+                                                      FractionalOffset.topRight,
+                                                  child: GestureDetector(
+                                                    child: Icon(
+                                                      Icons.clear,
+                                                      color: Color(0xffAEAEAB),
+                                                    ),
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ),
                                               ),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 61,
-                                        height: 61,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFFFF5F5),
-                                            borderRadius:
-                                                BorderRadius.circular(100)),
-                                        child: Icon(
-                                          Icons.delete,
-                                          size: 40,
-                                          color: Color(0xffE74C3C),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 24,
-                                      ),
-                                      Text('ยืนยันการลบประวัติ',
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      Text('การแปลภาษามือไทยทั้งหมด',
-                                          style: TextStyle(
-                                            fontFamily: 'Anakotmai',
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      SizedBox(
-                                        height: 36,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            FirebaseFirestore.instance
-                                                .collection('History')
-                                                .get()
-                                                .then((snapshot) {
-                                              for (DocumentSnapshot ds
-                                                  in snapshot.docs) {
-                                                ds.reference.delete();
-                                              }
-                                            });
-                                          });
-                                          Navigator.pop(context);
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 61,
+                                              height: 61,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFFFFF5F5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100)),
+                                              child: Icon(
+                                                Icons.delete,
+                                                size: 40,
+                                                color: Color(0xffE74C3C),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 24,
+                                            ),
+                                            Text('ยืนยันการลบประวัติ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500,
+                                                )),
+                                            Text('การแปลภาษามือไทยทั้งหมด',
+                                                style: TextStyle(
+                                                  fontFamily: 'Anakotmai',
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500,
+                                                )),
+                                            SizedBox(
+                                              height: 36,
+                                            ),
+                                            InkWell(
+                                              onTap: () async {
+                                                setState(() {
+                                                  FirebaseFirestore.instance
+                                                      .collection('History')
+                                                      .get()
+                                                      .then((snapshot) {
+                                                    for (DocumentSnapshot ds
+                                                        in snapshot.docs) {
+                                                      ds.reference.delete();
+                                                    }
+                                                  });
+                                                });
 
-                                          /*setState(() {
+                                                print('delete all');
+
+                                                /*setState(() {
+                                                  Timer(
+                                                      Duration(
+                                                          milliseconds: 250),
+                                                      () async {
+                                                    //after 0.25 seconds this will be called,
+                                                    try {} catch (e) {
+                                                      print(e);
+                                                    }
+                                                  });
+                                                });*/
+
+                                                var snapshot =
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('History')
+                                                        .get();
+                                                setState(() {
+                                                  if (snapshot
+                                                          .docs.isNotEmpty ==
+                                                      true) {
+                                                    haveHistory = true;
+                                                    print(
+                                                        '---------4have history = -----------');
+                                                    print(haveHistory);
+                                                  } else {
+                                                    haveHistory = false;
+                                                    print(
+                                                        '---------4have history = -----------');
+                                                    print(haveHistory);
+                                                  }
+                                                });
+
+                                                Navigator.pop(context);
+
+                                                /*setState(() {
                                                     FirebaseFirestore.instance
                                                         .collection('History')
                                                         .get()
@@ -1309,51 +1478,53 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                       }
                                                     });
                                                   });*/
-                                        },
-                                        child: Container(
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffE74C3C),
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 14),
-                                          child: Center(
-                                            child: Text('ลบทั้งหมด',
-                                                style: TextStyle(
-                                                  fontFamily: 'Anakotmai',
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                )),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ));
-                            });
-                      },
-                      child: Text(
-                        'ลบทั้งหมด',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Anakotmai',
-                          color: Color(0xffE74C3C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                                              },
+                                              child: Container(
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xffE74C3C),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                ),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 8,
+                                                    horizontal: 14),
+                                                child: Center(
+                                                  child: Text('ลบทั้งหมด',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Anakotmai',
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      )),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ));
+                                  });
+                            },
+                            child: Text(
+                              'ลบทั้งหมด',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontFamily: 'Anakotmai',
+                                color: Color(0xffE74C3C),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-              //: Container()
-              ,
+                      ],
+                    )
+                  : Container(),
               SizedBox(
                 height: 10,
               ),
-              bgHistory,
+              historyColumn,
               SizedBox(
                 height: 75,
               ),
