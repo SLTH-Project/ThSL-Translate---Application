@@ -414,18 +414,16 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------1have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------1have history = -----------');
-          print(haveHistory);
-        }
-      });
+    FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+      if (snapshot.docs.isNotEmpty == true) {
+        haveHistory = true;
+        print('---------1have history = -----------');
+        print(haveHistory);
+      } else {
+        haveHistory = false;
+        print('---------1have history = -----------');
+        print(haveHistory);
+      }
     });
 
     setCategoryName(Icon icon, Text textt) {
@@ -445,20 +443,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         ],
       );
     }
-
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------5have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------5have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
 
     final meaning = Positioned(
         top: 20,
@@ -485,20 +469,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             ],
           ),
         ));
-
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------6have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------6have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
 
     final stopButton = Positioned(
         bottom: 20,
@@ -531,27 +501,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       )),
                 ),
                 onTap: () async {
-                  //setState(() async {
                   print('------------stop------------');
                   setState(() {
                     stop = !stop;
                   });
-                  /*setState(() {
-                      FirebaseFirestore.instance
-                          .collection('History')
-                          .get()
-                          .then((snapshot) {
-                        if (snapshot.docs.isNotEmpty == true) {
-                          haveHistory = true;
-                          print('---------have history = -----------');
-                          print(haveHistory);
-                        } else {
-                          haveHistory = false;
-                          print('---------have history = -----------');
-                          print(haveHistory);
-                        }
-                      });
-                    });*/
 
                   print('stop = ');
                   print(stop);
@@ -589,26 +542,11 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       print(haveHistory);
                     }
                   });
-                  //});
                 },
               )
             ],
           ),
         ));
-
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------7have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------7have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
 
     final camera = Stack(
       children: <Widget>[
@@ -631,20 +569,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         stopButton
       ],
     );
-
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------8have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------8have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
 
     final rowCatagory = Container(
         height: 110,
@@ -742,20 +666,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 );
               }
             }));
-
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------9have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------9have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
 
     rowVocab(String locate) {
       return Container(
@@ -896,20 +806,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               }));
     }
 
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------10have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------10have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
-
     final bottomSwipeUp = SizedBox.expand(
       child: DraggableScrollableSheet(
           initialChildSize: 0.12,
@@ -979,20 +875,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           }),
     );
 
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------11have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------11have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
-
     if (stop == false) {
       print('----camera realtime detect----');
       Timer(Duration(milliseconds: 250), () async {
@@ -1011,22 +893,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       });
     }
 
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------12have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------12have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
-
     final historyColumn = Container(
-        //color: Colors.blue,
         height: screenSize.height * 0.5,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(
@@ -1120,7 +987,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                         height: 10,
                                       ),
                                       InkWell(
-                                        onTap: () {
+                                        onTap: () async {
                                           setState(() {
                                             FirebaseFirestore.instance
                                                 .collection('History')
@@ -1130,8 +997,28 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                 .refFromURL(
                                                     document["imageURL"])
                                                 .delete();
-                                            Navigator.pop(context);
                                           });
+
+                                          var snapshot = await FirebaseFirestore
+                                              .instance
+                                              .collection('History')
+                                              .get();
+                                          setState(() {
+                                            if (snapshot.docs.isNotEmpty ==
+                                                true) {
+                                              haveHistory = true;
+                                              print(
+                                                  '---------5have history = -----------');
+                                              print(haveHistory);
+                                            } else {
+                                              haveHistory = false;
+                                              print(
+                                                  '---------5have history = -----------');
+                                              print(haveHistory);
+                                            }
+                                          });
+
+                                          Navigator.pop(context);
                                         },
                                         child: Container(
                                             width: 100,
@@ -1277,20 +1164,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               }
             }));
 
-    setState(() {
-      FirebaseFirestore.instance.collection('History').get().then((snapshot) {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------13have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------13have history = -----------');
-          print(haveHistory);
-        }
-      });
-    });
-
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
       appBar: AppBar(
@@ -1411,31 +1284,17 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                                setState(() {
-                                                  FirebaseFirestore.instance
-                                                      .collection('History')
-                                                      .get()
-                                                      .then((snapshot) {
-                                                    for (DocumentSnapshot ds
-                                                        in snapshot.docs) {
-                                                      ds.reference.delete();
-                                                    }
-                                                  });
+                                                await FirebaseFirestore.instance
+                                                    .collection('History')
+                                                    .get()
+                                                    .then((snapshot) async {
+                                                  for (DocumentSnapshot ds
+                                                      in snapshot.docs) {
+                                                    await ds.reference.delete();
+                                                  }
                                                 });
 
                                                 print('delete all');
-
-                                                /*setState(() {
-                                                  Timer(
-                                                      Duration(
-                                                          milliseconds: 250),
-                                                      () async {
-                                                    //after 0.25 seconds this will be called,
-                                                    try {} catch (e) {
-                                                      print(e);
-                                                    }
-                                                  });
-                                                });*/
 
                                                 var snapshot =
                                                     await FirebaseFirestore
@@ -1459,25 +1318,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                 });
 
                                                 Navigator.pop(context);
-
-                                                /*setState(() {
-                                                    FirebaseFirestore.instance
-                                                        .collection('History')
-                                                        .get()
-                                                        .then((snapshot) {
-                                                      if (snapshot.docs.isNotEmpty == true) {
-                                                        haveHistory = true;
-                                                        print(
-                                                            '---------have history = -----------');
-                                                        print(haveHistory);
-                                                      } else {
-                                                        haveHistory = false;
-                                                        print(
-                                                            '---------have history = -----------');
-                                                        print(haveHistory);
-                                                      }
-                                                    });
-                                                  });*/
                                               },
                                               child: Container(
                                                 width: 100,
