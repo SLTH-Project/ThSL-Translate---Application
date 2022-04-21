@@ -79,6 +79,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   String meaningThai = '';
   String categoryThai = '';
+  bool haveHistory = false;
 
   @override
   void initState() {
@@ -443,12 +444,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     print('---------- add history complete -------------');
 
+    var snapshot = await FirebaseFirestore.instance.collection('History').get();
+    setState(() {
+      if (snapshot.docs.isNotEmpty == true) {
+        haveHistory = true;
+        print('---------2have history = -----------');
+        print(haveHistory);
+      } else {
+        haveHistory = false;
+        print('---------2have history = -----------');
+        print(haveHistory);
+      }
+    });
+
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
           image: image,
           name: meaningThai,
           camera: widget.camera,
+          //history: haveHistory,
         ),
       ),
     );
@@ -470,6 +485,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print("==================================================================");
     print('START : click category = ');
     print(yes);
+
+    FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+      if (snapshot.docs.isNotEmpty == true) {
+        haveHistory = true;
+        print('---------1have history = -----------');
+        print(haveHistory);
+      } else {
+        haveHistory = false;
+        print('---------1have history = -----------');
+        print(haveHistory);
+      }
+    });
 
     setCategoryName(Icon icon, Text textt) {
       return Row(
@@ -1022,8 +1049,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                CameraPage(camera: widget.camera)));
+                            builder: (context) => CameraPage(
+                                  camera: widget.camera,
+                                  history: haveHistory,
+                                )));
                   },
                   icon: Icon(
                     Icons.camera_alt,

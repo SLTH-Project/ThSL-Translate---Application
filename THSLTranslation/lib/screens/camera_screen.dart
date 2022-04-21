@@ -20,9 +20,11 @@ class CameraPage extends StatefulWidget {
   const CameraPage({
     Key? key,
     required this.camera,
+    required this.history,
   }) : super(key: key);
 
   final CameraDescription camera;
+  final bool history;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -56,7 +58,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   bool stop = false;
   String meaningThai = '';
   String categoryThai = '';
-  bool haveHistory = false;
 
   @override
   void initState() {
@@ -413,6 +414,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    bool haveHistory = widget.history;
 
     FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
