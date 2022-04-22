@@ -1049,10 +1049,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CameraPage(
-                                  camera: widget.camera,
-                                  history: haveHistory,
-                                )));
+                            builder: (context) =>
+                                CameraPage(camera: widget.camera)));
                   },
                   icon: Icon(
                     Icons.camera_alt,

@@ -55,7 +55,7 @@ class _ResultPageState extends State<ResultPage> {
 
   String meaningThai = '';
   String categoryThai = '';
-  //bool haveHistory = false;
+  bool haveHistory = true;
   late File imagee;
 
   @override
@@ -421,7 +421,7 @@ class _ResultPageState extends State<ResultPage> {
 
     print('---------- add history complete -------------');
 
-    bool haveHistory;
+    //bool haveHistory;
 
     var snapshot = await FirebaseFirestore.instance.collection('History').get();
     setState(() {
@@ -436,9 +436,9 @@ class _ResultPageState extends State<ResultPage> {
       }
     });
 
-    imagee = image;
+    //imagee = image;
 
-    /*return await Navigator.of(context).push(
+    return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
           image: image,
@@ -447,7 +447,7 @@ class _ResultPageState extends State<ResultPage> {
           //history: haveHistory,
         ),
       ),
-    );*/
+    );
   }
 
   @override
@@ -463,9 +463,9 @@ class _ResultPageState extends State<ResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    imagee = widget.image;
-    meaningThai = widget.name;
-    bool haveHistory = true;
+    //imagee = widget.image;
+    //meaningThai = widget.name;
+    //bool haveHistory = true;
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
 
@@ -529,7 +529,7 @@ class _ResultPageState extends State<ResultPage> {
                 decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 255, 255, 0.5),
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: Text(meaningThai,
+                child: Text(widget.name,
                     style: TextStyle(
                       fontFamily: 'Anakotmai',
                       color: Colors.black,
@@ -1201,7 +1201,7 @@ class _ResultPageState extends State<ResultPage> {
                         width: screenSize.width,
                         height: screenSize.width,
                         child: Image.file(
-                          imagee,
+                          widget.image,
                           fit: BoxFit.cover,
                         ),
                       ),
