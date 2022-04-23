@@ -51,14 +51,16 @@ class _GetStartedState extends State<GetStarted> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
+                        contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 40),
+                        titlePadding: EdgeInsets.fromLTRB(16, 40, 16, 0),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         title: Center(
-                          child: Text('คำขออนุญาต',
+                          child: Text('การบันทึกประวัติการแปล',
                               style: TextStyle(
                                 fontFamily: 'Anakotmai',
                                 color: Color(0xff2b2b2b),
-                                fontSize: 22,
+                                fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               )),
                         ),
@@ -68,19 +70,19 @@ class _GetStartedState extends State<GetStarted> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                                'เราขออนุญาตบันทึกภาพท่าทางของคุณ หากคุณอนุญาตภาพท่าทางของคุณจะถูกบันทึกเข้าประวัติการแปลท่าทางของเรา ซึ่งผู้ใช้งานแอปท่านอื่นจะสามารถเข้าถึงได้',
+                                'หากคุณยินยอมให้บันทึกประวัติการแปลของคุณ รูปภาพของคุณจะถูกเก็บในคลังข้อมูลของเรา ซึ่งผู้ใช้งานอื่นจะสามารถมองเห็นได้ หากคุณไม่ยินยอมให้บันทึกประวัติการแปล คุณยังสามารถใช้งานแอปพลิเคชันได้ตามปกติ แต่จะไม่สามารถดูประวัติการแปลใด ๆ ได้',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Anakotmai',
                                   color: Color(0xff2b2b2b),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
                                 )),
                             SizedBox(
                               height: 36,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 InkWell(
                                   onTap: () {
@@ -93,20 +95,20 @@ class _GetStartedState extends State<GetStarted> {
                                                 )));
                                   },
                                   child: Container(
-                                    width: 100,
+                                    width: 115,
                                     height: 44,
                                     decoration: BoxDecoration(
-                                      color: Color(0xfff7f7f7),
+                                      color: Color(0xffF0F0EF),
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                        vertical: 7, horizontal: 14),
+                                        vertical: 1, horizontal: 17),
                                     child: Center(
                                       child: Text('ไม่ยินยอม',
                                           style: TextStyle(
                                             fontFamily: 'Anakotmai',
                                             color: Color(0xff2b2b2b),
-                                            fontSize: 16,
+                                            fontSize: 15,
                                             fontWeight: FontWeight.w700,
                                           )),
                                     ),
@@ -123,20 +125,20 @@ class _GetStartedState extends State<GetStarted> {
                                                 )));
                                   },
                                   child: Container(
-                                    width: 100,
+                                    width: 115,
                                     height: 44,
                                     decoration: BoxDecoration(
                                       color: Color(0xff1821AE),
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                        vertical: 7, horizontal: 14),
+                                        vertical: 1, horizontal: 17),
                                     child: Center(
                                       child: Text('ยินยอม',
                                           style: TextStyle(
                                             fontFamily: 'Anakotmai',
                                             color: Colors.white,
-                                            fontSize: 18,
+                                            fontSize: 15,
                                             fontWeight: FontWeight.w700,
                                           )),
                                     ),
