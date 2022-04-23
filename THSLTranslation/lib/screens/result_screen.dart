@@ -26,14 +26,12 @@ class ResultPage extends StatefulWidget {
     required this.image,
     required this.name,
     required this.camera,
-    //required this.history
   }) : super(key: key);
 
   final File image;
   //final TensorImage image;
   final String name;
   final CameraDescription camera;
-  //final bool history;
 
   @override
   State<ResultPage> createState() => _ResultPageState();
@@ -421,8 +419,6 @@ class _ResultPageState extends State<ResultPage> {
 
     print('---------- add history complete -------------');
 
-    //bool haveHistory;
-
     var snapshot = await FirebaseFirestore.instance.collection('History').get();
     setState(() {
       if (snapshot.docs.isNotEmpty == true) {
@@ -436,15 +432,12 @@ class _ResultPageState extends State<ResultPage> {
       }
     });
 
-    //imagee = image;
-
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
           image: image,
           name: meaningThai,
           camera: widget.camera,
-          //history: haveHistory,
         ),
       ),
     );
@@ -463,9 +456,6 @@ class _ResultPageState extends State<ResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    //imagee = widget.image;
-    //meaningThai = widget.name;
-    //bool haveHistory = true;
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
 

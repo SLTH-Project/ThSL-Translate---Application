@@ -17,13 +17,9 @@ import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key, required this.camera
-      //required this.history,
-      })
-      : super(key: key);
+  const CameraPage({Key? key, required this.camera}) : super(key: key);
 
   final CameraDescription camera;
-  //final bool history;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -414,7 +410,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    //bool haveHistory = widget.history;
 
     FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
@@ -593,8 +588,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       onTap: () {
                         setState(() {
                           yes = true;
-                          //print('click category = ');
-                          //print(yes);
                           location = document["location"];
                           rowCategoryName = setCategoryName(
                               Icon(
@@ -640,7 +633,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                     width: 98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      //color: Colors.indigo[50],
                                     ),
                                     child: Padding(
                                         padding: EdgeInsets.all(1),
@@ -778,7 +770,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                       width: 98,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        //color: Colors.indigo[50],
                                       ),
                                       child: Padding(
                                           padding: EdgeInsets.all(1),
@@ -841,10 +832,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       onTap: () {
                         setState(() {
                           yes = false;
-                          //print('click to back to category (false) = ');
-                          //print(yes);
                         });
-                        //return;
                       },
                       child: yes
                           ? rowCategoryName
