@@ -21,17 +21,19 @@ import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({
-    Key? key,
-    required this.image,
-    required this.name,
-    required this.camera,
-  }) : super(key: key);
+  const ResultPage(
+      {Key? key,
+      required this.image,
+      required this.name,
+      required this.camera,
+      required this.consent})
+      : super(key: key);
 
   final File image;
   //final TensorImage image;
   final String name;
   final CameraDescription camera;
+  final bool consent;
 
   @override
   State<ResultPage> createState() => _ResultPageState();
@@ -398,26 +400,28 @@ class _ResultPageState extends State<ResultPage> {
 
     print('------------stop------------');
 
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage
-        .ref()
-        .child('camera_pictures/image_' + DateTime.now().toString());
-    await ref.putFile(_image!);
-    String URLL = await ref.getDownloadURL();
+    if (widget.consent == true) {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child('camera_pictures/image_' + DateTime.now().toString());
+      await ref.putFile(_image!);
+      String URLL = await ref.getDownloadURL();
 
-    print('imageURLL = ');
-    print(URLL);
+      print('imageURLL = ');
+      print(URLL);
 
-    CollectionReference histories =
-        FirebaseFirestore.instance.collection('History');
-    histories.add({
-      'category': categoryThai,
-      'imageURL': URLL,
-      'vocab': meaningThai,
-      'timestamp': DateTime.now()
-    });
+      CollectionReference histories =
+          FirebaseFirestore.instance.collection('History');
+      histories.add({
+        'category': categoryThai,
+        'imageURL': URLL,
+        'vocab': meaningThai,
+        'timestamp': DateTime.now()
+      });
 
-    print('---------- add history complete -------------');
+      print('---------- add history complete -------------');
+    }
 
     var snapshot = await FirebaseFirestore.instance.collection('History').get();
     setState(() {
@@ -438,6 +442,7 @@ class _ResultPageState extends State<ResultPage> {
           image: image,
           name: meaningThai,
           camera: widget.camera,
+          consent: widget.consent,
         ),
       ),
     );
@@ -458,6 +463,8 @@ class _ResultPageState extends State<ResultPage> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
+    print("consent = ");
+    print(widget.consent);
 
     FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
@@ -1146,8 +1153,10 @@ class _ResultPageState extends State<ResultPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(camera: widget.camera)));
+                            builder: (context) => HomePage(
+                                  camera: widget.camera,
+                                  consent: widget.consent,
+                                )));
                   },
                   child: Icon(
                     Icons.arrow_back_ios,
@@ -1191,7 +1200,7 @@ class _ResultPageState extends State<ResultPage> {
               SizedBox(
                 height: 20,
               ),
-              haveHistory
+              widget.consent && haveHistory
                   ? Row(
                       children: [
                         Container(
@@ -1370,7 +1379,7 @@ class _ResultPageState extends State<ResultPage> {
               SizedBox(
                 height: 20,
               ),
-              historyColumn,
+              widget.consent ? historyColumn : Container(),
               SizedBox(
                 height: 50,
               ),

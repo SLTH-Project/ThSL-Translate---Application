@@ -17,9 +17,11 @@ import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key, required this.camera}) : super(key: key);
+  const CameraPage({Key? key, required this.camera, required this.consent})
+      : super(key: key);
 
   final CameraDescription camera;
+  final bool consent;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -476,90 +478,78 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xfff7f7f7),
+              Material(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  color: Color.fromRGBO(255, 255, 255, 0),
+                  child: InkWell(
+                    customBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black87,
-                            spreadRadius: 0.01,
-                            blurRadius: 7.5,
-                            offset: Offset(0, 2))
-                      ]),
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                  child: Text(stop ? 'ดำเนินการแปลต่อ' : 'หยุดการแปลชั่วคราว',
-                      style: TextStyle(
-                        fontFamily: 'Anakotmai',
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      )),
-                ),
-                onTap: () async {
-                  print('------------stop------------');
-                  setState(() {
-                    stop = !stop;
-                  });
+                    ),
+                    hoverColor: Color.fromRGBO(255, 255, 255, 1),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 255, 255, 0.75),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      child:
+                          Text(stop ? 'ดำเนินการแปลต่อ' : 'หยุดการแปลชั่วคราว',
+                              style: TextStyle(
+                                fontFamily: 'Anakotmai',
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              )),
+                    ),
+                    onTap: () async {
+                      print('------------stop------------');
+                      setState(() {
+                        stop = !stop;
+                      });
 
-                  print('stop = ');
-                  print(stop);
+                      print('stop = ');
+                      print(stop);
 
-                  if (stop == true) {
-                    FirebaseStorage storage = FirebaseStorage.instance;
-                    Reference ref = storage.ref().child(
-                        'camera_pictures/image_' + DateTime.now().toString());
-                    await ref.putFile(_image!);
-                    String URLL = await ref.getDownloadURL();
+                      if (stop && widget.consent == true) {
+                        FirebaseStorage storage = FirebaseStorage.instance;
+                        Reference ref = storage.ref().child(
+                            'camera_pictures/image_' +
+                                DateTime.now().toString());
+                        await ref.putFile(_image!);
+                        String URLL = await ref.getDownloadURL();
 
-                    CollectionReference histories =
-                        FirebaseFirestore.instance.collection('History');
-                    histories.add({
-                      'category': categoryThai,
-                      'imageURL': URLL,
-                      'vocab': meaningThai,
-                      'timestamp': DateTime.now()
-                    });
+                        CollectionReference histories =
+                            FirebaseFirestore.instance.collection('History');
+                        histories.add({
+                          'category': categoryThai,
+                          'imageURL': URLL,
+                          'vocab': meaningThai,
+                          'timestamp': DateTime.now()
+                        });
 
-                    print('---------- add history complete -------------');
-                  }
+                        print('---------- add history complete -------------');
+                      }
 
-                  var snapshot = await FirebaseFirestore.instance
-                      .collection('History')
-                      .get();
-                  setState(() {
-                    if (snapshot.docs.isNotEmpty == true) {
-                      haveHistory = true;
-                      print('---------2have history = -----------');
-                      print(haveHistory);
-                    } else {
-                      haveHistory = false;
-                      print('---------2have history = -----------');
-                      print(haveHistory);
-                    }
-                  });
-                },
-              )
+                      var snapshot = await FirebaseFirestore.instance
+                          .collection('History')
+                          .get();
+                      setState(() {
+                        if (snapshot.docs.isNotEmpty == true) {
+                          haveHistory = true;
+                          print('---------2have history = -----------');
+                          print(haveHistory);
+                        } else {
+                          haveHistory = false;
+                          print('---------2have history = -----------');
+                          print(haveHistory);
+                        }
+                      });
+                    },
+                  ))
             ],
           ),
         ));
-
-    /*final pic = Container(
-      width: screenSize.width,
-      height: screenSize.width,
-      color: Color(0xFFEBEEF5),
-      child: Center(
-        child: Container(
-          width: screenSize.width,
-          height: screenSize.width,
-          child: Image.file(
-            _image!,
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-      ),
-    );*/
 
     final camera = Stack(
       children: <Widget>[
@@ -1195,27 +1185,36 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     return Scaffold(
       backgroundColor: Color(0xFFEBEEF5),
-      appBar: AppBar(
-        title: Text('THSL Translate',
-            style: TextStyle(
-              fontFamily: 'Anakotmai',
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            )),
-        backgroundColor: Color(0xFF1821AE),
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            title: Text('THSL Translate',
+                style: TextStyle(
+                  fontFamily: 'Anakotmai',
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                )),
+            backgroundColor: Color(0xFF1821AE),
+          )),
       body: SizedBox.expand(
           child: Stack(children: <Widget>[
         SingleChildScrollView(
           child: Column(
             children: [
-              //stop ? pic :
               camera,
               SizedBox(
                 height: 20,
               ),
-              haveHistory
+              widget.consent && haveHistory
                   ? Row(
                       children: [
                         Container(
@@ -1394,7 +1393,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               SizedBox(
                 height: 10,
               ),
-              historyColumn,
+              widget.consent ? historyColumn : Container(),
               SizedBox(
                 height: 75,
               ),

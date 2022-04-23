@@ -46,9 +46,11 @@ class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
     required this.camera,
+    required this.consent,
   }) : super(key: key);
 
   final CameraDescription camera;
+  final bool consent;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -424,28 +426,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       categoryThai = 'อาหาร';
     }
 
-    print('--------save history to firebase------------');
+    if (widget.consent == true) {
+      print('--------save history to firebase------------');
 
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage
-        .ref()
-        .child('camera_pictures/image_' + DateTime.now().toString());
-    await ref.putFile(_image!);
-    String URLL = await ref.getDownloadURL();
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child('camera_pictures/image_' + DateTime.now().toString());
+      await ref.putFile(_image!);
+      String URLL = await ref.getDownloadURL();
 
-    //print('imageURLL = ');
-    //print(URLL);
+      //print('imageURLL = ');
+      //print(URLL);
 
-    CollectionReference histories =
-        FirebaseFirestore.instance.collection('History');
-    histories.add({
-      'category': categoryThai,
-      'imageURL': URLL,
-      'vocab': meaningThai,
-      'timestamp': DateTime.now()
-    });
+      CollectionReference histories =
+          FirebaseFirestore.instance.collection('History');
+      histories.add({
+        'category': categoryThai,
+        'imageURL': URLL,
+        'vocab': meaningThai,
+        'timestamp': DateTime.now()
+      });
 
-    print('---------- add history complete -------------');
+      print('---------- add history complete -------------');
+    }
 
     var snapshot = await FirebaseFirestore.instance.collection('History').get();
     setState(() {
@@ -466,6 +470,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           image: image,
           name: meaningThai,
           camera: widget.camera,
+          consent: widget.consent,
         ),
       ),
     );
@@ -1068,8 +1073,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                CameraPage(camera: widget.camera)));
+                            builder: (context) => CameraPage(
+                                  camera: widget.camera,
+                                  consent: widget.consent,
+                                )));
                   },
                   icon: Icon(
                     Icons.camera_alt,
@@ -1388,6 +1395,117 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 )),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.info_outline),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            title: Center(
+                              child: Text('คำขออนุญาต',
+                                  style: TextStyle(
+                                    fontFamily: 'Anakotmai',
+                                    color: Color(0xff2b2b2b),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                  )),
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                    'เราขออนุญาตบันทึกภาพท่าทางของคุณ หากคุณอนุญาตภาพท่าทางของคุณจะถูกบันทึกเข้าประวัติการแปลท่าทางของเรา ซึ่งผู้ใช้งานแอปท่านอื่นจะสามารถเข้าถึงได้',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Anakotmai',
+                                      color: Color(0xff2b2b2b),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                    )),
+                                SizedBox(
+                                  height: 36,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => HomePage(
+                                                      camera: widget.camera,
+                                                      consent: false,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xfff7f7f7),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 7, horizontal: 14),
+                                        child: Center(
+                                          child: Text('ไม่ยินยอม',
+                                              style: TextStyle(
+                                                fontFamily: 'Anakotmai',
+                                                color: Color(0xff2b2b2b),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => HomePage(
+                                                      camera: widget.camera,
+                                                      consent: true,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xff1821AE),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 7, horizontal: 14),
+                                        child: Center(
+                                          child: Text('ยินยอม',
+                                              style: TextStyle(
+                                                fontFamily: 'Anakotmai',
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w700,
+                                              )),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ));
+                      });
+                },
+              )
+            ],
             backgroundColor: Color(0xFF1821AE),
           )),
       body: SizedBox.expand(
@@ -1401,7 +1519,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               SizedBox(
                 height: 20,
               ),
-              haveHistory
+              widget.consent && haveHistory
                   ? Row(
                       children: [
                         Container(
@@ -1578,7 +1696,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               SizedBox(
                 height: 10,
               ),
-              historyColumn,
+              widget.consent ? historyColumn : Container(),
               SizedBox(
                 height: 75,
               ),
