@@ -545,6 +545,22 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           ),
         ));
 
+    /*final pic = Container(
+      width: screenSize.width,
+      height: screenSize.width,
+      color: Color(0xFFEBEEF5),
+      child: Center(
+        child: Container(
+          width: screenSize.width,
+          height: screenSize.width,
+          child: Image.file(
+            _image!,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+      ),
+    );*/
+
     final camera = Stack(
       children: <Widget>[
         FittedBox(
@@ -552,16 +568,36 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           child: Container(
               width: screenSize.width,
               height: screenSize.width,
-              child: CameraPreview(controller)),
+              child: stop
+                  ? Container(
+                      width: screenSize.width,
+                      height: screenSize.width,
+                      color: Color(0xFFEBEEF5),
+                      child: Center(
+                        child: Container(
+                          width: screenSize.width,
+                          height: screenSize.width,
+                          child: Image.file(
+                            _image!,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    )
+                  : CameraPreview(controller)),
         ),
-        Image(
-          image: AssetImage('assets/images/frame-camera-front.png'),
-        ),
-        Image(
-          image: AssetImage('assets/images/frame-camera-square.png'),
-          height: screenSize.width,
-          width: screenSize.width,
-        ),
+        stop
+            ? Container()
+            : Image(
+                image: AssetImage('assets/images/frame-camera-front.png'),
+              ),
+        stop
+            ? Container()
+            : Image(
+                image: AssetImage('assets/images/frame-camera-square.png'),
+                height: screenSize.width,
+                width: screenSize.width,
+              ),
         meaningVocab ? meaning : Container(),
         stopButton
       ],
@@ -682,6 +718,9 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   title: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -1171,6 +1210,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         SingleChildScrollView(
           child: Column(
             children: [
+              //stop ? pic :
               camera,
               SizedBox(
                 height: 20,

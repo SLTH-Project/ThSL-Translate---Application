@@ -471,22 +471,6 @@ class _ResultPageState extends State<ResultPage> {
       }
     });
 
-    /*checkHistory() async {
-      var snapshot =
-          await FirebaseFirestore.instance.collection('History').get();
-      setState(() {
-        if (snapshot.docs.isNotEmpty == true) {
-          haveHistory = true;
-          print('---------2have history = -----------');
-          print(haveHistory);
-        } else {
-          haveHistory = false;
-          print('---------2have history = -----------');
-          print(haveHistory);
-        }
-      });
-    }*/
-
     setCategoryName(Icon icon, Text textt) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -691,6 +675,9 @@ class _ResultPageState extends State<ResultPage> {
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   title: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:

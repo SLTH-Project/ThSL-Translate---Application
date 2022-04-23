@@ -79,7 +79,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   String meaningThai = '';
   String categoryThai = '';
-  bool haveHistory = true;
+  bool haveHistory = false;
+  bool yes = false;
+  String location = '';
+  Row rowCategoryName = Row();
 
   @override
   void initState() {
@@ -430,8 +433,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     await ref.putFile(_image!);
     String URLL = await ref.getDownloadURL();
 
-    print('imageURLL = ');
-    print(URLL);
+    //print('imageURLL = ');
+    //print(URLL);
 
     CollectionReference histories =
         FirebaseFirestore.instance.collection('History');
@@ -448,12 +451,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     setState(() {
       if (snapshot.docs.isNotEmpty == true) {
         haveHistory = true;
-        print('---------2have history = -----------');
-        print(haveHistory);
+        //print('---------2have history = -----------');
+        //print(haveHistory);
       } else {
         haveHistory = false;
-        print('---------2have history = -----------');
-        print(haveHistory);
+        //print('---------2have history = -----------');
+        //print(haveHistory);
       }
     });
 
@@ -468,6 +471,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
+  checkHistory() async {
+    var snapshot = await FirebaseFirestore.instance.collection('History').get();
+    setState(() {
+      if (snapshot.docs.isNotEmpty == true) {
+        haveHistory = true;
+        //print('---------2have history = -----------');
+        //print(haveHistory);
+      } else {
+        haveHistory = false;
+        //print('---------2have history = -----------');
+        //print(haveHistory);
+      }
+    });
+  }
+
   @override
   void dispose() {
     Tflite.close();
@@ -475,13 +493,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  bool yes = false;
-  String location = '';
-  Row rowCategoryName = Row();
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+
+    checkHistory();
     /*print("==================================================================");
     print('START : click category = ');
     print(yes);*/
@@ -489,12 +505,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
         haveHistory = true;
-        print('---------1have history = -----------');
-        print(haveHistory);
+        //print('---------1have history = -----------');
+        //print(haveHistory);
       } else {
         haveHistory = false;
-        print('---------1have history = -----------');
-        print(haveHistory);
+        //print('---------1have history = -----------');
+        //print(haveHistory);
       }
     });
 
@@ -718,6 +734,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   title: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -1202,14 +1221,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                             if (snapshot.docs.isNotEmpty ==
                                                 true) {
                                               haveHistory = true;
-                                              print(
-                                                  '---------5have history = -----------');
-                                              print(haveHistory);
+                                              //print('---------5have history = -----------');
+                                              //print(haveHistory);
                                             } else {
                                               haveHistory = false;
-                                              print(
-                                                  '---------5have history = -----------');
-                                              print(haveHistory);
+                                              //print('---------5have history = -----------');
+                                              //print(haveHistory);
                                             }
                                           });
 
@@ -1335,14 +1352,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                               if (snapshot.docs.isNotEmpty ==
                                                   true) {
                                                 haveHistory = true;
-                                                print(
-                                                    '---------3have history = -----------');
-                                                print(haveHistory);
+                                                //print('---------3have history = -----------');
+                                                //print(haveHistory);
                                               } else {
                                                 haveHistory = false;
-                                                print(
-                                                    '---------3have history = -----------');
-                                                print(haveHistory);
+                                                //print('---------3have history = -----------');
+                                                //print(haveHistory);
                                               }
                                             });
                                           },
@@ -1495,7 +1510,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                   }
                                                 });
 
-                                                print('delete all');
+                                                //print('delete all');
 
                                                 var snapshot =
                                                     await FirebaseFirestore
@@ -1507,14 +1522,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                           .docs.isNotEmpty ==
                                                       true) {
                                                     haveHistory = true;
-                                                    print(
-                                                        '---------4have history = -----------');
-                                                    print(haveHistory);
+                                                    //print('---------4have history = -----------');
+                                                    //print(haveHistory);
                                                   } else {
                                                     haveHistory = false;
-                                                    print(
-                                                        '---------4have history = -----------');
-                                                    print(haveHistory);
+                                                    //print('---------4have history = -----------');
+                                                    //print(haveHistory);
                                                   }
                                                 });
 
