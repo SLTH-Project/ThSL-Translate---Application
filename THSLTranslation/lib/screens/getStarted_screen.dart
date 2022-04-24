@@ -2,15 +2,17 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:thsltranslation/screens/home_screen.dart';
-import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({
     Key? key,
     required this.camera,
+    required this.pref,
   }) : super(key: key);
 
   final CameraDescription camera;
+  final SharedPreferences pref;
 
   @override
   _GetStartedState createState() => _GetStartedState();
@@ -93,6 +95,7 @@ class _GetStartedState extends State<GetStarted> {
                                             builder: (context) => HomePage(
                                                   camera: widget.camera,
                                                   consent: false,
+                                                  pref: widget.pref,
                                                 )));
                                   },
                                   child: Container(
@@ -123,6 +126,7 @@ class _GetStartedState extends State<GetStarted> {
                                             builder: (context) => HomePage(
                                                   camera: widget.camera,
                                                   consent: true,
+                                                  pref: widget.pref,
                                                 )));
                                   },
                                   child: Container(

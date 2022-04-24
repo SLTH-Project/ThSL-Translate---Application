@@ -28,7 +28,8 @@ class ResultPage extends StatefulWidget {
       required this.image,
       required this.name,
       required this.camera,
-      required this.consent})
+      required this.consent,
+      required this.pref})
       : super(key: key);
 
   final File image;
@@ -36,6 +37,7 @@ class ResultPage extends StatefulWidget {
   final String name;
   final CameraDescription camera;
   final bool consent;
+  final SharedPreferences pref;
 
   @override
   State<ResultPage> createState() => _ResultPageState();
@@ -58,17 +60,16 @@ class _ResultPageState extends State<ResultPage> {
   String meaningThai = '';
   String categoryThai = '';
   bool haveHistory = true;
-  late SharedPreferences prefs;
-
-  void loadCounter() async {
-    prefs = await SharedPreferences.getInstance();
-  }
+  bool yes = false;
+  String location = '';
+  Row rowCategoryName = Row();
+  List<String> historyToShow = [];
 
   @override
   void initState() {
     super.initState();
     _classifier = ClassifierFloat();
-    loadCounter();
+    checkHistory();
   }
 
   Future getImage() async {
@@ -424,17 +425,17 @@ class _ResultPageState extends State<ResultPage> {
       print('---------- add history complete -------------');*/
       print('--------save history to local------------');
       String newString = categoryThai + "," + URLL + "," + meaningThai;
-      List<String>? now = prefs.getStringList('history');
+      List<String>? now = widget.pref.getStringList('history');
       if (now == null) {
         now = [];
       }
       now.add(newString);
-      await prefs.setStringList('history', now);
+      await widget.pref.setStringList('history', now);
       print('---------- add history local complete -------------');
     }
 
     setState(() {
-      if (prefs.getStringList('history')!.isEmpty == true) {
+      if (widget.pref.getStringList('history')!.isEmpty == true) {
         haveHistory = false;
       } else {
         haveHistory = true;
@@ -461,9 +462,20 @@ class _ResultPageState extends State<ResultPage> {
           name: meaningThai,
           camera: widget.camera,
           consent: widget.consent,
+          pref: widget.pref,
         ),
       ),
     );
+  }
+
+  checkHistory() {
+    setState(() {
+      if (widget.pref.getStringList('history')!.isEmpty == true) {
+        haveHistory = false;
+      } else {
+        haveHistory = true;
+      }
+    });
   }
 
   @override
@@ -473,23 +485,10 @@ class _ResultPageState extends State<ResultPage> {
     super.dispose();
   }
 
-  bool yes = false;
-  String location = '';
-  Row rowCategoryName = Row();
-  List<String> historyToShow = [];
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
-
-    setState(() {
-      if (prefs.getStringList('history')!.isEmpty == true) {
-        haveHistory = false;
-      } else {
-        haveHistory = true;
-      }
-    });
 
     /*FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
@@ -1168,7 +1167,7 @@ class _ResultPageState extends State<ResultPage> {
               }
             }));*/
 
-    final List<String>? items = prefs.getStringList('history');
+    final List<String>? items = widget.pref.getStringList('history');
 
     final historyLocal = Container(
         height: screenSize.height * 0.5,
@@ -1265,7 +1264,8 @@ class _ResultPageState extends State<ResultPage> {
                                     setState(() {
                                       items
                                           .removeAt(items.length - (index + 1));
-                                      prefs.setStringList('history', items);
+                                      widget.pref
+                                          .setStringList('history', items);
                                     });
                                     /*setState(() {
                                             FirebaseFirestore.instance
@@ -1401,7 +1401,8 @@ class _ResultPageState extends State<ResultPage> {
                                       setState(() {
                                         items.removeAt(
                                             items.length - (index + 1));
-                                        prefs.setStringList('history', items);
+                                        widget.pref
+                                            .setStringList('history', items);
                                       });
                                       /*setState(() {
                                               FirebaseFirestore.instance
@@ -1454,6 +1455,7 @@ class _ResultPageState extends State<ResultPage> {
                             builder: (context) => HomePage(
                                   camera: widget.camera,
                                   consent: widget.consent,
+                                  pref: widget.pref,
                                 )));
                   },
                   child: Icon(
@@ -1609,7 +1611,7 @@ class _ResultPageState extends State<ResultPage> {
 
                                                 print('delete all');
                                                 setState(() {
-                                                  prefs.setStringList(
+                                                  widget.pref.setStringList(
                                                       'history', []);
                                                 });
 
