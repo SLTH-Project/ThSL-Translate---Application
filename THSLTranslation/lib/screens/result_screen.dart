@@ -490,6 +490,11 @@ class _ResultPageState extends State<ResultPage> {
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
 
+    checkHistory();
+
+    print('have history = ');
+    print(haveHistory);
+
     /*FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
         haveHistory = true;
@@ -1442,164 +1447,181 @@ class _ResultPageState extends State<ResultPage> {
               );
             }));
 
-    return Scaffold(
-        backgroundColor: Color(0xF7F7F7FF),
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(40.0),
-            child: AppBar(
-              leading: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomePage(
-                                  camera: widget.camera,
-                                  consent: widget.consent,
-                                  pref: widget.pref,
-                                )));
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  )),
-              title: Text('THSL Translate: Import image',
-                  style: TextStyle(
-                    fontFamily: 'Anakotmai',
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  )),
-              backgroundColor: Color(0xFF1821AE),
-            )),
-        body: SizedBox.expand(
-            child: Stack(children: <Widget>[
-          SingleChildScrollView(
-              child: Column(
-            children: <Widget>[
-              Stack(
-                children: [
-                  Container(
-                    width: screenSize.width,
-                    height: screenSize.width,
-                    color: Color(0xFFEBEEF5),
-                    child: Center(
-                      child: Container(
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage(
+                        camera: widget.camera,
+                        consent: widget.consent,
+                        pref: widget.pref,
+                      )));
+          return false;
+        },
+        child: Scaffold(
+            backgroundColor: Color(0xF7F7F7FF),
+            appBar: PreferredSize(
+                preferredSize: Size.fromHeight(40.0),
+                child: AppBar(
+                  leading: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                      camera: widget.camera,
+                                      consent: widget.consent,
+                                      pref: widget.pref,
+                                    )));
+                      },
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      )),
+                  title: Text('THSL Translate: Import image',
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      )),
+                  backgroundColor: Color(0xFF1821AE),
+                )),
+            body: SizedBox.expand(
+                child: Stack(children: <Widget>[
+              SingleChildScrollView(
+                  child: Column(
+                children: <Widget>[
+                  Stack(
+                    children: [
+                      Container(
                         width: screenSize.width,
                         height: screenSize.width,
-                        child: Image.file(
-                          widget.image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  meaning,
-                  reButton
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              widget.consent && haveHistory
-                  ? Row(
-                      children: [
-                        Container(
-                          width: screenSize.width * 0.70,
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 25),
-                          child: Text(
-                            "ประวัติการแปลของคุณ",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontFamily: 'Anakotmai',
-                              color: Color(0xff2b2b2b),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                        color: Color(0xFFEBEEF5),
+                        child: Center(
+                          child: Container(
+                            width: screenSize.width,
+                            height: screenSize.width,
+                            child: Image.file(
+                              widget.image,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                        Container(
-                          width: screenSize.width * 0.30,
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 25),
-                          child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8))),
-                                        title: Column(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 1, 1, 0),
-                                              child: GestureDetector(
-                                                onTap: () {},
-                                                child: Container(
-                                                  alignment:
-                                                      FractionalOffset.topRight,
+                      ),
+                      meaning,
+                      reButton
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  widget.consent && haveHistory
+                      ? Row(
+                          children: [
+                            Container(
+                              width: screenSize.width * 0.70,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(left: 25),
+                              child: Text(
+                                "ประวัติการแปลของคุณ",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Color(0xff2b2b2b),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: screenSize.width * 0.30,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(right: 25),
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                            title: Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 1, 1, 0),
                                                   child: GestureDetector(
-                                                    child: Icon(
-                                                      Icons.clear,
-                                                      color: Color(0xffAEAEAB),
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      alignment:
+                                                          FractionalOffset
+                                                              .topRight,
+                                                      child: GestureDetector(
+                                                        child: Icon(
+                                                          Icons.clear,
+                                                          color:
+                                                              Color(0xffAEAEAB),
+                                                        ),
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
                                                     ),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    },
                                                   ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 61,
-                                              height: 61,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xFFFFF5F5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
-                                              child: Icon(
-                                                Icons.delete,
-                                                size: 40,
-                                                color: Color(0xffE74C3C),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 24,
-                                            ),
-                                            Text('ยืนยันการลบประวัติ',
-                                                style: TextStyle(
-                                                  fontFamily: 'Anakotmai',
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                )),
-                                            Text('การแปลภาษามือไทยทั้งหมด',
-                                                style: TextStyle(
-                                                  fontFamily: 'Anakotmai',
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                )),
-                                            SizedBox(
-                                              height: 36,
-                                            ),
-                                            InkWell(
-                                              onTap: () async {
-                                                /*await FirebaseFirestore.instance
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 61,
+                                                  height: 61,
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFFFFF5F5),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100)),
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    size: 40,
+                                                    color: Color(0xffE74C3C),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 24,
+                                                ),
+                                                Text('ยืนยันการลบประวัติ',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Anakotmai',
+                                                      color: Colors.black,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    )),
+                                                Text('การแปลภาษามือไทยทั้งหมด',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Anakotmai',
+                                                      color: Colors.black,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    )),
+                                                SizedBox(
+                                                  height: 36,
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    /*await FirebaseFirestore.instance
                                                     .collection('History')
                                                     .get()
                                                     .then((snapshot) async {
@@ -1609,13 +1631,13 @@ class _ResultPageState extends State<ResultPage> {
                                                   }
                                                 });*/
 
-                                                print('delete all');
-                                                setState(() {
-                                                  widget.pref.setStringList(
-                                                      'history', []);
-                                                });
+                                                    print('delete all');
+                                                    setState(() {
+                                                      widget.pref.setStringList(
+                                                          'history', []);
+                                                    });
 
-                                                /*var snapshot =
+                                                    /*var snapshot =
                                                     await FirebaseFirestore
                                                         .instance
                                                         .collection('History')
@@ -1636,60 +1658,62 @@ class _ResultPageState extends State<ResultPage> {
                                                   }
                                                 });*/
 
-                                                Navigator.pop(context);
-                                              },
-                                              child: Container(
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffE74C3C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8,
-                                                    horizontal: 14),
-                                                child: Center(
-                                                  child: Text('ลบทั้งหมด',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Anakotmai',
-                                                        color: Colors.white,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      )),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ));
-                                  });
-                            },
-                            child: Text(
-                              'ลบทั้งหมด',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: 'Anakotmai',
-                                color: Color(0xffE74C3C),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffE74C3C),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 14),
+                                                    child: Center(
+                                                      child: Text('ลบทั้งหมด',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Anakotmai',
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          )),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ));
+                                      });
+                                },
+                                child: Text(
+                                  'ลบทั้งหมด',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontFamily: 'Anakotmai',
+                                    color: Color(0xffE74C3C),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
-              SizedBox(
-                height: 20,
-              ),
-              widget.consent ? historyLocal : Container(),
-              SizedBox(
-                height: 50,
-              ),
-            ],
-          )),
-          bottomSwipeUp
-        ])));
+                          ],
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  widget.consent ? historyLocal : Container(),
+                  SizedBox(
+                    height: 50,
+                  ),
+                ],
+              )),
+              bottomSwipeUp
+            ]))));
   }
 }
