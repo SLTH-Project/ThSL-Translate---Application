@@ -20,6 +20,8 @@ import 'package:thsltranslation/models/classifier.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ResultPage extends StatefulWidget {
   const ResultPage(
       {Key? key,
@@ -56,18 +58,17 @@ class _ResultPageState extends State<ResultPage> {
   String meaningThai = '';
   String categoryThai = '';
   bool haveHistory = true;
-  late File imagee;
+  late SharedPreferences prefs;
+
+  void loadCounter() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   void initState() {
     super.initState();
     _classifier = ClassifierFloat();
-    /* controller = CameraController(
-      widget.camera,
-      ResolutionPreset.medium,
-    );
-
-    _initializeControllerFuture = controller.initialize();*/
+    loadCounter();
   }
 
   Future getImage() async {
@@ -408,7 +409,7 @@ class _ResultPageState extends State<ResultPage> {
       await ref.putFile(_image!);
       String URLL = await ref.getDownloadURL();
 
-      print('imageURLL = ');
+      /*print('imageURLL = ');
       print(URLL);
 
       CollectionReference histories =
@@ -420,10 +421,27 @@ class _ResultPageState extends State<ResultPage> {
         'timestamp': DateTime.now()
       });
 
-      print('---------- add history complete -------------');
+      print('---------- add history complete -------------');*/
+      print('--------save history to local------------');
+      String newString = categoryThai + "," + URLL + "," + meaningThai;
+      List<String>? now = prefs.getStringList('history');
+      if (now == null) {
+        now = [];
+      }
+      now.add(newString);
+      await prefs.setStringList('history', now);
+      print('---------- add history local complete -------------');
     }
 
-    var snapshot = await FirebaseFirestore.instance.collection('History').get();
+    setState(() {
+      if (prefs.getStringList('history')!.isEmpty == true) {
+        haveHistory = false;
+      } else {
+        haveHistory = true;
+      }
+    });
+
+    /*var snapshot = await FirebaseFirestore.instance.collection('History').get();
     setState(() {
       if (snapshot.docs.isNotEmpty == true) {
         haveHistory = true;
@@ -434,7 +452,7 @@ class _ResultPageState extends State<ResultPage> {
         print('---------2have history = -----------');
         print(haveHistory);
       }
-    });
+    });*/
 
     return await Navigator.of(context).push(
       MaterialPageRoute(
@@ -458,15 +476,22 @@ class _ResultPageState extends State<ResultPage> {
   bool yes = false;
   String location = '';
   Row rowCategoryName = Row();
+  List<String> historyToShow = [];
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     print("----Result Page-----");
-    print("consent = ");
-    print(widget.consent);
 
-    FirebaseFirestore.instance.collection('History').get().then((snapshot) {
+    setState(() {
+      if (prefs.getStringList('history')!.isEmpty == true) {
+        haveHistory = false;
+      } else {
+        haveHistory = true;
+      }
+    });
+
+    /*FirebaseFirestore.instance.collection('History').get().then((snapshot) {
       if (snapshot.docs.isNotEmpty == true) {
         haveHistory = true;
         print('---------1have history = -----------');
@@ -476,7 +501,7 @@ class _ResultPageState extends State<ResultPage> {
         print('---------1have history = -----------');
         print(haveHistory);
       }
-    });
+    });*/
 
     setCategoryName(Icon icon, Text textt) {
       return Row(
@@ -872,7 +897,7 @@ class _ResultPageState extends State<ResultPage> {
           }),
     );
 
-    final historyColumn = Container(
+    /*final historyColumn = Container(
         height: screenSize.height * 0.5,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: StreamBuilder(
@@ -1141,6 +1166,279 @@ class _ResultPageState extends State<ResultPage> {
                   }).toList(),
                 );
               }
+            }));*/
+
+    final List<String>? items = prefs.getStringList('history');
+
+    final historyLocal = Container(
+        height: screenSize.height * 0.5,
+        padding: EdgeInsets.symmetric(horizontal: 25.0),
+        child: ListView.builder(
+            physics: ClampingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemCount: items!.length,
+            itemBuilder: (context, index) {
+              String item = items[items.length - (index + 1)];
+              historyToShow = item.split(',').toList();
+              print('items : ');
+              print(items);
+              print('item : ');
+              print(item);
+              print('historyToShow : ');
+              print(historyToShow);
+              return InkWell(
+                onTap: () {
+                  historyToShow =
+                      items[items.length - (index + 1)].split(',').toList();
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            title: Column(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 1, 1, 0),
+                                  child: GestureDetector(
+                                    onTap: () {},
+                                    child: Container(
+                                      alignment: FractionalOffset.topRight,
+                                      child: GestureDetector(
+                                        child: Icon(
+                                          Icons.clear,
+                                          color: Color(0xffAEAEAB),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    historyToShow[2],
+                                    style: TextStyle(
+                                      fontFamily: 'Anakotmai',
+                                      color: Color(0xff2b2b2b),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "หมวด" + historyToShow[0],
+                                    style: TextStyle(
+                                      fontFamily: 'Anakotmai',
+                                      color: Color(0xff828280),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    width: 300,
+                                    height: 230,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        historyToShow[1],
+                                        fit: BoxFit.fill,
+                                      ),
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    setState(() {
+                                      items
+                                          .removeAt(items.length - (index + 1));
+                                      prefs.setStringList('history', items);
+                                    });
+                                    /*setState(() {
+                                            FirebaseFirestore.instance
+                                                .collection('History')
+                                                .doc(document.id)
+                                                .delete();
+                                            FirebaseStorage.instance
+                                                .refFromURL(
+                                                    document["imageURL"])
+                                                .delete();
+                                          });
+
+                                          var snapshot = await FirebaseFirestore
+                                              .instance
+                                              .collection('History')
+                                              .get();
+                                          setState(() {
+                                            if (snapshot.docs.isNotEmpty ==
+                                                true) {
+                                              haveHistory = true;
+                                              print(
+                                                  '---------5have history = -----------');
+                                              print(haveHistory);
+                                            } else {
+                                              haveHistory = false;
+                                              print(
+                                                  '---------5have history = -----------');
+                                              print(haveHistory);
+                                            }
+                                          });*/
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffE74C3C),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 14),
+                                      child: Center(
+                                        child: Text('ลบ',
+                                            style: TextStyle(
+                                              fontFamily: 'Anakotmai',
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                      )),
+                                )
+                              ],
+                            ));
+                      });
+                },
+                child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color(0x202b2b2b),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: Offset(0, 1))
+                        ]),
+                    child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      historyToShow[1],
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )),
+                              Container(
+                                margin: EdgeInsets.only(left: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      historyToShow[2],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff555555),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      "หมวด" + historyToShow[0],
+                                      style: TextStyle(
+                                        fontFamily: 'Anakotmai',
+                                        color: Color(0xff828280),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 1, right: 1),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  alignment: FractionalOffset.topRight,
+                                  child: GestureDetector(
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: Color(0xffAEAEAB),
+                                    ),
+                                    onTap: () async {
+                                      setState(() {
+                                        items.removeAt(
+                                            items.length - (index + 1));
+                                        prefs.setStringList('history', items);
+                                      });
+                                      /*setState(() {
+                                              FirebaseFirestore.instance
+                                                  .collection('History')
+                                                  .doc(document.id)
+                                                  .delete();
+                                              FirebaseStorage.instance
+                                                  .refFromURL(
+                                                      document["imageURL"])
+                                                  .delete();
+                                            });
+                                            var snapshot =
+                                                await FirebaseFirestore.instance
+                                                    .collection('History')
+                                                    .get();
+                                            setState(() {
+                                              if (snapshot.docs.isNotEmpty ==
+                                                  true) {
+                                                haveHistory = true;
+                                                print(
+                                                    '---------3have history = -----------');
+                                                print(haveHistory);
+                                              } else {
+                                                haveHistory = false;
+                                                print(
+                                                    '---------3have history = -----------');
+                                                print(haveHistory);
+                                              }
+                                            });*/
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ])),
+              );
             }));
 
     return Scaffold(
@@ -1299,7 +1597,7 @@ class _ResultPageState extends State<ResultPage> {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                                await FirebaseFirestore.instance
+                                                /*await FirebaseFirestore.instance
                                                     .collection('History')
                                                     .get()
                                                     .then((snapshot) async {
@@ -1307,11 +1605,15 @@ class _ResultPageState extends State<ResultPage> {
                                                       in snapshot.docs) {
                                                     await ds.reference.delete();
                                                   }
-                                                });
+                                                });*/
 
                                                 print('delete all');
+                                                setState(() {
+                                                  prefs.setStringList(
+                                                      'history', []);
+                                                });
 
-                                                var snapshot =
+                                                /*var snapshot =
                                                     await FirebaseFirestore
                                                         .instance
                                                         .collection('History')
@@ -1330,7 +1632,7 @@ class _ResultPageState extends State<ResultPage> {
                                                         '---------4have history = -----------');
                                                     print(haveHistory);
                                                   }
-                                                });
+                                                });*/
 
                                                 Navigator.pop(context);
                                               },
@@ -1379,7 +1681,7 @@ class _ResultPageState extends State<ResultPage> {
               SizedBox(
                 height: 20,
               ),
-              widget.consent ? historyColumn : Container(),
+              widget.consent ? historyLocal : Container(),
               SizedBox(
                 height: 50,
               ),

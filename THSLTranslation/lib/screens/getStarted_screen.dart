@@ -2,6 +2,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:thsltranslation/screens/home_screen.dart';
+import 'package:uuid/uuid.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({

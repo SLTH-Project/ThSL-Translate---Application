@@ -21,6 +21,8 @@ import 'package:thsltranslation/models/classifier.dart';
 import 'package:thsltranslation/models/classifier_float.dart';
 import 'package:logger/logger.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 /*class Item {
   Item({
     required this.expandedValue,
@@ -86,16 +88,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   String location = '';
   Row rowCategoryName = Row();
 
+  late SharedPreferences prefs;
+
   @override
   void initState() {
     super.initState();
     _classifier = ClassifierFloat();
-    /* controller = CameraController(
-      widget.camera,
-      ResolutionPreset.medium,
-    );
+    loadCounter();
+  }
 
-    _initializeControllerFuture = controller.initialize();*/
+  void loadCounter() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   Future getImage() async {
@@ -436,8 +439,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       await ref.putFile(_image!);
       String URLL = await ref.getDownloadURL();
 
-      //print('imageURLL = ');
-      //print(URLL);
+      /*print('imageURLL = ');
+      print(URLL);
 
       CollectionReference histories =
           FirebaseFirestore.instance.collection('History');
@@ -448,10 +451,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         'timestamp': DateTime.now()
       });
 
-      print('---------- add history complete -------------');
+      print('---------- add history complete -------------');*/
+
+      print('--------save history to local------------');
+      String newString = categoryThai + "," + URLL + "," + meaningThai;
+      List<String>? now = prefs.getStringList('history');
+      if (now == null) {
+        now = [];
+      }
+      now.add(newString);
+      await prefs.setStringList('history', now);
+      print('---------- add history local complete -------------');
     }
 
-    var snapshot = await FirebaseFirestore.instance.collection('History').get();
+    setState(() {
+      if (prefs.getStringList('history')!.isEmpty == true) {
+        haveHistory = false;
+      } else {
+        haveHistory = true;
+      }
+    });
+
+    /*var snapshot = await FirebaseFirestore.instance.collection('History').get();
     setState(() {
       if (snapshot.docs.isNotEmpty == true) {
         haveHistory = true;
@@ -462,7 +483,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         //print('---------2have history = -----------');
         //print(haveHistory);
       }
-    });
+    });*/
 
     return await Navigator.of(context).push(
       MaterialPageRoute(
@@ -491,6 +512,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     });
   }
 
+  sharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  deleteHistory() async {
+    await prefs.remove('history');
+  }
+
   @override
   void dispose() {
     Tflite.close();
@@ -501,8 +530,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+    sharedPref();
+    //deleteHistory();
     checkHistory();
+
     /*print("==================================================================");
     print('START : click category = ');
     print(yes);*/

@@ -50,6 +50,8 @@ dependencies:
   path_provider: ^2.0.7
   tflite_flutter_helper: ^0.3.0
   firebase_storage: any
+  shared_preferences: ^2.0.13
+  uuid: 3.0.6
 
 
 dev_dependencies:
