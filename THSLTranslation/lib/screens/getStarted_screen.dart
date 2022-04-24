@@ -33,7 +33,7 @@ class _GetStartedState extends State<GetStarted> {
             image: AssetImage('assets/images/logo.png'),
             height: 150,
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 8),
           Text(
             'THSL Translate',
             textAlign: TextAlign.center,
@@ -44,7 +44,7 @@ class _GetStartedState extends State<GetStarted> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 40),
           InkWell(
             onTap: () {
               showDialog(

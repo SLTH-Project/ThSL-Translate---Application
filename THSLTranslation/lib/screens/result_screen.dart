@@ -814,8 +814,8 @@ class _ResultPageState extends State<ResultPage> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24)),
                   boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)]),
               child: ListView(
                 controller: scrollController,
