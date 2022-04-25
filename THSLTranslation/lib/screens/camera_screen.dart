@@ -416,13 +416,16 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   }
 
   checkHistory() {
-    setState(() {
-      if (widget.pref.getStringList('history')!.isEmpty == true) {
+    if (widget.pref.getStringList('history') == null ||
+        widget.pref.getStringList('history')!.length == 0) {
+      setState(() {
         haveHistory = false;
-      } else {
+      });
+    } else {
+      setState(() {
         haveHistory = true;
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -922,12 +925,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             _predict(_image!);
           });
         } catch (e) {
-          print(e);
+          // print(e);
         }
       });
     }
 
-    final List<String>? items = widget.pref.getStringList('history');
+    List<String>? items = widget.pref.getStringList('history');
+    if (items == null) items = [];
 
     final historyLocal = Container(
         height: screenSize.height * 0.5,
@@ -935,9 +939,9 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         child: ListView.builder(
             physics: ClampingScrollPhysics(),
             scrollDirection: Axis.vertical,
-            itemCount: items!.length,
+            itemCount: items.length,
             itemBuilder: (context, index) {
-              String item = items[items.length - (index + 1)];
+              String item = items![items.length - (index + 1)];
               historyToShow = item.split(',').toList();
               /*print('items : ');
               print(items);
@@ -948,7 +952,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               return InkWell(
                 onTap: () {
                   historyToShow =
-                      items[items.length - (index + 1)].split(',').toList();
+                      items![items.length - (index + 1)].split(',').toList();
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -1022,7 +1026,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                 InkWell(
                                   onTap: () async {
                                     setState(() {
-                                      items
+                                      items!
                                           .removeAt(items.length - (index + 1));
                                       widget.pref
                                           .setStringList('history', items);
@@ -1129,7 +1133,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                     ),
                                     onTap: () async {
                                       setState(() {
-                                        items.removeAt(
+                                        items!.removeAt(
                                             items.length - (index + 1));
                                         widget.pref
                                             .setStringList('history', items);
@@ -1146,6 +1150,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
     return WillPopScope(
         onWillPop: () async {
+          setState(() {
+            stop = true;
+          });
+          //Navigator.pop(context);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -1163,7 +1171,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               child: AppBar(
                 leading: GestureDetector(
                     onTap: () {
-                      // Navigator.pop(context);
+                      setState(() {
+                        stop = true;
+                      });
+                      //Navigator.pop(context);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

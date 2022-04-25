@@ -60,15 +60,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   String location = '';
   Row rowCategoryName = Row();
   List<String> historyToShow = [];
+  late ScrollController _controller;
 
   @override
   void initState() {
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
     super.initState();
     _classifier = ClassifierFloat();
 
-    setState(() {
-      checkHistory();
-    });
+    checkHistory();
+  }
+
+  _scrollListener() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      setState(() {
+        //you can do anything here
+      });
+    }
+    if (_controller.offset <= _controller.position.minScrollExtent &&
+        !_controller.position.outOfRange) {
+      setState(() {
+        //you can do anything here
+      });
+    }
   }
 
   Future getImage() async {
@@ -419,7 +435,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     setState(() {
-      if (widget.pref.getStringList('history')!.isEmpty == true) {
+      if (widget.pref.getStringList('history') == null) {
         haveHistory = false;
       } else {
         haveHistory = true;
@@ -440,17 +456,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   checkHistory() {
-    setState(() {
-      if (widget.pref.getStringList('history')!.isEmpty == true) {
+    print('inCheckHistory');
+    if (widget.pref.getStringList('history') == null ||
+        widget.pref.getStringList('history')!.length == 0) {
+      print('inCheckHistory => null');
+      setState(() {
         haveHistory = false;
         print('2have history = ');
         print(haveHistory);
-      } else {
+      });
+    } else {
+      print('inCheckHistory => have[]');
+      setState(() {
         haveHistory = true;
         print('2have history = ');
         print(haveHistory);
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -977,22 +999,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
-    final List<String>? items = widget.pref.getStringList('history');
+    List<String>? items = widget.pref.getStringList('history');
+    if (items == null) items = [];
 
     final historyLocal = Container(
         height: screenSize.height * 0.5,
         padding: EdgeInsets.symmetric(horizontal: 25.0),
         child: ListView.builder(
+            controller: _controller,
             physics: ClampingScrollPhysics(),
             scrollDirection: Axis.vertical,
-            itemCount: items!.length,
+            itemCount: items.length,
             itemBuilder: (context, index) {
-              String item = items[items.length - (index + 1)];
+              String item = items![items.length - (index + 1)];
               historyToShow = item.split(',').toList();
               return InkWell(
                 onTap: () {
                   historyToShow =
-                      items[items.length - (index + 1)].split(',').toList();
+                      items![items.length - (index + 1)].split(',').toList();
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -1066,23 +1090,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                 InkWell(
                                   onTap: () async {
                                     setState(() {
-                                      items
+                                      items!
                                           .removeAt(items.length - (index + 1));
                                       widget.pref
                                           .setStringList('history', items);
                                     });
-
-                                    setState(() {
-                                      if (widget.pref
-                                              .getStringList('history')!
-                                              .isEmpty ==
-                                          true) {
-                                        haveHistory = false;
-                                      } else {
-                                        haveHistory = true;
-                                      }
-                                    });
-
                                     Navigator.pop(context);
                                   },
                                   child: Container(
@@ -1185,7 +1197,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                     ),
                                     onTap: () async {
                                       setState(() {
-                                        items.removeAt(
+                                        items!.removeAt(
                                             items.length - (index + 1));
                                         widget.pref
                                             .setStringList('history', items);
@@ -1457,18 +1469,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                     setState(() {
                                                       widget.pref.setStringList(
                                                           'history', []);
-                                                    });
-
-                                                    setState(() {
-                                                      if (widget.pref
-                                                              .getStringList(
-                                                                  'history')!
-                                                              .isEmpty ==
-                                                          true) {
-                                                        haveHistory = false;
-                                                      } else {
-                                                        haveHistory = true;
-                                                      }
+                                                      haveHistory = false;
                                                     });
 
                                                     Navigator.pop(context);
@@ -1520,7 +1521,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   SizedBox(
                     height: 10,
                   ),
-                  widget.consent ? historyLocal : Container(),
+                  widget.consent && items.length >= 1
+                      ? historyLocal
+                      : Container(),
                   SizedBox(
                     height: 75,
                   ),

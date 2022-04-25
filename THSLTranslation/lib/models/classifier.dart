@@ -60,7 +60,7 @@ abstract class Classifier {
       _probabilityProcessor =
           TensorProcessorBuilder().add(postProcessNormalizeOp).build();
     } catch (e) {
-      print('Unable to create interpreter, Caught Exception: ${e.toString()}');
+      //print('Unable to create interpreter, Caught Exception: ${e.toString()}');
     }
   }
 
@@ -90,17 +90,17 @@ abstract class Classifier {
     _inputImage = TensorImage(_inputType);
     _inputImage.loadImage(image);
 
-    print("image width = ");
+    /*print("image width = ");
     print(image.width);
     print("image height = ");
-    print(image.height);
+    print(image.height);*/
 
     _inputImage = _preProcess();
 
-    print("image width after pre process = ");
+    /*print("image width after pre process = ");
     print(_inputImage.width);
     print("image height after pre process = ");
-    print(_inputImage.height);
+    print(_inputImage.height);*/
 
     final pre = DateTime.now().millisecondsSinceEpoch - pres;
 
