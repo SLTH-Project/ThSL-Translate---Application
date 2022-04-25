@@ -1267,41 +1267,16 @@ class _ResultPageState extends State<ResultPage> {
                                 InkWell(
                                   onTap: () async {
                                     setState(() {
+                                      FirebaseStorage.instance
+                                          .refFromURL(historyToShow[1])
+                                          .delete();
+                                    });
+                                    setState(() {
                                       items
                                           .removeAt(items.length - (index + 1));
                                       widget.pref
                                           .setStringList('history', items);
                                     });
-                                    /*setState(() {
-                                            FirebaseFirestore.instance
-                                                .collection('History')
-                                                .doc(document.id)
-                                                .delete();
-                                            FirebaseStorage.instance
-                                                .refFromURL(
-                                                    document["imageURL"])
-                                                .delete();
-                                          });
-
-                                          var snapshot = await FirebaseFirestore
-                                              .instance
-                                              .collection('History')
-                                              .get();
-                                          setState(() {
-                                            if (snapshot.docs.isNotEmpty ==
-                                                true) {
-                                              haveHistory = true;
-                                              print(
-                                                  '---------5have history = -----------');
-                                              print(haveHistory);
-                                            } else {
-                                              haveHistory = false;
-                                              print(
-                                                  '---------5have history = -----------');
-                                              print(haveHistory);
-                                            }
-                                          });*/
-
                                     Navigator.pop(context);
                                   },
                                   child: Container(
@@ -1404,39 +1379,16 @@ class _ResultPageState extends State<ResultPage> {
                                     ),
                                     onTap: () async {
                                       setState(() {
+                                        FirebaseStorage.instance
+                                            .refFromURL(historyToShow[1])
+                                            .delete();
+                                      });
+                                      setState(() {
                                         items.removeAt(
                                             items.length - (index + 1));
                                         widget.pref
                                             .setStringList('history', items);
                                       });
-                                      /*setState(() {
-                                              FirebaseFirestore.instance
-                                                  .collection('History')
-                                                  .doc(document.id)
-                                                  .delete();
-                                              FirebaseStorage.instance
-                                                  .refFromURL(
-                                                      document["imageURL"])
-                                                  .delete();
-                                            });
-                                            var snapshot =
-                                                await FirebaseFirestore.instance
-                                                    .collection('History')
-                                                    .get();
-                                            setState(() {
-                                              if (snapshot.docs.isNotEmpty ==
-                                                  true) {
-                                                haveHistory = true;
-                                                print(
-                                                    '---------3have history = -----------');
-                                                print(haveHistory);
-                                              } else {
-                                                haveHistory = false;
-                                                print(
-                                                    '---------3have history = -----------');
-                                                print(haveHistory);
-                                              }
-                                            });*/
                                     },
                                   ),
                                 ),

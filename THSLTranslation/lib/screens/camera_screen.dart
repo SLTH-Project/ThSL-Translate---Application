@@ -1026,6 +1026,11 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                 InkWell(
                                   onTap: () async {
                                     setState(() {
+                                      FirebaseStorage.instance
+                                          .refFromURL(historyToShow[1])
+                                          .delete();
+                                    });
+                                    setState(() {
                                       items!
                                           .removeAt(items.length - (index + 1));
                                       widget.pref
@@ -1132,6 +1137,11 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                       color: Color(0xffAEAEAB),
                                     ),
                                     onTap: () async {
+                                      setState(() {
+                                        FirebaseStorage.instance
+                                            .refFromURL(historyToShow[1])
+                                            .delete();
+                                      });
                                       setState(() {
                                         items!.removeAt(
                                             items.length - (index + 1));
