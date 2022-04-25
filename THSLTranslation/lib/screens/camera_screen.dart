@@ -1321,8 +1321,26 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                 InkWell(
                                                   onTap: () async {
                                                     setState(() {
-                                                      widget.pref.setStringList(
-                                                          'history', []);
+                                                      int num = items!.length;
+                                                      for (int i = 0;
+                                                          i < num;
+                                                          i++) {
+                                                        String item = items[0];
+                                                        historyToShow = item
+                                                            .split(',')
+                                                            .toList();
+                                                        FirebaseStorage.instance
+                                                            .refFromURL(
+                                                                historyToShow[
+                                                                    1])
+                                                            .delete();
+                                                        items.removeAt(0);
+                                                        widget.pref
+                                                            .setStringList(
+                                                                'history',
+                                                                items);
+                                                      }
+                                                      haveHistory = false;
                                                     });
                                                     Navigator.pop(context);
                                                   },

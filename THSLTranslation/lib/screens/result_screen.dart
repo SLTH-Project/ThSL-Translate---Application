@@ -1573,42 +1573,29 @@ class _ResultPageState extends State<ResultPage> {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
-                                                    /*await FirebaseFirestore.instance
-                                                    .collection('History')
-                                                    .get()
-                                                    .then((snapshot) async {
-                                                  for (DocumentSnapshot ds
-                                                      in snapshot.docs) {
-                                                    await ds.reference.delete();
-                                                  }
-                                                });*/
-
                                                     print('delete all');
                                                     setState(() {
-                                                      widget.pref.setStringList(
-                                                          'history', []);
+                                                      int num = items!.length;
+                                                      for (int i = 0;
+                                                          i < num;
+                                                          i++) {
+                                                        String item = items[0];
+                                                        historyToShow = item
+                                                            .split(',')
+                                                            .toList();
+                                                        FirebaseStorage.instance
+                                                            .refFromURL(
+                                                                historyToShow[
+                                                                    1])
+                                                            .delete();
+                                                        items.removeAt(0);
+                                                        widget.pref
+                                                            .setStringList(
+                                                                'history',
+                                                                items);
+                                                      }
+                                                      haveHistory = false;
                                                     });
-
-                                                    /*var snapshot =
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('History')
-                                                        .get();
-                                                setState(() {
-                                                  if (snapshot
-                                                          .docs.isNotEmpty ==
-                                                      true) {
-                                                    haveHistory = true;
-                                                    print(
-                                                        '---------4have history = -----------');
-                                                    print(haveHistory);
-                                                  } else {
-                                                    haveHistory = false;
-                                                    print(
-                                                        '---------4have history = -----------');
-                                                    print(haveHistory);
-                                                  }
-                                                });*/
 
                                                     Navigator.pop(context);
                                                   },
