@@ -763,7 +763,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 children: <Widget>[
                   Center(
                     child: Container(
-                      height: 8,
+                      height: 5,
                       width: 50,
                       decoration: BoxDecoration(
                           color: Colors.grey,
@@ -861,15 +861,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         padding: EdgeInsets.only(top: 16, bottom: 19),
                         margin: EdgeInsets.only(left: 22),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xFF1812AE),
-                            boxShadow: [
+                          borderRadius: BorderRadius.circular(8),
+                          color: Color(0xFF1812AE),
+                          /*boxShadow: [
                               BoxShadow(
                                   color: Color(0x202b2b2b),
-                                  spreadRadius: 2,
+                                  spreadRadius: 5,
                                   blurRadius: 4,
                                   offset: Offset(0, 1))
-                            ]),
+                            ]*/
+                        ),
                         width: 229,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -938,13 +939,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final choices = Container(
       padding: EdgeInsets.only(top: 10, bottom: 10, left: 50, right: 50),
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+      decoration: BoxDecoration(
+        color: Colors
+            .white, /*boxShadow: [
         BoxShadow(
             color: Color(0x202b2b2b),
             spreadRadius: 2,
             blurRadius: 4,
             offset: Offset(0, 1))
-      ]),
+      ]*/
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1393,7 +1397,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             ),
                             Container(
                               width: screenSize.width * 0.30,
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.centerRight,
                               padding: EdgeInsets.only(right: 25),
                               child: InkWell(
                                 onTap: () {

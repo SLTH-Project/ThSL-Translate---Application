@@ -530,7 +530,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                       print('stop = ');
                       print(stop);
 
-                      if (stop && widget.consent && meaningVocab == true) {
+                      if (stop && widget.consent && meaningVocab) {
                         FirebaseStorage storage = FirebaseStorage.instance;
                         Reference ref = storage.ref().child(
                             'camera_pictures/image_' +
@@ -551,18 +551,23 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         print(
                             '---------- add history local complete -------------');
                       }
-                      setState(() {
-                        if (widget.pref.getStringList('history')!.isEmpty ==
-                            true) {
+
+                      if (widget.pref.getStringList('history') == null ||
+                          widget.pref.getStringList('history')!.length == 0) {
+                        print('inCheckHistory => null');
+                        setState(() {
                           haveHistory = false;
                           print('2have history = ');
                           print(haveHistory);
-                        } else {
+                        });
+                      } else {
+                        print('inCheckHistory => have[]');
+                        setState(() {
                           haveHistory = true;
                           print('2have history = ');
                           print(haveHistory);
-                        }
-                      });
+                        });
+                      }
                     },
                   ))
             ],
@@ -580,16 +585,9 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   ? Container(
                       width: screenSize.width,
                       height: screenSize.width,
-                      color: Color(0xFFEBEEF5),
-                      child: Center(
-                        child: Container(
-                          width: screenSize.width,
-                          height: screenSize.width,
-                          child: Image.file(
-                            _image!,
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
+                      child: Image.file(
+                        _image!,
+                        fit: BoxFit.fitWidth,
                       ),
                     )
                   : CameraPreview(controller)),
@@ -865,7 +863,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 children: <Widget>[
                   Center(
                     child: Container(
-                      height: 8,
+                      height: 5,
                       width: 50,
                       decoration: BoxDecoration(
                           color: Colors.grey,
@@ -913,7 +911,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     );
 
     if (stop == false) {
-      print('----camera realtime detect----');
+      print('----camera----');
       Timer(Duration(milliseconds: 250), () async {
         //after 0.25 seconds this will be called,
         try {
@@ -1236,7 +1234,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                             ),
                             Container(
                               width: screenSize.width * 0.30,
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.centerRight,
                               padding: EdgeInsets.only(right: 25),
                               child: InkWell(
                                 onTap: () {
