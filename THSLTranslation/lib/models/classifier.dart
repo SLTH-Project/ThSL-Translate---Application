@@ -60,7 +60,7 @@ abstract class Classifier {
       _probabilityProcessor =
           TensorProcessorBuilder().add(postProcessNormalizeOp).build();
     } catch (e) {
-      //print('Unable to create interpreter, Caught Exception: ${e.toString()}');
+      print('Unable to create interpreter, Caught Exception: ${e.toString()}');
     }
   }
 
@@ -74,12 +74,8 @@ abstract class Classifier {
   }
 
   TensorImage _preProcess() {
-    //int cropSize = 224;
     return ImageProcessorBuilder()
         .add(ResizeOp(224, 224, ResizeMethod.NEAREST_NEIGHBOUR))
-        /*.add(ResizeWithCropOrPadOp(cropSize, cropSize))
-        .add(ResizeOp(
-            _inputShape[1], _inputShape[2], ResizeMethod.NEAREST_NEIGHBOUR))*/
         .add(preProcessNormalizeOp)
         .build()
         .process(_inputImage);
@@ -90,17 +86,7 @@ abstract class Classifier {
     _inputImage = TensorImage(_inputType);
     _inputImage.loadImage(image);
 
-    /*print("image width = ");
-    print(image.width);
-    print("image height = ");
-    print(image.height);*/
-
     _inputImage = _preProcess();
-
-    /*print("image width after pre process = ");
-    print(_inputImage.width);
-    print("image height after pre process = ");
-    print(_inputImage.height);*/
 
     final pre = DateTime.now().millisecondsSinceEpoch - pres;
 
