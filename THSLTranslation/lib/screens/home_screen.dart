@@ -418,20 +418,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (widget.consent == true) {
       print('--------save history to firebase------------');
 
-      FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage
-          .ref()
-          .child('camera_pictures/image_' + DateTime.now().toString());
-      await ref.putFile(_image!);
-      String URLL = await ref.getDownloadURL();
-
-      String newString = categoryThai + "," + URLL + "," + meaningThai;
-      List<String>? now = widget.pref.getStringList('history');
-      if (now == null) {
-        now = [];
-      }
-      now.add(newString);
-      await widget.pref.setStringList('history', now);
+      saveHistory();
     }
 
     setState(() {
@@ -453,6 +440,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  saveHistory() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage
+        .ref()
+        .child('camera_pictures/image_' + DateTime.now().toString());
+    await ref.putFile(_image!);
+    String URLL = await ref.getDownloadURL();
+
+    String newString = categoryThai + "," + URLL + "," + meaningThai;
+    List<String>? now = widget.pref.getStringList('history');
+    if (now == null) {
+      now = [];
+    }
+    now.add(newString);
+    await widget.pref.setStringList('history', now);
   }
 
   checkHistory() {

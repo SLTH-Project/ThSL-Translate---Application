@@ -80,17 +80,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     checkHistory();
   }
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      _image = File(pickedFile!.path);
-//      _imageWidget = Image.file(_image!);
-      print("get image");
-      _predict(_image!);
-    });
-  }
-
   _predict(File image) async {
     print("in predict");
     img.Image imageInput = img.decodeImage(_image!.readAsBytesSync())!;
