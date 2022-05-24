@@ -481,6 +481,113 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  changePermission() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 40),
+              titlePadding: EdgeInsets.fromLTRB(16, 40, 16, 0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              title: Center(
+                child: Text('การบันทึกประวัติการแปล',
+                    style: TextStyle(
+                      fontFamily: 'Anakotmai',
+                      color: Color(0xff2b2b2b),
+                      fontSize: 19,
+                      fontWeight: FontWeight.w700,
+                    )),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                      'หากคุณยินยอมให้บันทึกประวัติการแปลของคุณ รูปภาพของคุณจะถูกเก็บในคลังข้อมูลของเรา หากคุณไม่ยินยอมให้บันทึกประวัติการแปล คุณยังสามารถใช้งานแอปพลิเคชันได้ตามปกติ แต่จะไม่สามารถดูประวัติการแปลใด ๆ ได้',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Anakotmai',
+                        color: Color(0xff2b2b2b),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  SizedBox(
+                    height: 36,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage(
+                                        camera: widget.camera,
+                                        consent: false,
+                                        pref: widget.pref,
+                                      )));
+                        },
+                        child: Container(
+                          width: 115,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: Color(0xffF0F0EF),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 1, horizontal: 17),
+                          child: Center(
+                            child: Text('ไม่ยินยอม',
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Color(0xff2b2b2b),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                )),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage(
+                                        camera: widget.camera,
+                                        consent: true,
+                                        pref: widget.pref,
+                                      )));
+                        },
+                        child: Container(
+                          width: 115,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: Color(0xff1821AE),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 1, horizontal: 17),
+                          child: Center(
+                            child: Text('ยินยอม',
+                                style: TextStyle(
+                                  fontFamily: 'Anakotmai',
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                )),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -863,13 +970,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: Color(0xFF1812AE),
-                          /*boxShadow: [
-                              BoxShadow(
-                                  color: Color(0x202b2b2b),
-                                  spreadRadius: 5,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 1))
-                            ]*/
                         ),
                         width: 229,
                         child: Row(
@@ -940,14 +1040,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final choices = Container(
       padding: EdgeInsets.only(top: 10, bottom: 10, left: 50, right: 50),
       decoration: BoxDecoration(
-        color: Colors
-            .white, /*boxShadow: [
-        BoxShadow(
-            color: Color(0x202b2b2b),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: Offset(0, 1))
-      ]*/
+        color: Colors.white,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -1249,118 +1342,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   IconButton(
                     icon: Icon(Icons.info_outline),
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(16, 16, 16, 40),
-                                titlePadding:
-                                    EdgeInsets.fromLTRB(16, 40, 16, 0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                                title: Center(
-                                  child: Text('การบันทึกประวัติการแปล',
-                                      style: TextStyle(
-                                        fontFamily: 'Anakotmai',
-                                        color: Color(0xff2b2b2b),
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w700,
-                                      )),
-                                ),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        'หากคุณยินยอมให้บันทึกประวัติการแปลของคุณ รูปภาพของคุณจะถูกเก็บในคลังข้อมูลของเรา หากคุณไม่ยินยอมให้บันทึกประวัติการแปล คุณยังสามารถใช้งานแอปพลิเคชันได้ตามปกติ แต่จะไม่สามารถดูประวัติการแปลใด ๆ ได้',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: 'Anakotmai',
-                                          color: Color(0xff2b2b2b),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                        )),
-                                    SizedBox(
-                                      height: 36,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        HomePage(
-                                                          camera: widget.camera,
-                                                          consent: false,
-                                                          pref: widget.pref,
-                                                        )));
-                                          },
-                                          child: Container(
-                                            width: 115,
-                                            height: 44,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xffF0F0EF),
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 1, horizontal: 17),
-                                            child: Center(
-                                              child: Text('ไม่ยินยอม',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Anakotmai',
-                                                    color: Color(0xff2b2b2b),
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w700,
-                                                  )),
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        HomePage(
-                                                          camera: widget.camera,
-                                                          consent: true,
-                                                          pref: widget.pref,
-                                                        )));
-                                          },
-                                          child: Container(
-                                            width: 115,
-                                            height: 44,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xff1821AE),
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 1, horizontal: 17),
-                                            child: Center(
-                                              child: Text('ยินยอม',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Anakotmai',
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w700,
-                                                  )),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ));
-                          });
+                      changePermission();
                     },
                   )
                 ],
