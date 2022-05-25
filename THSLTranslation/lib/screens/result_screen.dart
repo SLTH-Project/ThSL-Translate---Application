@@ -410,19 +410,6 @@ class _ResultPageState extends State<ResultPage> {
       await ref.putFile(_image!);
       String URLL = await ref.getDownloadURL();
 
-      /*print('imageURLL = ');
-      print(URLL);
-
-      CollectionReference histories =
-          FirebaseFirestore.instance.collection('History');
-      histories.add({
-        'category': categoryThai,
-        'imageURL': URLL,
-        'vocab': meaningThai,
-        'timestamp': DateTime.now()
-      });
-
-      print('---------- add history complete -------------');*/
       print('--------save history to local------------');
       String newString = categoryThai + "," + URLL + "," + meaningThai;
       List<String>? now = widget.pref.getStringList('history');
