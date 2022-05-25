@@ -417,6 +417,60 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
   }
 
+  capture() async {
+    try {
+      await _initializeControllerFuture;
+      final imageFromCamera = await controller.takePicture();
+      setState(() {
+        _image = File(imageFromCamera.path);
+        print("----capture----");
+        _predict(_image!);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  stopAndSave() async {
+    print('------------stop------------');
+    setState(() {
+      stop = !stop;
+    });
+
+    print('stop = ');
+    print(stop);
+
+    if (stop && widget.consent && meaningVocab) {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child('camera_pictures/image_' + DateTime.now().toString());
+      await ref.putFile(_image!);
+      String URLL = await ref.getDownloadURL();
+
+      print('--------save history to local------------');
+      String newString = categoryThai + "," + URLL + "," + meaningThai;
+      List<String>? now = widget.pref.getStringList('history');
+      if (now == null) {
+        now = [];
+      }
+      now.add(newString);
+      await widget.pref.setStringList('history', now);
+      print('---------- add history local complete -------------');
+    }
+
+    if (widget.pref.getStringList('history') == null ||
+        widget.pref.getStringList('history')!.length == 0) {
+      setState(() {
+        haveHistory = false;
+      });
+    } else {
+      setState(() {
+        haveHistory = true;
+      });
+    }
+  }
+
   @override
   void dispose() {
     Tflite.close();
@@ -511,52 +565,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                               )),
                     ),
                     onTap: () async {
-                      print('------------stop------------');
-                      setState(() {
-                        stop = !stop;
-                      });
-
-                      print('stop = ');
-                      print(stop);
-
-                      if (stop && widget.consent && meaningVocab) {
-                        FirebaseStorage storage = FirebaseStorage.instance;
-                        Reference ref = storage.ref().child(
-                            'camera_pictures/image_' +
-                                DateTime.now().toString());
-                        await ref.putFile(_image!);
-                        String URLL = await ref.getDownloadURL();
-
-                        print('--------save history to local------------');
-                        String newString =
-                            categoryThai + "," + URLL + "," + meaningThai;
-                        List<String>? now =
-                            widget.pref.getStringList('history');
-                        if (now == null) {
-                          now = [];
-                        }
-                        now.add(newString);
-                        await widget.pref.setStringList('history', now);
-                        print(
-                            '---------- add history local complete -------------');
-                      }
-
-                      if (widget.pref.getStringList('history') == null ||
-                          widget.pref.getStringList('history')!.length == 0) {
-                        print('inCheckHistory => null');
-                        setState(() {
-                          haveHistory = false;
-                          print('2have history = ');
-                          print(haveHistory);
-                        });
-                      } else {
-                        print('inCheckHistory => have[]');
-                        setState(() {
-                          haveHistory = true;
-                          print('2have history = ');
-                          print(haveHistory);
-                        });
-                      }
+                      stopAndSave();
                     },
                   ))
             ],
@@ -903,17 +912,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       print('----camera----');
       Timer(Duration(milliseconds: 250), () async {
         //after 0.25 seconds this will be called,
-        try {
-          await _initializeControllerFuture;
-          final imageFromCamera = await controller.takePicture();
-          setState(() {
-            _image = File(imageFromCamera.path);
-            print("----capture----");
-            _predict(_image!);
-          });
-        } catch (e) {
-          // print(e);
-        }
+        capture();
       });
     }
 

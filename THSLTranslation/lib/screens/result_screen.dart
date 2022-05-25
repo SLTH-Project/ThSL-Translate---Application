@@ -442,19 +442,6 @@ class _ResultPageState extends State<ResultPage> {
       }
     });
 
-    /*var snapshot = await FirebaseFirestore.instance.collection('History').get();
-    setState(() {
-      if (snapshot.docs.isNotEmpty == true) {
-        haveHistory = true;
-        print('---------2have history = -----------');
-        print(haveHistory);
-      } else {
-        haveHistory = false;
-        print('---------2have history = -----------');
-        print(haveHistory);
-      }
-    });*/
-
     return await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ResultPage(
